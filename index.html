@@ -3,11 +3,13 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>تقييم الأداء الوظيفي للمعلمين - مدرسة اليعقوبي الثانوية</title>
+<title>نموذج تقييم الاداء الوظيفي للمعلمين للعام ١٤٤٧هـ</title>
 
+<!-- خطوط -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
+<!-- مكتبات الحفظ -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
@@ -35,17 +37,18 @@ header .schooltitle h1{font-size:14.5px;color:var(--teal);margin:0}
 .note{margin:6px 0 8px;color:var(--muted);background:#f2f8f6;border:1px solid var(--border);
   border-radius:10px;padding:7px 8px;line-height:1.55;font-size:12px}
 
-/* بيانات */
-.info-row{display:grid;grid-template-columns:1.1fr 1fr 1fr 0.9fr;gap:6px;margin:4px 0 6px}
+/* صف اختيار المعلّم */
+.teacher-row{display:grid;grid-template-columns:1fr;gap:6px;margin:4px 0}
 .f{background:#fbfdfc;border:1px solid var(--border);border-radius:10px;padding:6px 8px}
 .f label{display:block;font-size:10px;color:#4b6864;margin-bottom:2px}
+.f select{width:100%;height:34px;border:1px solid #cfe1dd;border-radius:8px;background:#fff;font:inherit;font-size:13px;padding:0 10px;}
 
-/* ← تم ضبط الحقول لتكون الكتابة “متناسفة/متمركزة” في المربع */
-.f input,.f select{
-  width:100%; height:34px; border:1px solid #cfe1dd; border-radius:8px; background:#fff;
-  font:inherit; font-size:13px; line-height:34px; padding:0 10px; color:#103330;
-}
+/* بيانات */
+.info-row{display:grid;grid-template-columns:1.1fr 1fr 1fr 0.9fr;gap:6px;margin:4px 0 6px}
+.f input,.f .mini-select{width:100%;height:34px;border:1px solid #cfe1dd;border-radius:8px;background:#fff;
+  font:inherit;font-size:13px;line-height:34px;padding:0 10px;color:#103330}
 .f input::placeholder{color:#9cb3af; opacity:.9}
+.f .mini-select{appearance:auto}
 
 /* المؤشر */
 .bar-row{display:flex;align-items:center;gap:6px;margin:6px 0 2px}
@@ -65,7 +68,7 @@ th{background:var(--teal);color:#fff;text-align:center;font-size:11.8px;line-hei
 th:first-child,td:first-child{border-radius:8px 0 0 8px}
 th:last-child, td:last-child{border-radius:0 8px 8px 0}
 
-/* الدرجة والوزن مضغوطان لتوسيع خانة الأمثلة */
+/* الدرجة والوزن */
 .w-tight{width:72px;text-align:center}
 .w{width:64px;text-align:center}
 th .sub{display:block;font-size:10px;opacity:.9;margin-top:2px}
@@ -133,7 +136,17 @@ select.grade[data-g="1"]{background:#ffe8e6}
 
     <!-- تعريف مختصر -->
     <div class="note">
-      هذا نموذج قبلي تمهيدي موجّه للمعلم للتعرّف إلى عناصر التقييم وآلية احتسابها. اختر درجة (١–٥) لكل عنصر اعتمادًا على التفسير المختصر المقابل؛ وسيُحتسب <b>مؤشر الإنجاز</b> وتُصاغ <b>نقاط القوة</b> و<b>مجالات التطوير</b> تلقائيًا بصياغات تربوية موجزة. الطباعة/الحفظ تخرج في صفحة A4 واحدة ملونة.
+      هذا نموذج قبلي موجّه للمعلم للتعرّف إلى عناصر التقييم وآلية احتسابها. اختر درجة (١–٥) لكل عنصر اعتمادًا على التفسير المختصر المقابل؛ وسيُحتسب <b>مؤشر الإنجاز</b> وتُصاغ <b>نقاط القوة</b> و<b>مجالات التطوير</b> تلقائيًا بصياغات تربوية موجزة. الطباعة/الحفظ تخرج في صفحة A4 واحدة ملونة.
+    </div>
+
+    <!-- قائمة المعلمين -->
+    <div class="teacher-row">
+      <div class="f">
+        <label>قائمة المعلمين (اختر ليتم تعبئة البيانات تلقائيًا)</label>
+        <select id="tSelect">
+          <option value="">— اختر من القائمة —</option>
+        </select>
+      </div>
     </div>
 
     <!-- بيانات -->
@@ -142,7 +155,11 @@ select.grade[data-g="1"]{background:#ffe8e6}
       <div class="f"><label>رقم الهوية</label><input id="tId" placeholder="10 أرقام"/></div>
       <div class="f"><label>التخصص</label><input id="tSpec" placeholder="مثال: فيزياء"/></div>
       <div class="f"><label>مرحلة التقييم</label>
-        <select id="tStage"><option value="الأولى" selected>الأولى</option><option value="الثانية">الثانية</option><option value="الثالثة">الثالثة</option></select>
+        <select id="tStage" class="mini-select">
+          <option value="الأولى" selected>الأولى</option>
+          <option value="الثانية">الثانية</option>
+          <option value="الثالثة">الثالثة</option>
+        </select>
       </div>
     </div>
 
@@ -185,6 +202,7 @@ select.grade[data-g="1"]{background:#ffe8e6}
       <button class="btn" onclick="if(validate())doPrint()">طباعة A4</button>
       <button class="btn primary" id="saveBtn" onclick="if(validate())savePDF()">حفظ PDF</button>
       <button class="btn whatsapp" title="إرسال واتساب" onclick="if(validate())sendWhatsApp()">
+        <!-- أيقونة واتساب -->
         <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M19.11 17.4c-.27-.13-1.58-.77-1.83-.85-.25-.09-.43-.13-.62.13-.18.27-.71.85-.87 1.02-.16.18-.32.2-.59.07-.27-.13-1.12-.41-2.13-1.31-.79-.71-1.33-1.58-1.48-1.85-.16-.27-.02-.41.11-.54.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.13-.62-1.49-.85-2.05-.22-.54-.45-.46-.62-.46h-.53c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.69 4.14.66.29 1.18.46 1.58.59.66.21 1.25.18 1.72.11.53-.08 1.58-.65 1.81-1.28.23-.63.23-1.16.16-1.28-.06-.11-.23-.18-.5-.31z"/><path fill="#128C7E" d="M16.03 3.2C9.97 3.2 5.06 8.1 5.06 14.17c0 2.42.79 4.66 2.11 6.47L6.2 27.2l6.73-1.76c1.73.95 3.71 1.49 5.82 1.49 6.06 0 10.97-4.9 10.97-10.97S22.09 3.2 16.03 3.2zm0 19.95c-1.9 0-3.66-.57-5.13-1.54l-3.57.93.95-3.48c-1.07-1.56-1.69-3.44-1.69-5.46 0-5.43 4.41-9.84 9.84-9.84s9.84 4.41 9.84 9.84-4.41 9.85-9.84 9.85z"/></svg>
         إرسال واتساب
       </button>
@@ -211,7 +229,71 @@ function hijriUmmAlQura(){
 }
 const hijriToday=hijriUmmAlQura();
 
-/* ===== عناصر الجدول ===== */
+/* ===== بيانات المعلمين (من ملفّك) ===== */
+const teachers=[
+  {name:"موسى صلبان عبده عسيري",id:"1093013116",spec:"فيزياء"},
+  {name:"مبارك عوضه سفر آل ثابت",id:"1056464405",spec:"كيمياء"},
+  {name:"فرج عبدالعلي يوسف ال سيف",id:"1000397735",spec:"احياء"},
+  {name:"منذر عامر حمود زميع",id:"1065913053",spec:"انجليزي"},
+  {name:"سامي عبيد عبدالله العرابي",id:"1020850549",spec:"عربي"},
+  {name:"عماد محمد جمعان الزهراني",id:"1048667289",spec:"مكتبات"},
+  {name:"ابراهيم حبيب عبدالغني الميمني",id:"1072815481",spec:"رياضيات"},
+  {name:"بندر عبدالعزيز محمد الغامدي",id:"1046853881",spec:"حاسب"},
+  {name:"حسين بن محمد بن فهد ال قريش القحطاني",id:"1014268567",spec:"احياء"},
+  {name:"ناصر علي ناصر الراشد",id:"1008303370",spec:"حاسب"},
+  {name:"حسين بن محمد بن حسين الأحمد",id:"1060369202",spec:"عربي"},
+  {name:"عبدالرحمن محمد فرحان القرني",id:"1053065189",spec:"حاسب"},
+  {name:"علي سعد سعيد الاصلعي الاحمري",id:"1023999780",spec:"احياء"},
+  {name:"محمد حمد عبدالرحمن التويجري",id:"1064745944",spec:"عربي"},
+  {name:"عبدالله فيصل بن فطيس الهذلي",id:"1094733290",spec:"رياضيات"},
+  {name:"احمد عبدالرحيم عبدالحميد ابوعصيده",id:"1033584234",spec:"انجليزي"},
+  {name:"عبدالله بن عبدالعزيز بن سيف السهلي",id:"1063175010",spec:"علم اجتماع"},
+  {name:"بشير بن أحمد بن عبدالله آل سليم",id:"1019783917",spec:"مكتبات"},
+  {name:"ابراهيم بن محمد بن ابراهيم الربيع",id:"1004182687",spec:"انجليزي"},
+  {name:"عبدالمجيد عبدالله سالم آل حبشان",id:"1004581359",spec:"اجتماعيات"},
+  {name:"فيصل فهد علي الزهراني",id:"1086115373",spec:"رياضيات"},
+  {name:"خالد حسن مانع الشهري",id:"1021900764",spec:"عربي"},
+  {name:"عيسى بن خالد بن عبد الرحمن المذن",id:"1072990581",spec:"كيمياء"},
+  {name:"زياد عواض ابن عيضه العمري",id:"1092156742",spec:"علم الإدارة"},
+  {name:"عبدالرحمن عبدالجبار حمود العتيبي",id:"1089635724",spec:"فيزياء"},
+  {name:"عبد الله حسن عمر الادريسي",id:"1081556910",spec:"رياضيات"},
+  {name:"تقي عبد الهادي تقي العلي",id:"1026472363",spec:"كيمياء"},
+  {name:"صالح بن محمد بن صالح السميحي",id:"1003535422",spec:"دين"},
+  {name:"زاهر عبدالله سعد الشهراني",id:"1074173517",spec:"دين"},
+  {name:"عادل بن علي بن ناصر البارقي",id:"1007370701",spec:"رياضه"},
+  {name:"ابراهيم بن أحمد بن ابراهيم العجلان",id:"1001082179",spec:"دين"},
+  {name:"خالد أحمد محمد الشهري",id:"1034318301",spec:"كيمياء"},
+  {name:"خالد سعد راشد المرضي",id:"1025640010",spec:"اجتماعيات"},
+  {name:"عبدالله بن خلوفة بن عبدالله ال مرعي",id:"1029490875",spec:"دين"},
+  {name:"يحيى بن محمد بن سعيد القحطاني",id:"1048978892",spec:"اجتماعيات"},
+  {name:"حسين بن سعيد سلمان المدن",id:"1022616799",spec:"مكتبات"},
+  {name:"يوسف عيسى عيسى العيد",id:"1012646822",spec:"عربي"},
+  {name:"نبيل بن محسن محمد القلاف",id:"1025472604",spec:"رياضه"},
+  {name:"عبدالمجيد عبدالرحمن عبدالله السالمي",id:"1073861831",spec:"انجليزي"},
+  {name:"حسن علي حسن الشهري",id:"1037273594",spec:"عربي"},
+  {name:"جميل عبدالمجيد جواد العلي",id:"1029281589",spec:"فيزياء"},
+  {name:"عبد الهادي محمد حبيب العايش",id:"1058489277",spec:"رياضيات"},
+  {name:"حسن يوسف حسين الخليفة",id:"1056994203",spec:"كيمياء"},
+  {name:"حسن عبدالله علي العبدالله",id:"1005472780",spec:"احياء"}
+];
+
+/* تعبئة القائمة المنسدلة بالمعلمين */
+const tSelect=document.getElementById('tSelect');
+teachers.forEach((t,i)=>{
+  const op=document.createElement('option');
+  op.value=String(i);
+  op.textContent=t.name; // عرض الاسم كاملاً
+  tSelect.appendChild(op);
+});
+tSelect.addEventListener('change',()=>{
+  if(tSelect.value==="") return;
+  const t=teachers[Number(tSelect.value)];
+  document.getElementById('tName').value=t.name;
+  document.getElementById('tId').value=t.id;
+  document.getElementById('tSpec').value=t.spec;
+});
+
+/* ===== عناصر التقييم ===== */
 const items=[
   {name:"أداء الواجبات الوظيفية",weight:10,brief:"انضباط يومي؛ التزام بالجدول والمواعيد؛ تحضير وتتبع للدرس؛ تسليم التقارير في وقتها."},
   {name:"التفاعل مع المجتمع المهني",weight:10,brief:"مجتمعات تعلم مهنية؛ تبادل زيارات؛ حضور دورات؛ مشاركة موارد وخبرات."},
@@ -270,7 +352,7 @@ items.forEach((it,idx)=>{
   tbody.appendChild(tr);
 });
 
-/* ديناميكيات */
+/* ديناميكيات الحساب */
 const gradesEls=[...document.querySelectorAll('.grade')];
 const percentChip=document.getElementById('percentChip');
 const scoreChip=document.getElementById('scoreChip');
@@ -321,12 +403,12 @@ function fitOnce(){
 }
 function unfit(){ if(SHEET.dataset.prev!==undefined){SHEET.style.transform=SHEET.dataset.prev; delete SHEET.dataset.prev;} }
 
-/* تحقق قبل الإجراء */
+/* تحقق قبل الإجراءات */
 function validate(){
   const name=document.getElementById('tName').value.trim();
   const id=document.getElementById('tId').value.trim();
   const spec=document.getElementById('tSpec').value.trim();
-  if(!name){ alert('رجاءً اكتب اسم المعلم.'); document.getElementById('tName').focus(); return false; }
+  if(!name){ alert('رجاءً اختر المعلم من القائمة أو اكتب اسمه.'); document.getElementById('tName').focus(); return false; }
   if(!/^\d{10}$/.test(id)){ alert('رجاءً أدخل رقم هوية صحيحًا (10 أرقام).'); document.getElementById('tId').focus(); return false; }
   if(!spec){ alert('رجاءً اكتب التخصص.'); document.getElementById('tSpec').focus(); return false; }
   if(gradesEls.some(s=>!s.value)){ alert('رجاءً إنهاء درجات جميع العناصر.'); return false; }
@@ -370,15 +452,15 @@ async function savePDF(){
   }
 }
 
-/* واتساب — إصلاح الإرسال الفارغ: نص مُرمَّز + مساران */
+/* واتساب — ملخّص مختصر فقط */
 function sendWhatsApp(){
-  const phone='966504532489'; // الرقم بصيغة دولية
+  const phone='966504532489';
   const name=document.getElementById('tName').value.trim();
   const stage=document.getElementById('tStage').value;
   const S=recalc();
   const msg =
 `السلام عليكم،
-تم إرسال ملخص قبلي من المعلم بمدرسة اليعقوبي الثانوية:
+ملخص قبلي من المعلم بمدرسة اليعقوبي الثانوية:
 الاسم: ${name}
 مرحلة التقييم: ${stage}
 ${document.getElementById('scoreChip').textContent} | ${document.getElementById('percentChip').textContent}
@@ -387,16 +469,10 @@ ${document.getElementById('scoreChip').textContent} | ${document.getElementById(
 التاريخ الهجري: ${hijriToday}`;
   const encoded=encodeURIComponent(msg);
 
-  // المسار الأول
+  // المسار الأساسي + فول-باك
   let url=`https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
   let win=window.open(url,'_blank');
-
-  // فول-باك إن لم يُفتح/Safari
-  setTimeout(()=>{
-    if(!win || win.closed || typeof win.closed==='undefined'){
-      window.location.href=`https://wa.me/${phone}?text=${encoded}`;
-    }
-  }, 400);
+  setTimeout(()=>{ if(!win || win.closed || typeof win.closed==='undefined'){ window.location.href=`https://wa.me/${phone}?text=${encoded}`; }}, 400);
 }
 
 /* تهيئة التاريخ */
