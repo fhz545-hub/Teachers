@@ -3,484 +3,855 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>نموذج تقييم الاداء الوظيفي للمعلمين للعام ١٤٤٧هـ</title>
+<title>استمارة دعم وتطوير الهيئة التعليمية (زيارة معلم) ١٤٤٧هـ</title>
 
-<!-- خطوط -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<!-- خطوط وهوية -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Cairo:wght@600;700&display=swap" rel="stylesheet">
 
-<!-- مكتبات الحفظ -->
+<!-- مكتبات -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
 <style>
 :root{
-  --teal:#0f4c46; --ink:#103330; --muted:#456A66; --border:#e5efec; --bg:#f7fbfa;
-  --green:#22c55e; --amber:#f59e0b; --red:#ef4444;
+  --moe-dark:#0c594e; --moe-green:#0f7a66; --moe-lite:#e8f4f1;
+  --ink:#123b37; --line:#cfe1dd; --border:#e6efec; --bg:#fbfdfc;
+  --good:#16a34a; --mid:#f59e0b; --bad:#ef4444;
+  --colDomain:#f3faf8; --colLevel:#f9fbf7; --colSeq:#f2fbf7;
+  --base: clamp(14px, 1.3vw + 10px, 16px);
 }
-html,body{margin:0!important;padding:0!important;background:#fff;color:var(--ink);
-  -webkit-text-size-adjust:100%; print-color-adjust: exact; -webkit-print-color-adjust: exact;
-  font-family:"Tajawal",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
 *{box-sizing:border-box}
+html,body{margin:0;background:#fff;color:var(--ink);font-family:"Tajawal",system-ui;font-size:var(--base);min-height:100%}
+#page{width:min(1200px,100vw);margin-inline:auto}
+.wrap{padding:clamp(8px,2vw,16px)}
+.hidden{display:none}
 
-#page{width:794px; min-height:1123px; margin:0 auto; background:#fff;}
-.wrap{max-width:100%; margin-inline:auto; padding:6px 10px}
+/* عناصر تُخفى فقط أثناء لقطة الطباعة */
+.no-snap{}
 
-/* الهيدر */
-header{text-align:center;margin:0 0 6px}
-header .topline{font-weight:700;color:var(--teal);font-size:13px;line-height:1.25}
-header .schooltitle{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:3px}
-header .schooltitle h1{font-size:14.5px;color:var(--teal);margin:0}
-.badge{background:#eaf4f1;border:1px solid var(--border);padding:4px 8px;border-radius:10px;font-weight:700;color:#0b2f2c;font-size:11.2px}
+/* رأس رسمي */
+.govern-head{display:flex;flex-direction:column;gap:4px;align-items:center;margin-top:6px}
+.govern-head .hl{font-family:"Cairo";font-weight:700;color:#0a5b50;text-align:center}
+.govern-head .hl.small{font-size:clamp(13px,1.1vw + 10px,16px)}
+.govern-head .hl.big{font-size:clamp(14px,1.2vw + 10px,18px)}
+.govern-head .editable{padding:2px 6px;border-radius:8px;background:var(--moe-lite);border:1px dashed transparent;cursor:text}
+.govern-head .editable[contenteditable="true"]{border-color:#b6d8d1;background:#fffef5}
+h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-size:clamp(18px,1.6vw + 14px,26px);text-align:center}
+.badge{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:10px;background:#eaf7f4;color:#0b6256;font-weight:700;font-size:12px}
 
-/* تعريف */
-.note{margin:6px 0 8px;color:var(--muted);background:#f2f8f6;border:1px solid var(--border);
-  border-radius:10px;padding:7px 8px;line-height:1.55;font-size:12px}
+/* أدوات العنوان */
+.tools-head{display:flex;gap:6px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+.btn-s{padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--moe-dark);cursor:pointer;font-size:clamp(12px,.6vw + 10px,14px)}
 
-/* صف اختيار المعلّم */
-.teacher-row{display:grid;grid-template-columns:1fr;gap:6px;margin:4px 0}
-.f{background:#fbfdfc;border:1px solid var(--border);border-radius:10px;padding:6px 8px}
-.f label{display:block;font-size:10px;color:#4b6864;margin-bottom:2px}
-.f select{width:100%;height:34px;border:1px solid #cfe1dd;border-radius:8px;background:#fff;font:inherit;font-size:13px;padding:0 10px;}
+/* مربعات وأعمدة */
+.box{border:1px solid var(--border);border-radius:14px;background:var(--bg);margin-top:10px;overflow:hidden}
+.box h3{margin:0;padding:10px 12px;border-bottom:1px solid var(--border);font-size:15px;color:var(--moe-dark);display:flex;gap:10px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px}
+.fld{height:38px;border:1px solid var(--line);border-radius:10px;padding:0 10px;background:#fff;font:inherit}
+.col-2{grid-column:span 2/span 2}.col-3{grid-column:span 3/span 3}.col-4{grid-column:span 4/span 4}.col-6{grid-column:span 6/span 6}.col-12{grid-column:span 12/span 12}
 
-/* بيانات */
-.info-row{display:grid;grid-template-columns:1.1fr 1fr 1fr 0.9fr;gap:6px;margin:4px 0 6px}
-.f input,.f .mini-select{width:100%;height:34px;border:1px solid #cfe1dd;border-radius:8px;background:#fff;
-  font:inherit;font-size:13px;line-height:34px;padding:0 10px;color:#103330}
-.f input::placeholder{color:#9cb3af; opacity:.9}
-.f .mini-select{appearance:auto}
+/* شريط أدوات Excel + قائمة المعلمين */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-start;padding:8px 10px}
+.btn-ic{display:inline-flex;gap:8px;align-items:center;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--moe-dark);font-weight:800;cursor:pointer;font-size:clamp(12px,.6vw + 10px,14px);transition:transform .12s ease}
+.btn-ic:hover{transform:translateY(-1px)}
+.btn-ic svg{width:18px;height:18px}
+a.btn-ic{text-decoration:none}
+select.fld{height:38px}
 
-/* المؤشر */
-.bar-row{display:flex;align-items:center;gap:6px;margin:6px 0 2px}
-.chip{background:#f2f7f6;border:1px solid var(--border);padding:6px 8px;border-radius:10px;font-weight:700;color:#09312d;min-width:135px;text-align:center;font-size:11.5px}
-.meter{position:relative;height:16px;flex:1;background:#eaf1ef;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.fill{position:absolute;inset:3px;border-radius:10px;background:linear-gradient(90deg,var(--green) 0%, #7ad957 25%, var(--amber) 55%, #ff914d 75%, var(--red) 100%);}
-.thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;
-  background:#fff;border:3px solid #33524e;box-shadow:0 1px 5px rgba(0,0,0,.15)}
-.scale{position:relative;height:12px;margin-top:2px;font-weight:700;color:#2a4743;font-size:11px}
-.scale span{position:absolute;transform:translateX(-50%)}
-.scale .t5{left:0%}.scale .t4{left:25%}.scale .t3{left:50%}.scale .t2{left:75%}.scale .t1{left:100%}
+/* دوائر الزيارات */
+.visits{display:flex;gap:clamp(12px,2vw,24px);align-items:flex-start;justify-content:center;flex-wrap:wrap}
+.visitCard{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+.donut{width:clamp(84px, 10vw + 40px, 140px);height:auto;cursor:pointer}
+.donut .ring{transform:rotate(-90deg);transform-origin:50% 50%}
+.donut text{font-weight:800;fill:var(--moe-dark);font-size:14px}
+.done-badge{position:absolute;top:-6px;right:-6px;background:#16a34a;color:#fff;border-radius:999px;padding:4px 6px;font-size:11px;display:none;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.chip{background:#eaf7f4;border:1px dashed #cfe1dd;padding:4px 10px;border-radius:999px;font-size:clamp(11px,.6vw + 9px,12px);color:#0b6256;cursor:pointer}
+.visitLabel{font-family:"Cairo";font-weight:700;color:#0f685a;font-size:clamp(13px,.8vw + 10px,16px)}
 
-/* الجدول */
-table{width:100%;border-collapse:separate;border-spacing:0 4px}
-th,td{background:#fbfdfc;border:1px solid var(--border);padding:5px 7px;vertical-align:middle;font-size:12px}
-th{background:var(--teal);color:#fff;text-align:center;font-size:11.8px;line-height:1.2;padding:4px 6px}
-th:first-child,td:first-child{border-radius:8px 0 0 8px}
-th:last-child, td:last-child{border-radius:0 8px 8px 0}
+/* المؤشر الشامل + نسب الزيارات */
+.hmeterTop{margin:8px auto 4px;text-align:center}
+.tooltip{position:relative;display:inline-block;cursor:help;margin-bottom:6px;font-weight:700;color:#0b534a}
+.tooltip .tiptext{visibility:hidden;width:290px;background:#0a5b50;color:#fff;text-align:center;border-radius:6px;padding:6px;position:absolute;z-index:2;bottom:125%;left:50%;transform:translateX(-50%);opacity:0;transition:opacity .3s}
+.tooltip:hover .tiptext{visibility:visible;opacity:1}
+.globalInline{margin-inline-start:8px;font-family:"Cairo";font-size:clamp(14px,1vw + 11px,18px);font-weight:800;transition:color .15s ease}
+.globalInline.good{color:#0f6a3b}.globalInline.mid{color:#a8620a}.globalInline.bad{color:#b42318}
+.visitPercents{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+.visitPercents .badge{background:#f0faf6}
 
-/* الدرجة والوزن */
-.w-tight{width:72px;text-align:center}
-.w{width:64px;text-align:center}
-th .sub{display:block;font-size:10px;opacity:.9;margin-top:2px}
+/* صف المسطرة */
+.globalRow{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hbar{position:relative;width:min(700px,95vw);height:14px;border:1px solid var(--border);border-radius:999px;background:linear-gradient(90deg,#ef4444 0%,#f59e0b 50%,#16a34a 100%);margin:4px auto 6px}
+.hthumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid #0a5b50}
 
-select.grade{width:62px;height:28px;text-align:center;border:1px solid #cfe1dd;border-radius:8px;background:#fff;font-size:12.3px}
+/* مؤشر الأداء الأفقي تحت الدوائر */
+.hmeter{display:flex;flex-direction:column;gap:6px;align-items:center;margin:6px 0 8px}
+.hbarSmall{position:relative;width:min(680px,95vw);height:12px;border:1px solid var(--border);border-radius:999px;background:linear-gradient(90deg,#ef4444 0%,#f59e0b 50%,#16a34a 100%)}
+.hthumbSmall{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid #0a5b50}
+.hlbl{display:flex;gap:8px;align-items:center;color:#0a5b50;font-weight:800}
 
-/* نص الأمثلة */
-td.brief{font-size:12px;color:#2a4743;line-height:1.45}
+/* الجداول */
+.table-responsive{width:100%;overflow:auto}
+.tbl{width:100%;border-collapse:collapse;table-layout:auto}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 8px;background:#fff;vertical-align:top}
+.tbl thead th{background:var(--moe-dark)!important;color:#fff!important}
+.tbl .w{width:clamp(280px,26vw,380px);text-align:center;background:var(--colLevel)}
+.tbl tbody td:nth-child(2){background:var(--colDomain);text-align:center;vertical-align:middle}
+.tbl tbody td.seq{background:var(--colSeq);text-align:center;font-weight:700;color:#0c5e55}
 
-/* القوة/التطوير */
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
-.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:7px 8px;min-height:56px}
-.card h3{margin:0 0 4px;font-size:13px}
-#strength h3{color:#136b3e} #dev h3{color:#b4372d}
-#strengthBody,#devBody{font-family:"Cairo", Tahoma, sans-serif;font-size:11.2px;line-height:1.45}
+/* مستوى الأداء */
+.level{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:stretch;width:100%}
+.level button{--dot:#ddd;border:1px solid var(--line);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .12s;width:100%;padding:8px 0}
+.level button::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--dot)}
+.level button[data-v="1"]{--dot:#ef4444}
+.level button[data-v="2"]{--dot:#f59e0b}
+.level button[data-v="3"]{--dot:#16a34a}
+.level button.active{box-shadow:0 0 0 2px #cfe8df inset}
+.level button.active[data-v="1"]{background:#ffe3e3;border-color:#f2bcbc;color:#b42318}
+.level button.active[data-v="2"]{background:#fff1dc;border-color:#f2d3a2;color:#a8620a}
+.level button.active[data-v="3"]{background:#e9f7ee;border-color:#b9e4c8;color:#0f6a3b}
 
-/* أزرار */
-.actions{display:flex;gap:6px;justify-content:center;margin:8px 0 4px}
-.btn{padding:7px 10px;border-radius:10px;border:1px solid #cfe1dd;background:#eaf3f1;color:#09312d;font-weight:700;font-size:12.5px}
-.btn.primary{background:#0f7a66;color:#fff;border-color:#0f7a66}
-.btn.dark{background:#0f4c46;color:#fff;border-color:#0f4c46}
-.btn.whatsapp{display:inline-flex;align-items:center;gap:6px;background:#c9f8dc;color:#065f46;border-color:#22c55e}
-.btn svg{width:16px;height:16px}
+/* خلية العنصر + تعريف ذكي */
+.item-cell{display:flex;flex-direction:column;gap:3px}
+.item-cell b{display:block}
+.item-brief{display:block;margin-top:2px;padding-top:4px;border-top:1px dashed #dbe9e6;color:#2b5e57;opacity:.92;font-size:12.5px;line-height:1.5}
 
-/* تلوين قيم الدرجات */
-select.grade[data-g="5"]{background:#eaf8f1}
-select.grade[data-g="4"]{background:#f3faea}
-select.grade[data-g="3"]{background:#fff8e8}
-select.grade[data-g="2"]{background:#fff0e6}
-select.grade[data-g="1"]{background:#ffe8e6}
+/* الأدوات المساندة */
+.bar-wrap{position:relative;margin:8px 12px 10px}
+.gradbar{height:12px;border:1px solid var(--border);border-radius:999px;overflow:hidden;background:#eef3f2}
+.bar-nums{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:#0a5b50;padding:0 8px}
+.pills{display:grid;grid-template-columns:repeat(3, minmax(84px,1fr));gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-weight:700;font-size:12px;width:100%}
+.pill[data-v="2"].active{background:#e9f7ee;color:#0f6a3b;border-color:#b9e4c8}
+.pill[data-v="1"].active{background:#fff1dc;color:#a8620a;border-color:#f2d3a2}
+.pill[data-v="0"].active{background:#ffe3e3;color:#b42318;border-color:#f2bcbc}
+#toolsBox .tbl th,#toolsBox .tbl td{vertical-align:middle}
+#toolsBox .tbl th:nth-child(1){width:44px}
+#toolsBox .tbl th:nth-child(2){width:52%}
+#toolsBox .tbl th:nth-child(3){width:12%}
+#toolsBox .tbl th:nth-child(4){width:36%}
+#toolsBox .tbl td{padding:8px}
+.tool-name{font-weight:800;color:#0b4e47}
+.tool-desc{display:block;color:#2a5b5b;opacity:.95;font-size:12.5px;line-height:1.55;margin-top:2px}
 
-/* حقوق */
-.footer{margin:6px 0 2px;text-align:center;font-size:10.3px;color:#6a8682}
-.footer:before{content:"© ";}
+/* التوصيات */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.card{border:1px solid var(--border);border-radius:12px;background:#fff;padding:10px}
+.card h4{margin:0 0 6px;color:#0a5b50;font-family:"Cairo"}
+.list{font-size:13px;line-height:1.65;color:#184b44}
+
+/* تواقيع وإجراءات */
+.signs{margin:10px 0}
+.signs table{width:100%;border-collapse:collapse}
+.signs th,.signs td{border:1px solid var(--line);padding:8px;background:#fff}
+.signs .line{display:inline-block;min-width:160px;border-bottom:1px dashed #9fb5b1;height:20px}
+.actions{display:flex;gap:8px;justify-content:center;align-items:center;margin:12px 0 6px;flex-wrap:wrap}
+.btn{display:inline-flex;gap:8px;align-items:center;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;color:#0a5b50;font-weight:800;cursor:pointer;font-size:clamp(12px,.6vw + 10px,14px)}
+.btn.primary{background:var(--moe-green);color:#fff;border-color:#0f7a66}
+.print-mode{display:flex;gap:8px;align-items:center}
+.footer{margin:8px 0 14px;text-align:center;font-size:12.5px;color:#0b534a}
+
+/* شارة طباعة صغيرة */
+.printMark{display:none;text-align:center;margin:6px 0 2px;color:#184b44;font-size:10px}
+
+/* زر الصعود */
+#toTop{position:fixed;bottom:20px;left:20px;padding:10px;border:none;border-radius:50%;background:var(--moe-green);color:#fff;font-size:18px;cursor:pointer;display:none;z-index:999}
+
+/* تجاوب */
+@media (max-width:720px){
+  .grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:6px}
+  .col-3,.col-2,.col-6{grid-column:span 12 / span 12}
+  .toolbar .btn-ic{flex:1;justify-content:center}
+  .cards{grid-template-columns:1fr}
+}
 
 /* طباعة صفحة واحدة */
-@page{size:A4 portrait; margin:4mm 5mm 5mm 5mm}
+@page{ size:A4 portrait; margin:5mm }
 @media print{
-  html,body{height:auto;margin:0!important;padding:0!important}
-  #page{width:210mm;min-height:297mm}
-  .wrap{max-width:100%;padding:4mm 5mm}
-  table{font-size:10.1px}
-  td.brief{font-size:10.1px;line-height:1.35}
-  th,td{padding:3.5px 5px}
-  .card{min-height:44px}
-  .no-print{display:none!important}
+  :root{--base:12px}
+  h1{font-size:16px}
+  .donut{width:92px;height:auto}
+  .tbl th,.tbl td{padding:5px;font-size:11.5px}
+  .item-brief{font-size:10.5px}
+  /* إخفاء كل الأيقونات والأزرار والهوامش التفاعلية */
+  .no-print, .toolbar, .actions, .tools-head, .footer { display:none !important }
+  /* إجبار أي أزرار ظاهرة إلى تدرّج رمادي */
+  .btn, .btn-ic { filter:grayscale(1) !important; color:#000 !important; background:#fff !important; border-color:#999 !important }
+  /* إظهار سطر العبارة + التاريخ */
+  .printMark{display:block !important}
+  #page{width:210mm}
 }
 
-/* طبقة التحجيم (للحفظ فقط) */
-#sheet{transform-origin:top center}
+/* نمط اللقطة قبل html2canvas */
+.snapshot .no-snap{display:none !important}
+.snapshot .printMark{display:block !important}
+/* في وضع BW أثناء الالتقاط */
+.bw-print *{filter:grayscale(1) !important}
 </style>
 </head>
 <body>
-<div id="page">
-  <div class="wrap" id="sheet">
+<div id="page"><div class="wrap" id="sheet">
 
-    <!-- الهيدر -->
-    <header>
-      <div class="topline">الإدارة العامة للتعليم بالمنطقة الشرقية • قطاع التعليم بالخبر • مدرسة اليعقوبي الثانوية</div>
-      <div class="schooltitle">
-        <h1>تقييم الأداء الوظيفي للمعلمين للعام ١٤٤٧هـ</h1>
-        <span class="badge" id="hijriChip">التاريخ الهجري: —</span>
-      </div>
-    </header>
-
-    <!-- تعريف مختصر -->
-    <div class="note">
-      هذا نموذج قبلي موجّه للمعلم للتعرّف إلى عناصر التقييم وآلية احتسابها. اختر درجة (١–٥) لكل عنصر اعتمادًا على التفسير المختصر المقابل؛ وسيُحتسب <b>مؤشر الإنجاز</b> وتُصاغ <b>نقاط القوة</b> و<b>مجالات التطوير</b> تلقائيًا بصياغات تربوية موجزة. الطباعة/الحفظ تخرج في صفحة A4 واحدة ملونة.
-    </div>
-
-    <!-- قائمة المعلمين -->
-    <div class="teacher-row">
-      <div class="f">
-        <label>قائمة المعلمين (اختر ليتم تعبئة البيانات تلقائيًا)</label>
-        <select id="tSelect">
-          <option value="">— اختر من القائمة —</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- بيانات -->
-    <div class="info-row">
-      <div class="f"><label>اسم المعلم</label><input id="tName" placeholder="أدخل الاسم ثلاثيًا"/></div>
-      <div class="f"><label>رقم الهوية</label><input id="tId" placeholder="10 أرقام"/></div>
-      <div class="f"><label>التخصص</label><input id="tSpec" placeholder="مثال: فيزياء"/></div>
-      <div class="f"><label>مرحلة التقييم</label>
-        <select id="tStage" class="mini-select">
-          <option value="الأولى" selected>الأولى</option>
-          <option value="الثانية">الثانية</option>
-          <option value="الثالثة">الثالثة</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- المؤشر -->
-    <div class="bar-row">
-      <div class="chip" id="scoreChip">مؤشر الإنجاز: 0.00 / 5</div>
-      <div class="meter"><div class="fill"></div><div class="thumb" id="thumb" style="left:100%"></div></div>
-      <div class="chip" id="percentChip">المجموع: %0</div>
-    </div>
-    <div class="scale"><span class="t5">5</span><span class="t4">4</span><span class="t3">3</span><span class="t2">2</span><span class="t1">1</span></div>
-
-    <!-- الجدول -->
-    <table id="tbl">
-      <thead>
-        <tr>
-          <th class="w-tight">#</th>
-          <th>العنصر</th>
-          <th class="w">الوزن</th>
-          <th class="w-tight">الدرجة<span class="sub">(1–5)</span></th>
-          <th>تفسير / أمثلة مختصرة</th>
-        </tr>
-      </thead>
-      <tbody id="rows"></tbody>
-    </table>
-
-    <!-- القوة/التطوير -->
-    <div class="cards">
-      <div id="strength" class="card">
-        <h3>نقاط القوة</h3>
-        <div id="strengthBody">—</div>
-      </div>
-      <div id="dev" class="card">
-        <h3>مجالات التطوير</h3>
-        <div id="devBody">—</div>
-      </div>
-    </div>
-
-    <!-- أزرار -->
-    <div class="actions no-print">
-      <button class="btn" onclick="if(validate())doPrint()">طباعة A4</button>
-      <button class="btn primary" id="saveBtn" onclick="if(validate())savePDF()">حفظ PDF</button>
-      <button class="btn whatsapp" title="إرسال واتساب" onclick="if(validate())sendWhatsApp()">
-        <!-- أيقونة واتساب -->
-        <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M19.11 17.4c-.27-.13-1.58-.77-1.83-.85-.25-.09-.43-.13-.62.13-.18.27-.71.85-.87 1.02-.16.18-.32.2-.59.07-.27-.13-1.12-.41-2.13-1.31-.79-.71-1.33-1.58-1.48-1.85-.16-.27-.02-.41.11-.54.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.13-.62-1.49-.85-2.05-.22-.54-.45-.46-.62-.46h-.53c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.69 4.14.66.29 1.18.46 1.58.59.66.21 1.25.18 1.72.11.53-.08 1.58-.65 1.81-1.28.23-.63.23-1.16.16-1.28-.06-.11-.23-.18-.5-.31z"/><path fill="#128C7E" d="M16.03 3.2C9.97 3.2 5.06 8.1 5.06 14.17c0 2.42.79 4.66 2.11 6.47L6.2 27.2l6.73-1.76c1.73.95 3.71 1.49 5.82 1.49 6.06 0 10.97-4.9 10.97-10.97S22.09 3.2 16.03 3.2zm0 19.95c-1.9 0-3.66-.57-5.13-1.54l-3.57.93.95-3.48c-1.07-1.56-1.69-3.44-1.69-5.46 0-5.43 4.41-9.84 9.84-9.84s9.84 4.41 9.84 9.84-4.41 9.85-9.84 9.85z"/></svg>
-        إرسال واتساب
-      </button>
-    </div>
-
-    <!-- حقوق -->
-    <div class="footer">إعداد وتنفيذ وتصميم: فهد حامد الزهراني</div>
+  <!-- رأس -->
+  <div class="govern-head">
+    <div class="hl small editable" id="h-sa" contenteditable="false">المملكة العربية السعودية</div>
+    <div class="hl small editable" id="h-moed" contenteditable="false">وزارة التعليم</div>
+    <div class="hl big editable"   id="h-dir" contenteditable="false">الإدارة العامة للتعليم بالمنطقة الشرقية</div>
+    <div class="hl big editable"   id="h-school" contenteditable="false">مدرسة اليعقوبي الثانوية</div>
   </div>
-</div>
+  <h1>استمارة دعم وتطوير الهيئة التعليمية (زيارة معلم) ١٤٤٧هـ</h1>
+  <div style="text-align:center"><span class="badge" id="hijriChip">التاريخ الهجري: —</span></div>
+  <div class="tools-head no-print no-snap">
+    <button class="btn-s" id="editHead">تعديل العناوين</button>
+    <button class="btn-s" id="saveHead">حفظ</button>
+    <button class="btn-s" id="resetHead">افتراضي</button>
+  </div>
+
+  <!-- معلومات عامة + Excel -->
+  <div class="box">
+    <h3>المعلومات العامة <small style="color:#4f7f77;font-weight:normal">تُعبّأ تلقائيًا عند استيراد قائمة المعلمين</small></h3>
+    <div class="grid" style="padding:10px">
+      <input class="fld col-3" id="tName" placeholder="اسم المعلم">
+      <input class="fld col-3" id="tId" placeholder="رقم الهوية (10 أرقام)" inputmode="numeric" maxlength="10">
+      <input class="fld col-3" id="tSpec" placeholder="التخصص / المادة">
+      <input class="fld col-3" id="lesson" placeholder="عنوان الدرس">
+      <input class="fld col-3" id="degree" placeholder="المؤهل">
+      <input class="fld col-3" id="exp" placeholder="سنوات الخبرة">
+      <input class="fld col-3" id="class" placeholder="الفصل">
+      <div class="col-12 toolbar no-print no-snap">
+        <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" style="display:none">
+        <button class="btn-ic" id="btnImport" title="استيراد Excel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 16v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/><path d="M8 12l4 4 4-4M12 4v12"/></svg>
+          استيراد
+        </button>
+        <button class="btn-ic" id="btnExport" title="تنزيل القائمة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 7v10M7 12h10"/></svg>
+          تنزيل
+        </button>
+        <button class="btn-ic" id="btnTemplate" title="قالب فارغ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+          قالب
+        </button>
+        <select class="fld" id="teacherSelect" title="قائمة المعلمين"><option value="">— اختر معلم —</option></select>
+
+        <!-- الأيقونة/الرابط المطلوب بجوار القائمة -->
+        <a class="btn-ic" href="https://fhz545-hub.github.io/taqyeem/" target="_blank" rel="noopener" title="لمشاهدة تقييم الأداء الوظيفي">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          (لمشاهدة تقييم الأداء الوظيفي)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- المؤشر الشامل + النسب -->
+  <div class="hmeterTop">
+    <div class="tooltip">المؤشر الشامل للأداء <b id="globalPctInline" class="globalInline">0%</b>
+      <span class="tiptext">مقياس تجميعي يُلخّص نتائج الزيارات الثلاث، ليعكس صورة شاملة لمستوى أداء المعلم وتقدمه المهني عبر العام الدراسي.</span>
+    </div>
+    <div class="visitPercents">
+      <span class="badge">الأولى: <b id="p1">0%</b></span>
+      <span class="badge">الثانية: <b id="p2">0%</b></span>
+      <span class="badge">الثالثة: <b id="p3">0%</b></span>
+    </div>
+    <div class="globalRow">
+      <div class="hbar"><div class="hthumb" id="globalThumb" style="left:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- الزيارات -->
+  <div class="visits">
+    <div class="visitCard">
+      <span id="done1" class="done-badge">منتهية</span>
+      <svg class="donut" id="v1" viewBox="0 0 120 120" role="button" tabindex="0" aria-label="الزيارة الأولى">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#eef3f2" stroke-width="12"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#16a34a" stroke-width="12" stroke-dasharray="0 314" stroke-linecap="round" class="ring"/>
+        <text x="60" y="64" text-anchor="middle" id="v1t">0%</text>
+      </svg>
+      <div class="chip" id="v1h" title="انقر لتسجيل/تحديث تاريخ الزيارة بالهجري">—</div>
+      <div class="visitLabel">الزيارة الأولى</div>
+    </div>
+    <div class="visitCard">
+      <span id="done2" class="done-badge">منتهية</span>
+      <svg class="donut" id="v2" viewBox="0 0 120 120" role="button" tabindex="0" aria-label="الزيارة الثانية">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#eef3f2" stroke-width="12"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#16a34a" stroke-width="12" stroke-dasharray="0 314" stroke-linecap="round" class="ring"/>
+        <text x="60" y="64" text-anchor="middle" id="v2t">0%</text>
+      </svg>
+      <div class="chip hidden" id="v2h" title="انقر لتسجيل/تحديث تاريخ الزيارة بالهجري">—</div>
+      <div class="visitLabel">الزيارة الثانية</div>
+    </div>
+    <div class="visitCard">
+      <span id="done3" class="done-badge">منتهية</span>
+      <svg class="donut" id="v3" viewBox="0 0 120 120" role="button" tabindex="0" aria-label="الزيارة الثالثة">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#eef3f2" stroke-width="12"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#16a34a" stroke-width="12" stroke-dasharray="0 314" stroke-linecap="round" class="ring"/>
+        <text x="60" y="64" text-anchor="middle" id="v3t">0%</text>
+      </svg>
+      <div class="chip hidden" id="v3h" title="انقر لتسجيل/تحديث تاريخ الزيارة بالهجري">—</div>
+      <div class="visitLabel">الزيارة الثالثة</div>
+    </div>
+  </div>
+
+  <!-- مؤشر أداء الزيارة -->
+  <div class="hmeter">
+    <div class="hbarSmall"><div class="hthumbSmall" id="hThumb" style="left:0%"></div></div>
+    <div class="hlbl"><span>مؤشر أداء الزيارة الحالية:</span> <span id="kpiPct">0%</span></div>
+  </div>
+
+  <!-- عملية التعليم والتعلّم -->
+  <div class="box" id="learningBox">
+    <h3>عملية التعليم والتعلّم</h3>
+    <div class="table-responsive">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="width:44px">م</th>
+            <th class="center" style="width:260px">المجال</th>
+            <th class="center">العنصر (تعريف ذكي مختصر)</th>
+            <th class="w center">مستوى الأداء</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- الأدوات المساندة -->
+  <div class="box" id="toolsBox">
+    <h3><span>الأدوات المساندة لعملية التعليم والتعلّم</span><small id="toolsMeta">—</small></h3>
+    <div class="bar-wrap">
+      <div class="gradbar" id="gradbar"></div>
+      <div class="bar-nums"><span id="tR">غير مُفعل: 0</span><span id="tA">إلى حد ما: 0</span><span id="tG">مُفعل: 0</span></div>
+    </div>
+    <div class="table-responsive">
+      <table class="tbl">
+        <thead><tr><th>م</th><th>الأدوات</th><th>الشواهد</th><th>التفعيل</th></tr></thead>
+        <tbody id="toolsRows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- التوصيات المقدّمة -->
+  <div class="box">
+    <h3>التوصيات المقدّمة (مرتبطة بمستوى الأداء)</h3>
+    <div class="cards">
+      <div class="card"><h4>جوانب التميّز</h4><div id="strengthBox" class="list">—</div></div>
+      <div class="card"><h4>احتياجات التنمية المهنية</h4><div id="devBox" class="list">—</div></div>
+    </div>
+  </div>
+
+  <!-- التوقيعات -->
+  <div class="signs">
+    <table>
+      <tr><th>الزيارة الأولى</th><th>الزيارة الثانية</th><th>الزيارة الثالثة</th></tr>
+      <tr><td>اسم المعلم: <span id="sn1">—</span></td><td>اسم المعلم: <span id="sn2">—</span></td><td>اسم المعلم: <span id="sn3">—</span></td></tr>
+      <tr><td>توقيع المعلم: <span class="line"></span></td><td>توقيع المعلم: <span class="line"></span></td><td>توقيع المعلم: <span class="line"></span></td></tr>
+      <tr><td>تاريخ الزيارة (هجري): <span id="sh1">—</span></td><td>تاريخ الزيارة (هجري): <span id="sh2">—</span></td><td>تاريخ الزيارة (هجري): <span id="sh3">—</span></td></tr>
+      <tr>
+        <td colspan="3">
+          اسم مدير المدرسة: <span class="editable" id="principalName" contenteditable="false">فهد حامد الزهراني</span> — توقيع: <span class="line"></span>
+          <span class="no-print no-snap" style="margin-inline-start:8px">
+            <button class="btn-s" id="editPrincipal">تعديل الاسم</button>
+            <button class="btn-s" id="savePrincipal">حفظ</button>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- أزرار -->
+  <div class="actions no-print no-snap">
+    <div class="print-mode">
+      <label for="printMode">وضع الطباعة:</label>
+      <select id="printMode" class="fld" style="height:36px;width:150px">
+        <option value="color" selected>ملون</option>
+        <option value="bw">أبيض وأسود</option>
+      </select>
+    </div>
+    <button class="btn" id="finishVisitBtn" title="حفظ كامل لهذه الزيارة">إنهاء الزيارة (حفظ كامل)</button>
+    <button class="btn" id="printBtn" title="طباعة A4">طباعة A4</button>
+    <button class="btn primary" id="saveBtn" title="حفظ PDF باسم المعلم">حفظ PDF</button>
+    <button class="btn" id="waBtn" title="إرسال واتساب">واتساب</button>
+  </div>
+
+  <!-- شارة الطباعة (تظهر فقط في الطباعة/اللقطة) -->
+  <div id="printMark" class="printMark">مبادرة دعم اليعقوبي الثانوي — تاريخ الطباعة (هجري): <span id="printHijri">—</span></div>
+
+  <div class="footer no-snap">© مبادرة مدرسة اليعقوبي الثانوية — تنفيذ وتصميم: فهد حامد الزهراني</div>
+
+</div></div>
+
+<!-- زر الصعود لأعلى -->
+<button id="toTop" class="no-print no-snap" title="أعلى">↑</button>
 
 <script>
-/* ===== التاريخ الهجري (أم القرى) ===== */
-function hijriUmmAlQura(){
-  let txt='—';
+/* ===== رأس قابل للتعديل ===== */
+const LS_HEAD='moe_header_v14';
+const headIds=['h-sa','h-moed','h-dir','h-school'];
+function loadHead(){const raw=localStorage.getItem(LS_HEAD); if(raw){try{const o=JSON.parse(raw); headIds.forEach(id=>{if(o[id]) document.getElementById(id).textContent=o[id];});}catch{}}}
+function saveHead(){const o={}; headIds.forEach(id=>o[id]=document.getElementById(id).textContent.trim()); localStorage.setItem(LS_HEAD,JSON.stringify(o)); alert('تم حفظ العناوين.');}
+function resetHead(){document.getElementById('h-sa').textContent='المملكة العربية السعودية';document.getElementById('h-moed').textContent='وزارة التعليم';document.getElementById('h-dir').textContent='الإدارة العامة للتعليم بالمنطقة الشرقية';document.getElementById('h-school').textContent='مدرسة اليعقوبي الثانوية';saveHead();}
+document.getElementById('editHead').addEventListener('click',()=>headIds.forEach(id=>document.getElementById(id).setAttribute('contenteditable','true')));
+document.getElementById('saveHead').addEventListener('click',()=>{headIds.forEach(id=>document.getElementById(id).setAttribute('contenteditable','false'));saveHead();});
+document.getElementById('resetHead').addEventListener('click',()=>{if(confirm('إرجاع العناوين للقيم الافتراضية؟')) resetHead();});
+loadHead();
+
+/* ===== التاريخ الهجري العام ===== */
+function hijriNow(){
   try{
     const opt={weekday:'long',day:'numeric',month:'long',year:'numeric'};
-    txt=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',opt).format(new Date());
-  }catch(e){
-    try{ txt=new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date()); }
-    catch{ txt=new Date().toLocaleDateString('ar-SA'); }
-  }
-  document.getElementById('hijriChip').textContent='التاريخ الهجري: '+txt+' هـ';
-  return txt+' هـ';
+    return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',opt).format(new Date())+' هـ';
+  }catch{return '—';}
 }
-const hijriToday=hijriUmmAlQura();
+document.getElementById('hijriChip').textContent='التاريخ الهجري: '+hijriNow();
 
-/* ===== بيانات المعلمين (من ملفّك) ===== */
-const teachers=[
-  {name:"موسى صلبان عبده عسيري",id:"1093013116",spec:"فيزياء"},
-  {name:"مبارك عوضه سفر آل ثابت",id:"1056464405",spec:"كيمياء"},
-  {name:"فرج عبدالعلي يوسف ال سيف",id:"1000397735",spec:"احياء"},
-  {name:"منذر عامر حمود زميع",id:"1065913053",spec:"انجليزي"},
-  {name:"سامي عبيد عبدالله العرابي",id:"1020850549",spec:"عربي"},
-  {name:"عماد محمد جمعان الزهراني",id:"1048667289",spec:"مكتبات"},
-  {name:"ابراهيم حبيب عبدالغني الميمني",id:"1072815481",spec:"رياضيات"},
-  {name:"بندر عبدالعزيز محمد الغامدي",id:"1046853881",spec:"حاسب"},
-  {name:"حسين بن محمد بن فهد ال قريش القحطاني",id:"1014268567",spec:"احياء"},
-  {name:"ناصر علي ناصر الراشد",id:"1008303370",spec:"حاسب"},
-  {name:"حسين بن محمد بن حسين الأحمد",id:"1060369202",spec:"عربي"},
-  {name:"عبدالرحمن محمد فرحان القرني",id:"1053065189",spec:"حاسب"},
-  {name:"علي سعد سعيد الاصلعي الاحمري",id:"1023999780",spec:"احياء"},
-  {name:"محمد حمد عبدالرحمن التويجري",id:"1064745944",spec:"عربي"},
-  {name:"عبدالله فيصل بن فطيس الهذلي",id:"1094733290",spec:"رياضيات"},
-  {name:"احمد عبدالرحيم عبدالحميد ابوعصيده",id:"1033584234",spec:"انجليزي"},
-  {name:"عبدالله بن عبدالعزيز بن سيف السهلي",id:"1063175010",spec:"علم اجتماع"},
-  {name:"بشير بن أحمد بن عبدالله آل سليم",id:"1019783917",spec:"مكتبات"},
-  {name:"ابراهيم بن محمد بن ابراهيم الربيع",id:"1004182687",spec:"انجليزي"},
-  {name:"عبدالمجيد عبدالله سالم آل حبشان",id:"1004581359",spec:"اجتماعيات"},
-  {name:"فيصل فهد علي الزهراني",id:"1086115373",spec:"رياضيات"},
-  {name:"خالد حسن مانع الشهري",id:"1021900764",spec:"عربي"},
-  {name:"عيسى بن خالد بن عبد الرحمن المذن",id:"1072990581",spec:"كيمياء"},
-  {name:"زياد عواض ابن عيضه العمري",id:"1092156742",spec:"علم الإدارة"},
-  {name:"عبدالرحمن عبدالجبار حمود العتيبي",id:"1089635724",spec:"فيزياء"},
-  {name:"عبد الله حسن عمر الادريسي",id:"1081556910",spec:"رياضيات"},
-  {name:"تقي عبد الهادي تقي العلي",id:"1026472363",spec:"كيمياء"},
-  {name:"صالح بن محمد بن صالح السميحي",id:"1003535422",spec:"دين"},
-  {name:"زاهر عبدالله سعد الشهراني",id:"1074173517",spec:"دين"},
-  {name:"عادل بن علي بن ناصر البارقي",id:"1007370701",spec:"رياضه"},
-  {name:"ابراهيم بن أحمد بن ابراهيم العجلان",id:"1001082179",spec:"دين"},
-  {name:"خالد أحمد محمد الشهري",id:"1034318301",spec:"كيمياء"},
-  {name:"خالد سعد راشد المرضي",id:"1025640010",spec:"اجتماعيات"},
-  {name:"عبدالله بن خلوفة بن عبدالله ال مرعي",id:"1029490875",spec:"دين"},
-  {name:"يحيى بن محمد بن سعيد القحطاني",id:"1048978892",spec:"اجتماعيات"},
-  {name:"حسين بن سعيد سلمان المدن",id:"1022616799",spec:"مكتبات"},
-  {name:"يوسف عيسى عيسى العيد",id:"1012646822",spec:"عربي"},
-  {name:"نبيل بن محسن محمد القلاف",id:"1025472604",spec:"رياضه"},
-  {name:"عبدالمجيد عبدالرحمن عبدالله السالمي",id:"1073861831",spec:"انجليزي"},
-  {name:"حسن علي حسن الشهري",id:"1037273594",spec:"عربي"},
-  {name:"جميل عبدالمجيد جواد العلي",id:"1029281589",spec:"فيزياء"},
-  {name:"عبد الهادي محمد حبيب العايش",id:"1058489277",spec:"رياضيات"},
-  {name:"حسن يوسف حسين الخليفة",id:"1056994203",spec:"كيمياء"},
-  {name:"حسن عبدالله علي العبدالله",id:"1005472780",spec:"احياء"}
-];
+/* ===== Excel: استيراد/تصدير/قالب + قائمة المعلمين (قراءة هوية قوية) ===== */
+let teacherList=[];
+const tName=document.getElementById('tName'), tId=document.getElementById('tId'), tSpec=document.getElementById('tSpec');
+const degree=document.getElementById('degree'), exp=document.getElementById('exp');
+const tSelect=document.getElementById('teacherSelect');
 
-/* تعبئة القائمة المنسدلة بالمعلمين */
-const tSelect=document.getElementById('tSelect');
-teachers.forEach((t,i)=>{
-  const op=document.createElement('option');
-  op.value=String(i);
-  op.textContent=t.name; // عرض الاسم كاملاً
-  tSelect.appendChild(op);
-});
-tSelect.addEventListener('change',()=>{
-  if(tSelect.value==="") return;
-  const t=teachers[Number(tSelect.value)];
-  document.getElementById('tName').value=t.name;
-  document.getElementById('tId').value=t.id;
-  document.getElementById('tSpec').value=t.spec;
-});
-
-/* ===== عناصر التقييم ===== */
-const items=[
-  {name:"أداء الواجبات الوظيفية",weight:10,brief:"انضباط يومي؛ التزام بالجدول والمواعيد؛ تحضير وتتبع للدرس؛ تسليم التقارير في وقتها."},
-  {name:"التفاعل مع المجتمع المهني",weight:10,brief:"مجتمعات تعلم مهنية؛ تبادل زيارات؛ حضور دورات؛ مشاركة موارد وخبرات."},
-  {name:"التفاعل مع أولياء الأمور",weight:10,brief:"قنوات تواصل منضبطة؛ رسائل موجزة؛ متابعة بنّاءة لحالات الطلاب."},
-  {name:"التنوع في استراتيجيات التدريس",weight:10,brief:"تنويع أساليب التعلم النشط؛ مراعاة الفروق؛ أسئلة عليا؛ تعلم تعاوني."},
-  {name:"تحسين نتائج المتعلمين",weight:10,brief:"قياس قبلي/بعدي؛ خطط علاج للفاقد؛ إثراء للمتفوقين؛ متابعة تقدم."},
-  {name:"إعداد وتنفيذ خطة التعلم",weight:10,brief:"توزيع منهج معتمد؛ تحضير علمي؛ تقويم بنائي؛ تنفيذ ملتزم بالزمن."},
-  {name:"توظيف تقنيات ووسائل التعلم المناسبة",weight:10,brief:"منصات تعليم؛ موارد تفاعلية؛ مصادر متعددة؛ محتوى منظم ومناسب."},
-  {name:"تهيئة البيئة التعليمية",weight:5, brief:"تهيئة نفسية محفّزة؛ تنظيم المقاعد؛ لوحات وإرشادات صفية."},
-  {name:"الإدارة الصفية",weight:5,  brief:"قواعد وضوابط واضحة؛ إدارة وقت دقيقة؛ انتقالات سلسة؛ متابعة الغياب."},
-  {name:"تحليل نتائج المتعلمين وتشخيص مستوياتهم",weight:10,brief:"تحليل بنود الاختبار؛ تحديد نقاط القوة والضعف؛ تقارير مختصرة."},
-  {name:"تنوع أساليب التقويم",weight:10,brief:"اختبارات تحريرية/شفهية/عملية/إلكترونية؛ مهام أداء؛ ملفات إنجاز."},
-];
-const strengthPhrases={
- "أداء الواجبات الوظيفية":"انضباط وظيفي والتزام بالمواعيد وجودة متابعة للتحضير والتقارير.",
- "التفاعل مع المجتمع المهني":"حضور فاعل وتبادل خبرات يثري الممارسة الصفية.",
- "التفاعل مع أولياء الأمور":"تواصل راقٍ وموجّه يسهم في دعم تعلم الأبناء.",
- "التنوع في استراتيجيات التدريس":"تنويع مؤثر يحقق مشاركة وفاعلية المتعلمين.",
- "تحسين نتائج المتعلمين":"خطط علاج وإثراء انعكست على نتائج الطلاب.",
- "إعداد وتنفيذ خطة التعلم":"تنفيذ محكم لخطة تعليمية متوازنة وتقويم بنائي.",
- "توظيف تقنيات ووسائل التعلم المناسبة":"اختيار أدوات مناسبة تُحفّز التفاعل وتثري المحتوى.",
- "تهيئة البيئة التعليمية":"بيئة آمنة ومحفّزة تُظهر أثرًا إيجابيًا على المشاركة.",
- "الإدارة الصفية":"انضباط واضح وتنظيم وقت فعّال وانتقالات سلسة.",
- "تحليل نتائج المتعلمين وتشخيص مستوياتهم":"تحليل دقيق للنتائج وتوجيه بنّاء لتحسين الأداء.",
- "تنوع أساليب التقويم":"تقويم متنوع يقيس التعلم ويغذّيه راجعًا."
-};
-const devPhrases={
- "أداء الواجبات الوظيفية":"تعزيز توثيق التحضير وضبط المواعيد وتفعيل المتابعة الأسبوعية.",
- "التفاعل مع المجتمع المهني":"زيادة المبادرات المهنية وتبادل الزيارات والتجارب الصفية.",
- "التفاعل مع أولياء الأمور":"تنويع قنوات التواصل وجدولتها برسائل موجزة وواضحة.",
- "التنوع في استراتيجيات التدريس":"توسيع التنويع وتفعيل أنشطة تعلم نشط تراعي الفروق.",
- "تحسين نتائج المتعلمين":"تطوير خطط علاجية دقيقة وربطها بمؤشرات تقدم أسبوعية.",
- "إعداد وتنفيذ خطة التعلم":"مراجعة التحضير العلمي وربط الأهداف بمعايير قياس واضحة.",
- "توظيف تقنيات ووسائل التعلم المناسبة":"إثراء المحتوى بأدوات رقمية تفاعلية مناسبة للدرس.",
- "تهيئة البيئة التعليمية":"تحسين التهيئة النفسية وتنظيم المقاعد بما يدعم التفاعل.",
- "الإدارة الصفية":"تثبيت قواعد صفية واضحة وتحسين إدارة الوقت والانتقال.",
- "تحليل نتائج المتعلمين وتشخيص مستوياتهم":"توسيع تحليل البنود وبناء ملفات تقدم مختصرة.",
- "تنوع أساليب التقويم":"تفعيل التقويم العملي والشفهي والإلكتروني بشكل أوسع."
-};
-
-/* بناء الجدول */
-const tbody=document.getElementById('rows');
-items.forEach((it,idx)=>{
-  const tr=document.createElement('tr');
-  tr.innerHTML=`
-    <td class="w-tight" style="text-align:center">${idx+1}</td>
-    <td>${it.name}</td>
-    <td class="w"><b>${it.weight}%</b></td>
-    <td class="w-tight">
-      <select class="grade" data-g="3" aria-label="درجة العنصر">
-        <option value="5">5</option><option value="4">4</option>
-        <option value="3" selected>3</option><option value="2">2</option><option value="1">1</option>
-      </select>
-    </td>
-    <td class="brief">${it.brief}</td>`;
-  tbody.appendChild(tr);
-});
-
-/* ديناميكيات الحساب */
-const gradesEls=[...document.querySelectorAll('.grade')];
-const percentChip=document.getElementById('percentChip');
-const scoreChip=document.getElementById('scoreChip');
-const thumb=document.getElementById('thumb');
-const strengthBody=document.getElementById('strengthBody');
-const devBody=document.getElementById('devBody');
-
-function overallText(avg){
-  if(avg>=4.5) return "مثالي";
-  if(avg>=3.5) return "تخطّى التوقعات";
-  if(avg>=2.5) return "وافق التوقعات";
-  if(avg>=1.5) return "بحاجة إلى تطوير";
-  return "غير مرضي";
-}
-
-function recalc(){
-  let weighted=0, per=0, strengths=[], devs=[];
-  gradesEls.forEach((sel,i)=>{
-    const g=Number(sel.value); sel.dataset.g=g;
-    const w=items[i].weight;
-    weighted += g*w;
-    per += (g/5)*w;
-    const name=items[i].name;
-    if(g>=4) strengths.push(`• ${strengthPhrases[name]}`);
-    if(g<=3) devs.push(`• ${devPhrases[name]}`);
-  });
-  const avg=weighted/100; const pct=Math.round(per);
-  scoreChip.textContent=`مؤشر الإنجاز: ${avg.toFixed(2)} / 5`;
-  percentChip.textContent=`المجموع: %${pct}`;
-  const pos=((5-avg)/4)*100; thumb.style.left=`${pos}%`;
-  let bcol='#33524e'; if(avg>=4.5) bcol='#1c7f4d'; else if(avg<=2) bcol='#b32828'; else bcol='#a86a19';
-  thumb.style.borderColor=bcol;
-  strengthBody.innerHTML=strengths.length?strengths.join('<br>'):'—';
-  devBody.innerHTML=devs.length?devs.join('<br>'):'—';
-  return {avg,pct,overall:overallText(avg)};
-}
-gradesEls.forEach(el=>el.addEventListener('change',recalc));
-recalc();
-
-/* ضغط للحفظ كصفحة واحدة */
-const SHEET=document.getElementById('sheet');
-function fitOnce(){
-  const mmToPx=3.78, avail=(297-14)*mmToPx;
-  const h=SHEET.scrollHeight, scale=Math.min(1,(avail/h)*0.995);
-  SHEET.dataset.prev=SHEET.style.transform||'';
-  SHEET.style.transform=`scale(${scale})`;
-  return scale;
-}
-function unfit(){ if(SHEET.dataset.prev!==undefined){SHEET.style.transform=SHEET.dataset.prev; delete SHEET.dataset.prev;} }
-
-/* تحقق قبل الإجراءات */
-function validate(){
-  const name=document.getElementById('tName').value.trim();
-  const id=document.getElementById('tId').value.trim();
-  const spec=document.getElementById('tSpec').value.trim();
-  if(!name){ alert('رجاءً اختر المعلم من القائمة أو اكتب اسمه.'); document.getElementById('tName').focus(); return false; }
-  if(!/^\d{10}$/.test(id)){ alert('رجاءً أدخل رقم هوية صحيحًا (10 أرقام).'); document.getElementById('tId').focus(); return false; }
-  if(!spec){ alert('رجاءً اكتب التخصص.'); document.getElementById('tSpec').focus(); return false; }
-  if(gradesEls.some(s=>!s.value)){ alert('رجاءً إنهاء درجات جميع العناصر.'); return false; }
-  return true;
-}
-
-/* طباعة */
-function doPrint(){ fitOnce(); setTimeout(()=>window.print(),60); }
-window.addEventListener('afterprint',unfit);
-
-/* حفظ PDF */
-async function savePDF(){
+document.getElementById('btnImport').addEventListener('click',()=>document.getElementById('excelInput').click());
+document.getElementById('excelInput').addEventListener('change', async (e)=>{
+  const file=e.target.files[0]; if(!file) return;
   try{
-    document.getElementById('saveBtn').disabled=true;
-    const name=(document.getElementById('tName').value||'غير_مسمى').replace(/\s+/g,' ');
-    const stage=document.getElementById('tStage').value;
-    const filename=`تقييم الأداء الوظيفي - ${name} - مرحلة ${stage} - ${hijriToday}.pdf`;
+    const data=await file.arrayBuffer();
+    const wb=XLSX.read(data); const sh=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(sh,{header:1,defval:''});
+    if(!rows.length){alert('الملف فارغ');return;}
+    const headers=rows[0].map(h=>String(h).trim().toLowerCase());
+    const norm=(h)=>h.replace(/\s+/g,' ').replace(/[^\u0600-\u06FFa-z0-9 ]/gi,'').trim();
+    const findIdx=(...keys)=>headers.findIndex(h=>{const n=norm(h); return keys.some(k=> n===norm(k) || n.includes(norm(k)));});
 
-    fitOnce();
-    await new Promise(r=>setTimeout(r,120));
+    const ixName=findIdx('الاسم','name','full name','fullname','اسم المعلم','اسم');
+    const ixId  =findIdx('الهوية','id','national id','رقم الهوية','رقم السجل','هوية');
+    const ixSpec=findIdx('التخصص','spec','specialization','subject','المادة','مادة');
+    const ixDeg =findIdx('المؤهل','qualification','degree');
+    const ixExp =findIdx('سنوات الخبرة','الخبرة','experience','years');
 
-    const node=document.getElementById('page');
-    const canvas=await html2canvas(node,{useCORS:true,scale:2,background:'#ffffff',scrollX:0,scrollY:0});
-    const imgData=canvas.toDataURL('image/png',1.0);
-    const {jsPDF}=window.jspdf;
-    const pdf=new jsPDF({unit:'mm',format:'a4',orientation:'portrait'});
+    function tenDigitsFallback(row){
+      for(const c of row){ const s=String(c||'').replace(/\D+/g,''); if(/^\d{10}$/.test(s)) return s; }
+      return '';
+    }
 
-    const margin=5;
-    const pdfW=210-2*margin, pdfH=297-2*margin;
-    const imgWmm=canvas.width*0.264583, imgHmm=canvas.height*0.264583;
-    const ratio=Math.min(pdfW/imgWmm, pdfH/imgHmm);
-    const w=imgWmm*ratio, h=imgHmm*ratio;
-    const x=margin+(pdfW-w)/2, y=margin+(pdfH-h)/2;
+    teacherList = rows.slice(1)
+      .filter(r=>r.some(x=>String(x).trim()!==''))
+      .map(r=>{
+        const name=(ixName>-1? r[ixName] : (r[0]||'')).toString().trim();
+        let id=(ixId>-1? String(r[ixId]) : '').replace(/\D+/g,'');
+        if(!/^\d{10}$/.test(id)) id=tenDigitsFallback(r);
+        const spec=(ixSpec>-1? r[ixSpec] : (r[2]||'')).toString().trim();
+        const deg=(ixDeg>-1? r[ixDeg] : '').toString().trim();
+        const ex =(ixExp>-1? r[ixExp] : '').toString().trim();
+        return {name,id:id.slice(0,10),spec,degree:deg,exp:ex};
+      })
+      .filter(x=>x.name);
 
-    pdf.addImage(imgData,'PNG',x,y,w,h,'','FAST');
-    pdf.save(filename);
-  }catch(err){
-    alert('تعذّر الحفظ PDF. جرّب من جديد.'); console.error(err);
-  }finally{
-    unfit(); document.getElementById('saveBtn').disabled=false;
+    rebuildSelect();
+    if(teacherList.length){fillTeacher(teacherList[0]); tSelect.value="0";}
+    alert('تم الاستيراد وتعبئة البيانات.');
+  }catch(err){console.error(err);alert('فشل استيراد الملف');}
+  finally{ e.target.value=''; }
+});
+document.getElementById('btnExport').addEventListener('click',()=>{
+  if(!teacherList.length){alert('لا توجد بيانات لتصدير.');return;}
+  const ws=XLSX.utils.aoa_to_sheet([['الاسم','الهوية','التخصص','المؤهل','سنوات الخبرة'],...teacherList.map(t=>[t.name,t.id,t.spec,t.degree||'',t.exp||''])]);
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'المعلمون'); XLSX.writeFile(wb,'قائمة_المعلمين.xlsx');
+});
+document.getElementById('btnTemplate').addEventListener('click',()=>{
+  const ws=XLSX.utils.aoa_to_sheet([['الاسم','الهوية','التخصص','المؤهل','سنوات الخبرة'],['مثال: محمد علي','1010101010','رياضيات','بكالوريوس','8']]);
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'قالب_المعلمين'); XLSX.writeFile(wb,'قالب_المعلمين.xlsx');
+});
+function rebuildSelect(){tSelect.innerHTML='<option value="">— اختر معلم —</option>';teacherList.forEach((t,i)=>{const op=document.createElement('option');op.value=i;op.textContent=t.name;tSelect.appendChild(op);});}
+tSelect.addEventListener('change',()=>{const v=tSelect.value;if(v==='')return;fillTeacher(teacherList[Number(v)]);});
+
+/* ===== مفاتيح التخزين ===== */
+const LS_FORMS='moe_teacher_forms_v3';
+const LS_LAST='moe_last_teacher';
+function teacherKey(){ const n=(tName.value||'').trim(), id=(tId.value||'').trim(); return n||id? `${n}|${id}` : '';}
+function readAll(){ try{ return JSON.parse(localStorage.getItem(LS_FORMS)||'{}'); }catch{return {};}}
+function writeAll(obj){ localStorage.setItem(LS_FORMS, JSON.stringify(obj)); }
+function getFormRecord(){ const key=teacherKey(); if(!key) return null; const all=readAll(); return all[key] || null; }
+
+/* ===== تعبئة/تحميل حسب المعلم ===== */
+function fillTeacher(t){
+  tName.value=t.name||''; 
+  tId.value=(t.id||'').replace(/\D+/g,'').slice(0,10); 
+  tSpec.value=t.spec||''; degree.value=t.degree||''; exp.value=t.exp||'';
+  updateSignNames();
+  loadFormForCurrentTeacher();   // استرجاع كل زياراته
+  calcAll();
+  localStorage.setItem(LS_LAST, teacherKey());
+}
+
+/* ===== تقييد إدخال الهوية ===== */
+document.getElementById('tId').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D+/g,'').slice(0,10);saveForm();});
+
+/* ===== دوائر الزيارات + التاريخ ===== */
+const C=314; let activeVisit=1;
+function hijriDateStr(d){try{const f=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',{weekday:'long',day:'numeric',month:'long',year:'numeric'});return f.format(d)+' هـ';}catch{return '—';}}
+function setChip(v,txt){document.getElementById('v'+v+'h').textContent=txt; document.getElementById('sh'+v).textContent=txt;}
+function setDonut(v,p){const ring=document.querySelector('#v'+v+' .ring');const txt=document.getElementById('v'+v+'t');ring.setAttribute('stroke', p>=80?'#16a34a':(p>=50?'#f59e0b':'#ef4444'));ring.setAttribute('stroke-dasharray',`${(p/100)*C} ${C}`);txt.textContent=p+'%';}
+['v1','v2','v3'].forEach((id,i)=>{const el=document.getElementById(id);el.addEventListener('click',()=>{activeVisit=i+1;toggleChipVisibility();buildTable();renderToolsForVisit();calcAll();saveForm();});el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});});
+['v1h','v2h','v3h'].forEach((id,i)=>{document.getElementById(id).addEventListener('click',()=>{const txt=hijriDateStr(new Date()); setChip(i+1,txt); saveForm();});});
+function toggleChipVisibility(){['v1h','v2h','v3h'].forEach((id,i)=>document.getElementById(id).classList.toggle('hidden',(i+1)!==activeVisit));}
+
+/* ===== شارات إنهاء الزيارات ===== */
+function setDoneBadge(v, on){document.getElementById('done'+v).style.display=on?'inline-block':'none';}
+
+/* ===== المؤشرات ===== */
+const hThumb=document.getElementById('hThumb'), kpiPct=document.getElementById('kpiPct'), globalThumb=document.getElementById('globalThumb');
+const p1Span=document.getElementById('p1'), p2Span=document.getElementById('p2'), p3Span=document.getElementById('p3');
+const globalInline=document.getElementById('globalPctInline');
+function setVisitMeter(p){kpiPct.textContent=p+'%'; hThumb.style.left=p+'%';}
+function setGlobalMeter(p){globalThumb.style.left=p+'%'; globalInline.textContent=p+'%'; globalInline.classList.remove('good','mid','bad'); if(p>=80) globalInline.classList.add('good'); else if(p>=50) globalInline.classList.add('mid'); else globalInline.classList.add('bad');}
+function setVisitPercents(p1,p2,p3){p1Span.textContent=p1+'%';p2Span.textContent=p2+'%';p3Span.textContent=p3+'%';}
+
+/* ===== جدول عملية التعليم والتعلّم ===== */
+const fields=[
+  {name:'إعداد وتنفيذ خطة للتعلم', items:[
+    ['تخطيط محكم','تحويل المنهج إلى خطة دروس بمخرجات قابلة للقياس.'],
+    ['استراتيجيات مبتكرة','تضمين أساليب حديثة تدعم التفكير والتطبيق.'],
+    ['التزام زمني مرن','التوازن بين الزمن والأنشطة دون الإخلال بالمحتوى.'],
+    ['تقويم هادف','أدوات قياس تغذي التعلم وتضبط التحسين.']
+  ]},
+  {name:'التنوع في استراتيجيات التدريس', items:[
+    ['تنويع الأساليب','اختيار ما يلائم المحتوى وأهداف الدرس.'],
+    ['مراعاة الفروق','تهيئة بدائل ومسارات لسرعات مختلفة.'],
+    ['دمج التعليم المباشر والرقمي','التكامل بين التفاعل الصفي والأدوات الرقمية.'],
+    ['تحفيز التفاعل','أنشطة تشاركية وأسئلة تولّد الحوار.']
+  ]},
+  {name:'إدارة الفصل', items:[
+    ['تنظيم البيئة','تهيئة مكان آمن ومحفّز للتعلم.'],
+    ['ضبط السلوك','قواعد واضحة وتتبّع عادل للسلوك.'],
+    ['تعزيز المشاركة','إشراك جميع الطلاب بأدوار فاعلة.'],
+    ['توظيف الوقت','انتقالات سلسة واستثمار كل دقيقة.']
+  ]},
+  {name:'توظيف التقنية', items:[
+    ['أدوات رقمية','منصات وموارد تفاعلية مناسبة.'],
+    ['دمج التقنية','استخدام التقنية داخل المهمة التعليمية.'],
+    ['دعم الفروق','التقنية كوسيط لتخصيص التعلم.'],
+    ['تعزيز النواتج','أدلة محكمة على تقدّم الطلاب.']
+  ]},
+  {name:'البيئة التعليمية', items:[
+    ['تهيئة مكان آمن','إجراءات سلامة وشعور بالانتماء.'],
+    ['موارد تعلم','مواد متنوعة تدعم الفهم.'],
+    ['علاقات إيجابية','احترام متبادل وتواصل فعّال.'],
+    ['دافعية المتعلمين','تعزيز الجهد والإنجاز بمكافآت بناءة.']
+  ]},
+  {name:'أساليب وأدوات التقويم', items:[
+    ['تنويع أدوات','تحريري/شفهي/عملي/رقمي.'],
+    ['مراعاة الفروق','مهام متدرجة وبدائل منصفة.'],
+    ['التقويم البنائي والنهائي','متابعة مستمرة واختبارات معيارية.'],
+    ['استثمار النتائج','تحسين التدريس وفق بيانات واقعية.']
+  ]}
+];
+const tbody=document.getElementById('rows');
+let store={1:fields.map(f=>Array(f.items.length).fill(0)),2:fields.map(f=>Array(f.items.length).fill(0)),3:fields.map(f=>Array(f.items.length).fill(0))};
+
+function buildTable(){
+  tbody.innerHTML='';
+  fields.forEach((f,fi)=>{
+    f.items.forEach((pair,ii)=>{
+      const [label,brief]=pair;
+      const tr=document.createElement('tr');
+      if(ii===0){
+        tr.innerHTML+=`<td class="seq" rowspan="${f.items.length}" style="vertical-align:middle">${fi+1}</td>`;
+        tr.innerHTML+=`<td rowspan="${f.items.length}" style="text-align:center;vertical-align:middle;font-weight:800;background:var(--colDomain)">${f.name}</td>`;
+      }
+      tr.innerHTML+=`<td class="item-cell"><b>${label}</b><span class="item-brief">${brief}</span></td>
+        <td class="w"><div class="level">
+          <button data-v="1">ضعيف</button>
+          <button data-v="2">متوسط</button>
+          <button data-v="3">متميز</button>
+        </div></td>`;
+      tbody.appendChild(tr);
+      const btns=[...tr.querySelectorAll('button')];
+      const saved=store[activeVisit][fi][ii]; if(saved>0) btns.forEach(b=>b.classList.toggle('active', Number(b.dataset.v)===saved));
+      btns.forEach(b=> b.addEventListener('click',()=>{btns.forEach(x=>x.classList.remove('active'));b.classList.add('active');store[activeVisit][fi][ii]=Number(b.dataset.v);calcAll();saveForm();}));
+    });
+  });
+}
+
+/* ===== الأدوات المساندة ===== */
+const toolsData=[
+  {title:'تحسين نواتج التعلّم باستراتيجيات مبنية على الأدلة',desc:'رفع مستوى تحصيل الطلاب باستخدام طرق تدريس فعّالة ومتنوعة تراعي الفروق الفردية.'},
+  {title:'تفعيل ومتابعة منصة مدرستي بفاعلية',desc:'توظيف المنصة في إدارة التعلم، متابعة الواجبات والأنشطة، وتعزيز التواصل.'},
+  {title:'تعزيز الشراكة مع المجتمع المهني',desc:'المشاركة في البرامج التدريبية والرخص المهنية بما يسهم في تطوير الأداء.'},
+  {title:'التواصل المستمر مع أولياء الأمور',desc:'فتح قنوات اتصال فعّالة لدعم متابعة الطلاب أكاديميًا وسلوكيًا.'},
+  {title:'تحليل نواتج التعلّم واتخاذ قرارات علاجية',desc:'قراءة بيانات الاختبارات لتحديد القوة ومعالجة مواطن الضعف.'},
+  {title:'توظيف ومتابعة كتاب الطالب كمرجع أساسي',desc:'الاعتماد على الكتاب وربطه بالأنشطة والواجبات.'}
+];
+const tBody=document.getElementById('toolsRows');
+function buildTools(){
+  tBody.innerHTML='';
+  toolsData.forEach((t,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="seq">${i+1}</td>
+      <td><span class="tool-name">${t.title}</span><span class="tool-desc">${t.desc}</span></td>
+      <td style="text-align:center"><input type="checkbox" aria-label="شاهد"></td>
+      <td><div class="pills">
+          <div class="pill" data-v="2">مُفعل</div>
+          <div class="pill" data-v="1">إلى حد ما</div>
+          <div class="pill" data-v="0">غير مُفعل</div>
+        </div></td>`;
+    tBody.appendChild(tr);
+  });
+  [...document.querySelectorAll('.pills')].forEach((set)=>{
+    const pills=set.querySelectorAll('.pill');
+    pills.forEach(p=>p.addEventListener('click',()=>{pills.forEach(x=>x.classList.remove('active'));p.classList.add('active');updateToolsSummary();calcAll();saveForm();}));
+  });
+  updateToolsSummary();
+}
+const gradbar=document.getElementById('gradbar'), meta=document.getElementById('toolsMeta');
+const tR=document.getElementById('tR'), tA=document.getElementById('tA'), tG=document.getElementById('tG');
+function updateToolsSummary(){
+  const sets=[...document.querySelectorAll('.pills')]; let g=0,a=0,r=0;
+  sets.forEach(set=>{const act=set.querySelector('.pill.active'); if(act && act.dataset.v==='2')g++; else if(act && act.dataset.v==='1')a++; else r++;});
+  const total=toolsData.length||1; const pg=(g/total)*100, pa=(a/total)*100, pr=100-pg-pa;
+  gradbar.style.background=`linear-gradient(90deg,#fecaca 0% ${pr}%,#fde68a ${pr}% ${pr+pa}%,#bbf7d0 ${pr+pa}% 100%)`;
+  tR.textContent=`غير مُفعل: ${r}`; tA.textContent=`إلى حد ما: ${a}`; tG.textContent=`مُفعل: ${g}`;
+  meta.textContent=`${total} أداة • مفعل: ${g} • إلى حد ما: ${a} • غير مفعل: ${r}`;
+}
+buildTools();
+
+/* حفظ/استرجاع حالة الأدوات حسب الزيارة */
+function getToolsStateFromUI(){
+  return [...document.querySelectorAll('.pills')].map(set=>{
+    const act=set.querySelector('.pill.active'); return act? Number(act.dataset.v):0;
+  });
+}
+function setToolsStateToUI(arr){
+  const sets=[...document.querySelectorAll('.pills')];
+  sets.forEach((set,i)=>{
+    const v= (arr && typeof arr[i]!=='undefined')? arr[i] : 0;
+    set.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+    const target=set.querySelector(`.pill[data-v="${v}"]`)||set.querySelector('.pill[data-v="0"]');
+    target.classList.add('active');
+  });
+  updateToolsSummary();
+}
+function renderToolsForVisit(){
+  const rec = getFormRecord(); 
+  const st = (rec && rec.visits && rec.visits[activeVisit] && rec.visits[activeVisit].tools) || Array(toolsData.length).fill(0);
+  setToolsStateToUI(st);
+}
+
+/* ===== توصيات ومؤشرات ===== */
+function calcAll(){
+  const p1 = visitPct(1), p2 = visitPct(2), p3 = visitPct(3);
+  const vPct = visitPct(activeVisit); setVisitMeter(vPct);
+  [1,2,3].forEach(v=> setDonut(v, visitPct(v)));
+  const gpct = Math.round((p1+p2+p3)/3); setGlobalMeter(gpct); setVisitPercents(p1,p2,p3);
+  const ok=[], dev=[];
+  fields.forEach((f,fi)=>{const vals=store[activeVisit][fi].filter(v=>v>0); if(!vals.length) return; const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+    if(avg>=2.5) ok.push(`• ${f.name}: أداء متقدّم ومتسق.`);
+    if(avg<=2)   dev.push(`• ${f.name}: يحتاج تعزيز التطبيق والمتابعة.`);
+  });
+  const sets=[...document.querySelectorAll('.pills')];
+  const valOf=set=> Number((set.querySelector('.pill.active')||{dataset:{v:0}}).dataset.v);
+  const ranked=sets.map((s,i)=>({i,v:valOf(s)}));
+  ranked.filter(x=>x.v===2).slice(0,2).forEach(x=>ok.push(`• تفعيل متميز للأداة (${toolsData[x.i].title}).`));
+  ranked.filter(x=>x.v===0).slice(0,2).forEach(x=>dev.push(`• تفعيل الأداة (${toolsData[x.i].title}) وربطها بالأهداف التعليمية.`));
+  document.getElementById('strengthBox').innerHTML=ok.length?ok.join('<br>'):'—';
+  document.getElementById('devBox').innerHTML=dev.length?dev.join('<br>'):'—';
+}
+function visitPct(v){
+  const flat=store[v].flat(), rated=flat.filter(x=>x>0);
+  const s=rated.reduce((a,b)=>a+(b-1),0); // 1->0,2->1,3->2
+  return rated.length?Math.round((s/(rated.length*2))*100):0;
+}
+
+/* ===== أسماء التوقيعات ===== */
+function updateSignNames(){const n=(tName.value||'—');['sn1','sn2','sn3'].forEach(id=>document.getElementById(id).textContent=n); saveForm();}
+document.getElementById('tName').addEventListener('input',updateSignNames);
+
+/* ===== طباعة صورة A4 نظيفة ===== */
+const printModeSel=document.getElementById('printMode');
+function updatePrintHijri(){ document.getElementById('printHijri').textContent = hijriNow(); }
+
+document.getElementById('printBtn').addEventListener('click', async ()=>{
+  // إعداد وضع اللقطة: إخفاء الأيقونات وإظهار سطر الطباعة
+  document.body.classList.add('snapshot');
+  updatePrintHijri();
+
+  // أبيض وأسود؟
+  const bw = printModeSel.value==='bw';
+  document.body.classList.toggle('bw-print', bw);
+
+  // التقط الصفحة كصورة
+  const node=document.getElementById('page');
+  const canvas=await html2canvas(node,{scale:2,background:'#ffffff',scrollX:0,scrollY:0,useCORS:true});
+
+  // أعد الحالة
+  document.body.classList.remove('bw-print');
+  document.body.classList.remove('snapshot');
+
+  const img=canvas.toDataURL('image/png',1.0);
+
+  // اطبع في IFRAME
+  const iframe=document.createElement('iframe');
+  iframe.style.position='fixed'; iframe.style.right='0'; iframe.style.bottom='0';
+  iframe.style.width='0'; iframe.style.height='0'; iframe.style.border='0';
+  document.body.appendChild(iframe);
+
+  const doc=iframe.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>طباعة</title>
+  <style>@page{size:A4 portrait;margin:5mm}html,body{height:auto;margin:0}img{width:100%;height:auto;display:block}</style>
+  </head><body><img id="pimg" src="${img}"></body></html>`);
+  doc.close();
+  const imgEl=doc.getElementById('pimg');
+  imgEl.onload=()=>{ setTimeout(()=>{iframe.contentWindow.focus(); iframe.contentWindow.print(); setTimeout(()=>document.body.removeChild(iframe),400);},100); };
+});
+
+/* ===== حفظ PDF ===== */
+function activeVisitHijri(){ const lbl=activeVisit===1?'الأولى':activeVisit===2?'الثانية':'الثالثة'; const d=document.getElementById('v'+activeVisit+'h').textContent||'—'; return {lbl,d}; }
+document.getElementById('saveBtn').addEventListener('click', async ()=>{
+  // لقطة نظيفة بدون أيقونات
+  document.body.classList.add('snapshot'); updatePrintHijri();
+  const node=document.getElementById('page');
+  const canvas=await html2canvas(node,{scale:2,background:'#ffffff',scrollX:0,scrollY:0,useCORS:true});
+  document.body.classList.remove('snapshot');
+
+  const name=((tName.value||'غير مسمى').trim()).replace(/[\\/:*?"<>|]/g,'-');
+  const school=document.getElementById('h-school').textContent.trim();
+  const principal=document.getElementById('principalName').textContent.trim();
+  const {lbl,d}=activeVisitHijri();
+
+  const {jsPDF}=window.jspdf; const pdf=new jsPDF({unit:'mm',format:'a4',orientation:'portrait'});
+  const margin=5; const pdfW=210-2*margin, pdfH=297-2*margin;
+  const img=canvas.toDataURL('image/png',1.0);
+  const imgWmm=canvas.width*0.264583, imgHmm=canvas.height*0.264583;
+  const ratio=Math.min(pdfW/imgWmm, pdfH/imgHmm); const w=imgWmm*ratio, h=imgHmm*ratio;
+  const x=margin+(pdfW-w)/2, y=margin+(pdfH-h)/2;
+  pdf.addImage(img,'PNG',x,y,w,h,'','FAST');
+  pdf.save(`استمارة زيارة - ${name} - الزيارة ${lbl} - ${d} - ${school} - المدير ${principal}.pdf`);
+});
+
+/* ===== واتساب ===== */
+document.getElementById('waBtn').addEventListener('click', ()=>{
+  const name=(tName.value||'—').trim(), spec=(tSpec.value||'—').trim(), id=(tId.value||'—').trim();
+  const p1=visitPct(1), p2=visitPct(2), p3=visitPct(3);
+  const school=document.getElementById('h-school').textContent.trim();
+  const principal=document.getElementById('principalName').textContent.trim();
+  const {lbl,d}=activeVisitHijri();
+  const msg=`السلام عليكم،
+${school}
+المدير: ${principal}
+الاسم: ${name} | الهوية: ${id} | التخصص: ${spec}
+الزيارة ${lbl}: بتاريخ ${d}
+نِسب الزيارات: الأولى %${p1}، الثانية %${p2}، الثالثة %${p3}
+المؤشر الشامل للأداء: %${Math.round((p1+p2+p3)/3)}`;
+  window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+});
+
+/* ===== زر صعود ===== */
+const toTop=document.getElementById('toTop');
+window.addEventListener('scroll',()=>{toTop.style.display=window.scrollY>200?"block":"none";});
+toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+/* ===== حفظ دائم لكل معلم/زيارة + حفظ تلقائي ===== */
+function saveForm(){
+  const key=teacherKey(); if(!key) return;
+  const all=readAll();
+  if(!all[key]) all[key]={teacher:{},visits:{1:{},2:{},3:{}}};
+
+  all[key].teacher = {name:tName.value||'', id:tId.value||'', spec:tSpec.value||'', degree:degree.value||'', exp:exp.value||'', school:document.getElementById('h-school').textContent||''};
+
+  all[key].visits[1].ratings = store[1];
+  all[key].visits[2].ratings = store[2];
+  all[key].visits[3].ratings = store[3];
+
+  all[key].visits[activeVisit].tools = getToolsStateFromUI();
+
+  all[key].visits[1].date = document.getElementById('v1h').textContent||'—';
+  all[key].visits[2].date = document.getElementById('v2h').textContent||'—';
+  all[key].visits[3].date = document.getElementById('v3h').textContent||'—';
+
+  writeAll(all);
+  localStorage.setItem(LS_LAST,key);
+}
+
+/* إنهاء الزيارة (حفظ كامل + شارة) */
+document.getElementById('finishVisitBtn').addEventListener('click',()=>{
+  const chip=document.getElementById('v'+activeVisit+'h');
+  if(!chip.textContent || chip.textContent==='—'){
+    setChip(activeVisit, hijriDateStr(new Date()));
+  }
+  saveForm();
+  const key=teacherKey(); if(key){
+    const all=readAll();
+    if(!all[key]) all[key]={teacher:{},visits:{1:{},2:{},3:{}}};
+    if(!all[key].visits[activeVisit]) all[key].visits[activeVisit]={};
+    all[key].visits[activeVisit].finalized=true;
+    all[key].visits[activeVisit].savedAt=new Date().toISOString();
+    writeAll(all);
+  }
+  setDoneBadge(activeVisit,true);
+  alert('تم إنهاء الزيارة وحفظ جميع البيانات بتاريخها الهجري.');
+});
+
+/* تحميل سجل المعلم وإظهاره */
+function loadFormForCurrentTeacher(){
+  // افتراضي
+  store={1:fields.map(f=>Array(f.items.length).fill(0)),2:fields.map(f=>Array(f.items.length).fill(0)),3:fields.map(f=>Array(f.items.length).fill(0))};
+
+  const rec=getFormRecord();
+  [1,2,3].forEach(v=>setDoneBadge(v,false));
+
+  if(rec){
+    if(rec.visits){
+      [1,2,3].forEach(v=>{
+        if(rec.visits[v] && rec.visits[v].ratings) store[v]=rec.visits[v].ratings;
+        const d=(rec.visits[v] && rec.visits[v].date) ? rec.visits[v].date : '—';
+        setChip(v,d);
+        if(rec.visits[v] && rec.visits[v].finalized) setDoneBadge(v,true);
+      });
+    }
+    toggleChipVisibility();
+    buildTable();
+    renderToolsForVisit();
+    calcAll();
+  }else{
+    setChip(1, hijriDateStr(new Date())); setChip(2,'—'); setChip(3,'—');
+    toggleChipVisibility();
+    buildTable(); renderToolsForVisit(); calcAll();
   }
 }
 
-/* واتساب — ملخّص مختصر فقط */
-function sendWhatsApp(){
-  const phone='966504532489';
-  const name=document.getElementById('tName').value.trim();
-  const stage=document.getElementById('tStage').value;
-  const S=recalc();
-  const msg =
-`السلام عليكم،
-ملخص قبلي من المعلم بمدرسة اليعقوبي الثانوية:
-الاسم: ${name}
-مرحلة التقييم: ${stage}
-${document.getElementById('scoreChip').textContent} | ${document.getElementById('percentChip').textContent}
-التقدير العام: ${S.overall}
-(سيتم لاحقًا إرسال ملف PDF الكامل إلى المدير.)
-التاريخ الهجري: ${hijriToday}`;
-  const encoded=encodeURIComponent(msg);
+/* حفظ عند تغييرات عامة */
+['lesson','degree','exp','class','tSpec'].forEach(id=>document.getElementById(id).addEventListener('input',saveForm));
 
-  // المسار الأساسي + فول-باك
-  let url=`https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
-  let win=window.open(url,'_blank');
-  setTimeout(()=>{ if(!win || win.closed || typeof win.closed==='undefined'){ window.location.href=`https://wa.me/${phone}?text=${encoded}`; }}, 400);
-}
+/* مدير المدرسة */
+document.getElementById('editPrincipal').addEventListener('click',()=>document.getElementById('principalName').setAttribute('contenteditable','true'));
+document.getElementById('savePrincipal').addEventListener('click',()=>{document.getElementById('principalName').setAttribute('contenteditable','false');alert('تم حفظ اسم المدير.');saveForm();});
 
-/* تهيئة التاريخ */
-(function initHijri(){ hijriUmmAlQura(); })();
+/* استعادة آخر استمارة عند فتح الصفحة */
+(function restoreLast(){
+  const last=localStorage.getItem(LS_LAST);if(!last)return;
+  const all=readAll();if(!all[last])return;
+  const [name,id]=last.split('|');
+  tName.value=name;tId.value=id;
+  const spec=all[last].teacher?.spec||'', deg=all[last].teacher?.degree||'', ex=all[last].teacher?.exp||'';
+  tSpec.value=spec; degree.value=deg; exp.value=ex;
+  updateSignNames();
+  loadFormForCurrentTeacher();
+})();
 
-/* تحسين للجوال */
-(function mobileTune(){
-  if(window.innerWidth<640){ document.documentElement.style.fontSize='14px'; }
+/* حفظ تلقائي كل دقيقة */
+setInterval(saveForm,60000);
+
+/* تهيئة أولية */
+(function init(){
+  if(!document.getElementById('v1h').textContent.trim() || document.getElementById('v1h').textContent==='—'){
+    setChip(1, hijriDateStr(new Date()));
+  }
+  loadFormForCurrentTeacher();
+  calcAll();
 })();
 </script>
 </body>
