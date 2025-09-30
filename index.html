@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
 <title>استمارة دعم وتطوير الهيئة التعليمية (زيارة معلم) ١٤٤٧هـ</title>
 
+<!-- خطوط الهوية -->
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Cairo:wght@600;700&display=swap" rel="stylesheet">
+
+<!-- مكتبات مساعدة -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -18,6 +21,8 @@
   --base: clamp(14px, 1.15vw + 10px, 16.5px);
   --soft-green:#e9f7ee; --soft-green-b:#b9e4c8; --soft-green-t:#0f6a3b;
 }
+
+/* أساسي */
 *{box-sizing:border-box}
 html,body{margin:0;background:#fff;color:var(--ink);font-family:"Tajawal",system-ui;font-size:var(--base);min-height:100%}
 #page{width:min(1200px,100vw);margin-inline:auto}
@@ -38,7 +43,7 @@ html,body{margin:0;background:#fff;color:var(--ink);font-family:"Tajawal",system
 .inline-pen{border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:var(--moe-dark)}
 .inline-pen svg{width:14px;height:14px}
 h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-size:clamp(18px,1.6vw + 14px,26px);text-align:center}
-.badge{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:10px;background:#eaf7f4;color:#0b6256;font-weight:700;font-size:12px}
+.badge{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:10px;background:var(--moe-lite);color:var(--moe-dark);font-weight:700;font-size:12px}
 
 /* صناديق */
 .box{border:1px solid var(--border);border-radius:14px;background:var(--bg);margin-top:10px;overflow:hidden}
@@ -47,14 +52,18 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .fld{height:38px;border:1px solid var(--line);border-radius:10px;padding:0 10px;background:#fff;font:inherit;text-align:center}
 .col-3{grid-column:span 3/span 3}.col-12{grid-column:span 12/span 12}
 
-/* الأزرار: موحَّدة باللون الأخضر الوزاري */
-.btn-ic{display:inline-flex;gap:8px;align-items:center;padding:9px 12px;border-radius:12px;border:1px solid var(--moe-green);background:var(--moe-green);color:#fff;font-weight:800;cursor:pointer;font-size:clamp(12px,.6vw + 10px,14px);transition:transform .12s ease,background .12s ease}
-.btn-ic:hover{background:#0c594e;transform:translateY(-1px)}
+/* أزرار: موحّد بلون وزاري */
+.btn-ic{
+  display:inline-flex;gap:8px;align-items:center;padding:9px 12px;border-radius:12px;border:1px solid var(--moe-green);
+  background:var(--moe-green);color:#fff;font-weight:800;cursor:pointer;font-size:clamp(12px,.6vw + 10px,14px);
+  transition:all .12s ease; box-shadow:0 6px 18px rgba(15,122,102,0.08);
+}
+.btn-ic:hover{background:var(--moe-dark); transform:translateY(-1px)}
 .btn-ic svg{width:18px;height:18px}
 .btn-ic.tiny{padding:6px 8px}
 
-/* الأزرار السفلية (متماثلة) */
-.bottom-actions .btn-ic{ /* النسق موحد */ }
+/* الأزرار السفلية: تبقى في صف واحد */
+.bottom-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;padding:10px;border:1px solid var(--border);border-radius:14px;background:var(--bg);margin-top:12px}
 
 /* زيارات */
 .visits{display:flex;gap:clamp(12px,2vw,24px);align-items:flex-start;justify-content:center;flex-wrap:wrap}
@@ -62,19 +71,18 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .donut{width:clamp(84px, 10vw + 40px, 140px);height:auto;cursor:pointer}
 .donut .ring{transform:rotate(-90deg);transform-origin:50% 50%}
 .donut text{font-weight:800;fill:var(--moe-dark);font-size:14px}
-.done-badge{position:absolute;top:-6px;right:-6px;background:#16a34a;color:#fff;border-radius:999px;padding:4px 6px;font-size:11px;display:none;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-.chip{background:#eaf7f4;border:1px dashed #cfe1dd;padding:4px 10px;border-radius:999px;font-size:clamp(11px,.6vw + 9px,12px);color:#0b6256;cursor:pointer}
-.visitLabel{font-family:"Cairo";font-weight:700;color:#0f685a;font-size:clamp(13px,.8vw + 10px,16px)}
+.chip{background:var(--moe-lite);border:1px dashed var(--line);padding:4px 10px;border-radius:999px;font-size:clamp(11px,.6vw + 9px,12px);color:var(--moe-dark);cursor:pointer}
+.visitLabel{font-family:"Cairo";font-weight:700;color:var(--moe-dark);font-size:clamp(13px,.8vw + 10px,16px)}
 
 /* المؤشرات */
 .hmeterTop{margin:8px auto 4px;text-align:center}
-.tooltip{position:relative;display:inline-block;cursor:help;margin-bottom:6px;font-weight:700;color:#0b534a}
+.tooltip{position:relative;display:inline-block;cursor:help;margin-bottom:6px;font-weight:700;color:var(--moe-dark)}
 .tooltip .tiptext{visibility:hidden;width:290px;background:var(--moe-dark);color:#fff;text-align:center;border-radius:6px;padding:6px;position:absolute;z-index:2;bottom:125%;left:50%;transform:translateX(-50%);opacity:0;transition:opacity .3s}
 .tooltip:hover .tiptext{visibility:visible;opacity:1}
 .globalInline{margin-inline-start:8px;font-family:"Cairo";font-size:clamp(14px,1vw + 11px,18px);font-weight:800;transition:color .15s ease}
 .globalInline.good{color:var(--good)}.globalInline.mid{color:var(--mid)}.globalInline.bad{color:var(--bad)}
 .visitPercents{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:4px}
-.visitPercents .badge{background:#f0faf6}
+.visitPercents .badge{background:#f0faf6;border:1px solid var(--soft-green-b)}
 .globalRow{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
 .hbar{position:relative;width:min(700px,95vw);height:14px;border:1px solid var(--border);border-radius:999px;background:linear-gradient(90deg,#ef4444 0%,#f59e0b 50%,#16a34a 100%);margin:4px auto 6px}
 .hthumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--moe-dark)}
@@ -89,19 +97,10 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .tbl th,.tbl td{border:1px solid var(--line);padding:6px 8px;background:#fff;vertical-align:middle;text-align:center;word-wrap:break-word}
 .tbl thead th{background:var(--moe-dark)!important;color:#fff!important}
 .tbl .w{width:clamp(280px,26vw,380px);text-align:center}
-.tbl tbody td.seq{background:#f2fbf7;text-align:center;font-weight:700;color:#0c5e55}
+.tbl tbody td.seq{background:#f2fbf7;text-align:center;font-weight:700;color:var(--moe-dark)}
 .tbl tbody td.domain-cell{background:#f3faf8;text-align:center;vertical-align:middle;font-weight:800}
-.group-colored td{background:var(--strip)!important}
-.group-white   td{background:#fff!important}
-.group-colored td.domain-cell{background:var(--strip)!important}
-.group-white   td.domain-cell{background:#fff!important}
 
-/* العنصر + التعريف */
-.item-cell{display:flex;flex-direction:column;gap:3px;text-align:right}
-.item-cell b{display:block}
-.item-brief{display:block;margin-top:2px;padding-top:4px;border-top:1px dashed #dbe9e6;color:#2b5e57;opacity:.9;font-size:12px;line-height:1.55}
-
-/* مستوى الأداء */
+/* مستوى الأداء (الأزرار في الجدول) */
 .level{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:stretch;width:100%}
 .level button{--dot:#ddd;border:1px solid var(--line);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .12s;width:100%;padding:10px 0}
 .level button::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--dot)}
@@ -118,8 +117,7 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .gradbar{height:12px;border:1px solid var(--border);border-radius:999px;overflow:hidden;background:#eef3f2}
 .bar-nums{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:var(--moe-dark);padding:0 8px}
 
-/* تنسيق تفعيل */
-.td-activate{display:flex;align-items:center;justify-content:center}
+/* شواهد وأدوات */
 .pills{display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;align-items:center;justify-items:center; width:100%; max-width:360px; margin-inline:auto}
 .pill{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-weight:700;font-size:12px;min-width:86px}
 .pill[data-v="2"].active{background:#e9f7ee;color:#0f6a3b;border-color:#b9e4c8}
@@ -127,13 +125,9 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .pill[data-v="0"].active{background:#ffe3e3;color:#b42318;border-color:#f2bcbc}
 
 .tool-desc{display:block;opacity:.9;font-size:11px;line-height:1.6;margin-top:2px;text-align:right}
-
-/* الأدلة والشواهد */
 .td-proof{width:100%; text-align:center}
 .td-proof input{transform:scale(.95)}
-.td-reason .tool-reason{width:100%;min-height:52px;border:1px dashed var(--line);border-radius:10px;background:#fff;padding:6px 8px;font:inherit;font-size:11.5px;resize:vertical;white-space:pre-wrap}
-.tool-reason:disabled{opacity:.55;background:#f7faf9}
-.textarea-print{white-space:pre-wrap;border:1px dashed var(--line);border-radius:10px;background:#fff;padding:6px;font-size:11.5px;min-height:44px;text-align:right}
+.tool-reason{width:100%;min-height:52px;border:1px dashed var(--line);border-radius:10px;background:#fff;padding:6px 8px;font:inherit;font-size:11.5px;resize:vertical;white-space:pre-wrap}
 
 /* التوصيات */
 .rec-wrap{padding:10px}
@@ -156,19 +150,47 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 /* إشعار أصفر (Toast) */
 .toast{
   position:fixed; right:12px; bottom:12px; z-index:1400;
-  width:min(520px,92vw);
-  min-height:36px;
+  width:min(520px,92vw); min-height:36px;
   background:rgba(255,244,178,.96); border:1px solid #f5d565; color:#7a6400;
-  border-radius:16px; padding:6px 10px; box-shadow:0 10px 28px rgba(0,0,0,.12);
-  display:flex; align-items:center; gap:8px; direction:rtl;
-  -webkit-backdrop-filter: blur(1px); backdrop-filter: blur(1px);
+  border-radius:16px; padding:6px 10px; box-shadow:0 10px 28px rgba(0,0,0,.12); direction:rtl;
 }
 .toast .dot{width:6px;height:6px;border-radius:50%;background:#a07800;opacity:.9}
 .toast .line{flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;font-size:11.5px;font-weight:700;white-space:nowrap}
 .toast .close{border:none;background:#fff;color:#a07800;border:1px solid #f0d98b;border-radius:999px;padding:0 8px;cursor:pointer;font-size:12px;line-height:20px}
 
+/* بقية التنسيقات */
+.bottom-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;padding:10px;border:1px solid var(--border);border-radius:14px;background:var(--bg);margin-top:12px}
+.signs{margin:10px 0}
+.signs table{width:100%;border-collapse:collapse}
+.signs th,.signs td{border:1px solid var(--line);padding:8px;background:#fff}
+.sign-line{display:block;height:1px;border-bottom:1px dashed #9fb5b1;margin:8px 24px}
+
+/* لوحة المعتمدين */
+#approvedPanel{position:fixed;left:50%;transform:translateX(-50%);bottom:88px;min-width:min(520px,92vw);max-width:92vw;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.15);padding:0;display:none;z-index:1500}
+.ap-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding:10px}
+.ap-head h4{margin:0;color:var(--moe-dark);font-family:"Cairo"}
+.ap-close{border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer}
+#approvedList{display:flex;flex-wrap:wrap;gap:6px;padding:12px;max-height:40vh;overflow:auto}
+.name-chip{padding:6px 10px;border-radius:999px;border:1px dashed var(--line);background:#fafafa}
+
+/* لوحة الأسماء (عدسة) */
+#teachersPanel{position:fixed;inset:auto 0 0 0;margin:auto;max-width:min(780px,96vw);background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.2);display:none;z-index:1600}
+.tp-head{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid var(--border)}
+.tp-body{padding:10px;max-height:60vh;overflow:auto}
+.tp-search{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.tp-list{display:grid;grid-template-columns:repeat(2,minmax(160px,1fr));gap:8px}
+.tp-item{padding:8px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.tp-item b{color:var(--moe-dark)}
+.tp-close{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer}
+.printMark{display:none;text-align:center;margin:6px 0 2px;color:#184b44;font-size:10px}
+
+/* أزرار الصعود/الهبوط */
+#toTop,#toBottom{position:fixed;bottom:20px;padding:12px;border:none;border-radius:50%;background:var(--moe-green);color:#fff;font-size:18px;cursor:pointer;display:none;z-index:999;box-shadow:0 8px 20px rgba(0,0,0,.18);transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;opacity:.95}
+#toTop{left:20px} #toBottom{right:20px}
+#toTop:hover,#toBottom:hover{transform:translateY(-2px) scale(1.04); box-shadow:0 12px 28px rgba(0,0,0,.22)}
+
 /* فوتر */
-.footer-rights{margin:8px 0 14px;text-align:center;font-size:11.5px;color:#0b534a}
+.footer-rights{margin:8px 0 14px;text-align:center;font-size:11.5px;color:var(--moe-dark)}
 body.snapshot .no-print{ display:none !important }
 
 /* تجاوب */
@@ -267,17 +289,17 @@ body.snapshot .no-print{ display:none !important }
   <!-- دوائر الزيارات -->
   <div class="visits">
     <div class="visitCard">
-      <span id="done1" class="done-badge">منتهية</span>
+      <span id="done1" class="done-badge" style="display:none">منتهية</span>
       <svg class="donut" id="v1" viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#eef3f2" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="#16a34a" stroke-width="12" stroke-dasharray="0 314" stroke-linecap="round" class="ring"/><text x="60" y="64" text-anchor="middle" id="v1t">0%</text></svg>
       <div class="chip" id="v1h">—</div><div class="visitLabel">الزيارة الأولى</div>
     </div>
     <div class="visitCard">
-      <span id="done2" class="done-badge">منتهية</span>
+      <span id="done2" class="done-badge" style="display:none">منتهية</span>
       <svg class="donut" id="v2" viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#eef3f2" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="#16a34a" stroke-width="12" stroke-dasharray="0 314" stroke-linecap="round" class="ring"/><text x="60" y="64" text-anchor="middle" id="v2t">0%</text></svg>
       <div class="chip" id="v2h">—</div><div class="visitLabel">الزيارة الثانية</div>
     </div>
     <div class="visitCard">
-      <span id="done3" class="done-badge">منتهية</span>
+      <span id="done3" class="done-badge" style="display:none">منتهية</span>
       <svg class="donut" id="v3" viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#eef3f2" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="#16a34a" stroke-width="12" stroke-dasharray="0 314" stroke-linecap="round" class="ring"/><text x="60" y="64" text-anchor="middle" id="v3t">0%</text></svg>
       <div class="chip" id="v3h">—</div><div class="visitLabel">الزيارة الثالثة</div>
     </div>
@@ -392,15 +414,14 @@ body.snapshot .no-print{ display:none !important }
 
     <span style="display:inline-flex;align-items:center;gap:6px">
       <button class="btn-ic" id="waBtn" title="واتساب">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 12.1A9.5 9.5 0 1 1 12 2.5a9.5 9.5 0 0 1 9.5 9.6Z"/><path d="m3.5 20.5 1.6-5.6"/><path d="M8.5 8.5c1 2.5 3.5 4.5 6 5l1.5-1.5"/></svg>
-      </button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 12.1A9.5 9.5 0 1 1 12 2.5a9.5 9.5 0 0 1 9.5 9.6Z"/><path d="m3.5 20.5 1.6-5.6"/><path d="M8.5 8.5c1 2.5 3.5 4.5 6 5l1.5-1.5"/></svg>واتساب</button>
       <button class="inline-pen" id="waEdit" title="تعديل رقم واتساب">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
       </button>
     </span>
 
     <button class="btn-ic" id="btnApproved" title="المعتمدون"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/><path d="M20 8v6m3-3h-6"/></svg>المعتمدون</button>
-    <button class="btn-ic" id="btnDeleteVisit" title="حذف هذه الزيارة لهذا المعلم"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4h8v2"/></svg>حذف زيارة (لهذا المعلم)</button>
+    <button class="btn-ic" id="btnDeleteVisit" title="حذف هذه الزيارة لهذا المعلم"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4h8v2"/></svg>حذف زيارة</button>
     <button class="btn-ic" id="btnClearAll" title="مسح الجميع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 6 3 1 2 13h8ل2-13 3-1"/><path d="M5 6h14"/><path d="M10 11v6M14 11v6"/></svg>مسح الجميع</button>
   </div>
 
@@ -435,7 +456,7 @@ body.snapshot .no-print{ display:none !important }
 <button id="toBottom" class="no-print" title="أسفل">↓</button>
 
 <!-- إشعار أصفر -->
-<div class="toast no-print" id="toast">
+<div class="toast no-print" id="toast" style="display:none">
   <div class="dot"></div>
   <div class="line" id="toastText">رحلة تطوير حيّة… حيث يتحوّل التقييم من أرقام جامدة إلى دعم تفاعلي يضيء مسار المعلّم.</div>
   <button class="close" id="toastClose" title="إغلاق">×</button>
@@ -466,7 +487,7 @@ function openDB(){
         let os;
         if(!db.objectStoreNames.contains(STORE)){ os=db.createObjectStore(STORE,{keyPath:'teacherId'}); }
         else{ os=req.transaction.objectStore(STORE); }
-        if(os && !os.indexNames.contains('by_name')) os.createIndex('by_name','name',{Unique:false});
+        if(os && !os.indexNames.contains('by_name')) os.createIndex('by_name','name',{unique:false});
       }catch{ USE_LS_FALLBACK=true; }
     };
     req.onsuccess=()=>resolve(req.result);
@@ -549,8 +570,7 @@ document.getElementById('hijriChip').textContent='التاريخ الهجري: '
 function syncSignatureDates(){ ['1','2','3'].forEach(v=>{ const val=document.getElementById('v'+v+'h').textContent||'—'; document.getElementById('sh'+v).textContent=(val&&val.trim())?val:'—'; }); }
 ['v1h','v2h','v3h'].forEach(id=>{ const el=document.getElementById(id); new MutationObserver(syncSignatureDates).observe(el,{characterData:true,subtree:true,childList:true}); });
 
-/* واتساب */
-/* افتراضي مُحدَّث كما طلبت */
+/* واتساب: رقم افتراضي قابل للتعديل */
 let waNumber=localStorage.getItem(LS_WA)||'966504532489';
 document.getElementById('waEdit').addEventListener('click',()=>{ const v=prompt('رقم واتساب الافتراضي (مع مفتاح الدولة):',waNumber); if(v && /^\d{8,15}$/.test(v)){waNumber=v;localStorage.setItem(LS_WA,waNumber);alert('تم حفظ رقم واتساب.');}});
 document.getElementById('waBtn').addEventListener('click',()=>{
@@ -567,15 +587,14 @@ document.getElementById('waBtn').addEventListener('click',()=>{
 ${school}
 الاسم: ${name} | الهوية: ${id} | التخصص: ${spec}
 الزيارة ${lbl}: بتاريخ ${d}
-نِسب الزيارات: الأولى %${p1}، الثانية %${p2}، الثالثة %${p3}
+مؤشر الزيارات: الأولى %${p1}، الثانية %${p2}، الثالثة %${p3}
 جوانب التميز:
 ${ok}
 احتياجات التنمية المهنية:
 ${dv}${supportBlock}${reasonsBlock}
-المؤشر العام: ${Math.round((p1+p2+p3)/3)}% 
-اسم المدير: ${document.getElementById('pn1').textContent || '—'}
-تاريخ الاستمارة: ${hijriNow()}`;
-  window.open('https://api.whatsapp.com/send?phone='+waNumber+'&text='+encodeURIComponent(msg),'_blank');
+المدير: ${document.getElementById('pn1').textContent || '—'}
+التاريخ: ${hijriNow()}`;
+  window.open('https://wa.me/'+waNumber+'?text='+encodeURIComponent(msg),'_blank');
 });
 
 /* كشف الأسماء */
@@ -618,7 +637,7 @@ function handleExcelImport(e){
     }).filter(x=>x.name);
     localStorage.setItem(LS_TEACHERS, JSON.stringify(teacherList));
     renderTeachers('');
-    alert('تم الاستيراد، استخدم البحث لاختيار المعلم.');
+    showToast('تم الاستيراد، استخدم البحث لاختيار المعلم.');
     e.target.value='';
   }).catch(()=>{alert('فشل استيراد الملف.'); e.target.value='';});
 }
@@ -880,7 +899,7 @@ async function saveSoft(){
 
 /* إشعار */
 const toast=document.getElementById('toast'), toastText=document.getElementById('toastText');
-function showToast(msg,ms=2000){ toastText.textContent=msg; toast.style.display='flex'; setTimeout(()=>{toast.style.display='none';},ms); }
+function showToast(msg,ms=3000){ toastText.textContent=msg; toast.style.display='flex'; setTimeout(()=>{toast.style.display='none';},ms); }
 document.getElementById('toastClose').addEventListener('click',()=>toast.style.display='none');
 
 /* التحقق قبل الاعتماد */
@@ -896,7 +915,7 @@ function validateAllSelections(){
   const states=getToolsStateFromUI(), reasons=getToolReasonsFromUI();
   states.forEach((v,i)=>{ if(v===null){ ok=false; missing.push(`حالة أداة: «${toolsData[i].title}»`); } if((v===0||v===1) && !reasons[i]){ ok=false; const area=document.querySelectorAll('.tool-reason')[i]; mark(area); missing.push(`سبب أداة: «${toolsData[i].title}»`); }});
   if(!ok){
-    alert('الرجاء استكمال التالي قبل الاعتماد:\n- '+[...new Set(missing)].slice(0,12).join('\n- '));
+    showToast('الرجاء استكمال الحقول المطلوبة قبل الاعتماد.');
     boxInfo.classList.add('section-error');
   }
   return ok;
@@ -906,7 +925,7 @@ function validateAllSelections(){
 document.getElementById('finishVisitBtn').addEventListener('click', async ()=>{
   clearErrors();
   if(!validateAllSelections()) return;
-  const id=currentKey(); if(!id) return alert('أدخل بيانات المعلم أولاً.');
+  const id=currentKey(); if(!id) return showToast('أدخل بيانات المعلم أولاً.');
   if(!loadedRecord){ const rec=await dbGetTeacher(id); if(rec){ loadedRecord=rec; fixedKey=rec.teacherId; } }
   const chip=document.getElementById('v'+activeVisit+'h'); if(!chip.textContent||chip.textContent==='—'){ chip.textContent=hijriDateStr(new Date()); }
   setChip(activeVisit,chip.textContent); syncSignatureDates();
@@ -937,7 +956,7 @@ document.getElementById('finishVisitBtn').addEventListener('click', async ()=>{
 
 /* حذف زيارة */
 document.getElementById('btnDeleteVisit').addEventListener('click', async ()=>{
-  const id=currentKey(); if(!id) return alert('اختر معلمًا أولًا.');
+  const id=currentKey(); if(!id) return showToast('اختر معلمًا أولًا.');
   if(!confirm('سيتم تصفير المؤشرات والاختيارات والأسباب والدعم والتاريخ لهذه الزيارة فقط. متابعة؟')) return;
   try{
     if(!loadedRecord){ const rec=await dbGetTeacher(id); if(rec){ loadedRecord=rec; fixedKey=rec.teacherId; } }
@@ -945,7 +964,8 @@ document.getElementById('btnDeleteVisit').addEventListener('click', async ()=>{
     store[activeVisit]=zeroMatrix(); await dbPutTeacher(loadedRecord);
     setChip(activeVisit,'—'); setDonut(activeVisit,0); document.getElementById('done'+activeVisit).style.display='none';
     renderToolsForVisit(); renderSupportForVisit(); calcAll(); await refreshApprovedPanel(true);
-  }catch{ alert('تعذر حذف الزيارة، حاول مجددًا.'); }
+    showToast('تم حذف بيانات الزيارة.');
+  }catch{ showToast('تعذر حذف الزيارة، حاول مجددًا.'); }
 });
 
 /* مسح الجميع */
@@ -959,8 +979,8 @@ document.getElementById('btnClearAll').addEventListener('click', async ()=>{
     document.getElementById('strengthBox').innerHTML='—'; document.getElementById('devBox').innerHTML='—';
     document.getElementById('approvedList').innerHTML='—'; document.getElementById('approvedPanel').style.display='none';
     tName.value=''; tId.value=''; tSpec.value=''; degree.value=''; exp.value='';
-    setSupportToUI([]); updateSignNames(); calcAll(); alert('تم مسح جميع البيانات بنجاح.');
-  }catch{ alert('تعذر المسح العام، تأكد من سماح المتصفح بالتخزين.'); }
+    setSupportToUI([]); updateSignNames(); calcAll(); showToast('تم مسح جميع البيانات بنجاح.');
+  }catch{ showToast('تعذر المسح العام، تأكد من سماح المتصفح بالتخزين.'); }
 });
 
 /* لوحة المعتمدين */
@@ -1007,69 +1027,48 @@ function calcAll(){
   saveDraftActiveVisit();
 }
 
-/* طباعة / PDF — طريقة حفظ PDF النصية (بدلاً من snapshot) */
+/* طباعة / PDF — وضوح أعلى + انتظار الخطوط */
+async function waitFonts(){ if(document.fonts && document.fonts.ready) { try{ await document.fonts.ready; }catch{} } }
 function updatePrintHijri(){ document.getElementById('printHijri').textContent=hijriNow(); }
-
-/* حفظ PDF كرسم نصي (الطريقة المطلوبه: اسم ملف منسق ونص عربي قابل للنسخ) */
+function cloneForSnapshot(){
+  const node=document.getElementById('page'); const cloned=node.cloneNode(true);
+  cloned.classList.add('for-print'); cloned.querySelectorAll('.no-print').forEach(el=>el.style.display='none');
+  cloned.querySelectorAll('.table-responsive').forEach(d=>{ d.style.overflow='visible'; d.style.maxWidth='unset'; });
+  const origAreas=document.querySelectorAll('textarea.tool-reason');
+  const clonedAreas=cloned.querySelectorAll('textarea.tool-reason');
+  clonedAreas.forEach((ta,idx)=>{ const val=(origAreas[idx]?.value||''); const div=document.createElement('div'); div.className='textarea-print'; div.textContent=val; ta.parentNode.replaceChild(div,ta); });
+  const saOrig=document.getElementById('supportArea');
+  const sa=cloned.querySelector('#supportArea'); if(sa){ const div=document.createElement('div'); div.className='textarea-print'; div.textContent=(saOrig.value||''); sa.parentNode.replaceChild(div,sa); }
+  return cloned;
+}
+async function snapshotToCanvas(){
+  await waitFonts(); updatePrintHijri();
+  const clone=cloneForSnapshot(); const holder=document.createElement('div');
+  holder.style.position='fixed'; holder.style.left='-99999px'; holder.style.top='-99999px'; holder.style.width='210mm';
+  holder.appendChild(clone); document.body.appendChild(holder);
+  const canvas=await html2canvas(clone,{scale:2.5,background:'#ffffff',scrollX:0,scrollY:0,useCORS:true,letterRendering:true});
+  document.body.removeChild(holder); return canvas;
+}
+document.getElementById('printBtn').addEventListener('click', async ()=>{
+  const canvas=await snapshotToCanvas(); const img=canvas.toDataURL('image/png',1.0);
+  const iframe=document.createElement('iframe'); Object.assign(iframe.style,{position:'fixed',right:'0',bottom:'0',width:'0',height:'0',border:'0'}); document.body.appendChild(iframe);
+  const doc=iframe.contentWindow.document;
+  doc.open(); doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>طباعة</title><style>@page{size:A4 portrait;margin:5mm}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}html,body{height:auto;margin:0;background:#fff;color:#000}img{width:100%;height:auto;display:block}</style></head><body><img id="pimg" src="${img}"></body></html>`); doc.close();
+  const imgEl=doc.getElementById('pimg'); imgEl.onload=()=>{ setTimeout(()=>{iframe.contentWindow.focus(); iframe.contentWindow.print(); setTimeout(()=>document.body.removeChild(iframe),400);},100); };
+});
 document.getElementById('saveBtn').addEventListener('click', async ()=>{
-  const {jsPDF} = window.jspdf;
-  const pdf=new jsPDF({unit:'mm',format:'a4',orientation:'portrait'});
-  const margin=12;
-  const pageWidth=210-2*margin;
-  let y=18;
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(14);
-  pdf.text("استمارة دعم وتطوير الهيئة التعليمية (زيارة معلم)", margin, y); y+=8;
-  pdf.setFontSize(11); pdf.setFont('helvetica','normal');
-  const school=document.getElementById('h-school').textContent.trim()||'—';
-  const name=(document.getElementById('tName').value||'—').trim();
-  const id=(document.getElementById('tId').value||'—').trim();
-  const spec=(document.getElementById('tSpec').value||'—').trim();
-  const lesson=(document.getElementById('lesson').value||'—').trim();
-  const visitLabel = activeVisit===1?'الأولى':activeVisit===2?'الثانية':'الثالثة';
-  const visitDate = (document.getElementById('v'+activeVisit+'h').textContent||hijriNow());
-  const strengths=(document.getElementById('strengthBox').innerText||'—').trim();
-  const dev=(document.getElementById('devBox').innerText||'—').trim();
-  const support=(document.getElementById('supportArea').value||'—').trim();
-  const manager=(document.getElementById('pn1').textContent||'فهد حامد علي الزهراني').trim();
-  const indicator=document.getElementById('globalPctInline').textContent||'—';
-  const date=hijriNow();
-
-  const lines=[
-    `المدرسة: ${school}`,
-    `اسم المعلم: ${name}`,
-    `رقم الهوية: ${id}`,
-    `التخصص: ${spec}`,
-    `عنوان الدرس: ${lesson}`,
-    `الزيارة: ${visitLabel} — تاريخ الزيارة: ${visitDate}`,
-    ``,
-    `نقاط القوة:`,
-    ... (strengths==='—'? ['—'] : strengths.split('\n')),
-    ``,
-    `مجالات التطوير:`,
-    ... (dev==='—'? ['—'] : dev.split('\n')),
-    ``,
-    `الدعم المقترح:`,
-    ... (support? support.split('\n') : ['—']),
-    ``,
-    `المؤشر العام: ${indicator}`,
-    `اسم المدير: ${manager}`,
-    `تاريخ الاستمارة (هجري): ${date}`
-  ];
-
-  pdf.setFontSize(11);
-  lines.forEach(ln=>{
-    const wrapped=pdf.splitTextToSize(ln, pageWidth);
-    wrapped.forEach(txt=>{
-      if(y>280){ pdf.addPage(); y=18; }
-      pdf.text(txt, margin, y); y+=6;
-    });
-  });
-
-  const safeName=name.replace(/[\\\/:*?"<>|]/g,'-')||'غير_مسمى';
-  const safeSchool=school.replace(/[\\\/:*?"<>|]/g,'-');
-  const fileName=`استمارة_${safeName}_زيارة_${visitLabel}_${date}_${safeSchool}.pdf`;
-  pdf.save(fileName);
-  showToast(`تم حفظ PDF باسم ${fileName}`,2200);
+  const canvas=await snapshotToCanvas();
+  const name=((tName.value||'غير مسمى').trim()).replace(/[\\/:*?"<>|]/g,'-');
+  const school=document.getElementById('h-school').textContent.trim();
+  const {lbl,d}=activeVisitHijri();
+  const {jsPDF}=window.jspdf; const pdf=new jsPDF({unit:'mm',format:'a4',orientation:'portrait'});
+  const margin=5; const pdfW=210-2*margin, pdfH=297-2*margin;
+  const img=canvas.toDataURL('image/png',1.0); const imgWmm=canvas.width*0.264583, imgHmm=canvas.height*0.264583;
+  const ratio=Math.min(pdfW/imgWmm, pdfH/imgHmm); const w=imgWmm*ratio, h=imgHmm*ratio; const x=margin+(pdfW-w)/2, y=margin+(pdfH-h)/2;
+  pdf.addImage(img,'PNG',x,y,w,h,'','FAST');
+  const fname=`استمارة زيارة - ${name} - الزيارة ${lbl} - ${d} - ${school}.pdf`.replace(/\s+/g,' ');
+  pdf.save(fname);
+  showToast("تم حفظ PDF باسم "+fname, 3000);
 });
 
 /* تمرير */
