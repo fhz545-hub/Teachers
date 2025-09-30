@@ -768,7 +768,13 @@ function buildTools(){
     tr.innerHTML=`<td class="seq">${i+1}</td>
       <td style="text-align:right"><span class="tool-name" style="font-weight:800">${t.title}</span><span class="tool-desc">${t.desc}</span></td>
       <td class="td-proof"><input type="checkbox" class="tool-proof" title="شاهد مُتاح؟"></td>
-      <td class="td-activate"><div class="pills"><div class="pill" data-v="2">مُفعل</div><div class="pill" data-v="1">إلى حد ما</div><div class="pill" data-v="0">غير مُفعل</div></div></td>
+     <td class="td-activate">
+  <div class="level">
+    <button data-v="2">مُفعل</button>
+    <button data-v="1">إلى حد ما</button>
+    <button data-v="0">غير مُفعل</button>
+  </div>
+</td>
       <td class="td-reason"><textarea class="tool-reason" placeholder="اكتب السبب عند (غير مُفعل/إلى حد ما)"></textarea></td>`;
     tBody.appendChild(tr);
   });
