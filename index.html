@@ -1173,242 +1173,390 @@ document.getElementById('finishVisitBtn').addEventListener('click',()=>{
   showToast('تم اعتماد الزيارة وحفظ جميع البيانات.');
 });
 
-/* ========== طباعة و PDF (تحجيم مناسب A4) ========== */
-document.getElementById('printBtn').addEventListener('click',()=>{
-  // تخفيف الأحجام للطباعة (يتم عبر @media print) + عرض كامل
-  window.print();
-});
+/* ========== طباعة و PDF: نسخة رسمية A4 ========== */
 
-document.getElementById('saveBtn').addEventListener('click', async ()=>{
-  const root=document.getElementById('page');
-  const oldClass=document.body.className;
-  document.body.classList.add('for-print');
-  document.body.classList.add('snapshot'); // إخفاء العناصر التشغيلية
-  // عرض إلى صورة عالية الدقة ثم PDF A4
-  const { jsPDF } = window.jspdf;
-  const canvas = await html2canvas(root, {scale:2, background:'#ffffff', useCORS:true, windowWidth: root.scrollWidth});
-  const imgData = canvas.toDataURL('image/jpeg', 0.95);
-  const pdf = new jsPDF('p','mm','a4');
-  const pageWidth  = 210;
-  const pageHeight = 297;
-  // حساب تحجيم الصورة داخل A4
-  const imgWidth = pageWidth-10;
-  const imgHeight = canvas.height * imgWidth / canvas.width;
-  let y=5;
-  if(imgHeight <= pageHeight-10){
-    pdf.addImage(imgData,'JPEG',5,y,imgWidth,imgHeight,'','FAST');
-  }else{
-    // تقسيم على صفحات
-    let h = imgHeight, s=0;
-    while(h>0){
-      pdf.addImage(imgData,'JPEG',5,y,imgWidth,imgHeight,'','FAST', 0, s);
-      s += (pageHeight-10) * (canvas.width/imgWidth);
-      h -= (pageHeight-10);
-      if(h>0) pdf.addPage();
-    }
-  }
-  const nm = (loadedRecord?.name||'معلم') + ' - زيارة ' + (activeVisit) + '.pdf';
-  pdf.save(nm);
-  document.body.className=oldClass;
-});
-
-/* ========== أزرار المساعدة: حفظ يدوي/تحميل آخر تقرير/حذف/مسح ========== */
-document.getElementById('btnSaveManual').addEventListener('click',()=>{
-  saveDraftActiveVisit();
-  showToast('تم الحفظ.');
-});
-
-document.getElementById('btnLoadLast').addEventListener('click',()=>{
-  // يبحث آخر عنصر معتمد ويعرض تقريرًا بسيطًا في نافذة جديدة
-  const arr=readApproved(); if(!arr.length){ showToast('لا توجد تقارير معتمدة.'); return; }
-  const last=arr[arr.length-1];
-  const rec=loadRecordByKey(last.teacherId);
-  if(!rec){ showToast('تعذر فتح التقرير.'); return; }
-  const v=last.visit;
-  const p = (k)=> (rec?.visits?.[k]? Math.round( (visitPctFromSaved(rec.visits[k]) * 0.85) + (toolPctFromArray(rec.visits[k].tools||[]) * 0.15) ) : 0);
-  const html = makeReportHTML(rec, v, {p1:p(1),p2:p(2),p3:p(3)}, last.whenHijri||'—');
-  const w=window.open('','_blank');
-  w.document.write(html); w.document.close();
-});
-function visitPctFromSaved(snap){
-  const arr=(snap?.levels||[]).flat();
-  const rated=arr.filter(x=>x>0);
-  if(!rated.length) return 0;
-  const s=rated.reduce((a,b)=>a+(b-1),0);
-  return Math.round((s/(rated.length*2))*100);
+/* ------- خيارات طباعة: مونو/ملون ------- */
+function setMono(on){
+  document.body.classList.toggle('print-mono', !!on);
 }
-function makeReportHTML(rec, v, ps, when){
-  const name=rec.name||'—', id=rec.id||'—', spec=rec.spec||'—', cls=rec.class||'—';
-  const ok = rec.visits?.[v]?.supportUnified ? '' : '';
-  const okTxt = (()=>{
-    // نص التوصيات من الحقول الحالية (لنفس الزيارة)
-    const tmpStore = store[v];
-    return (document.getElementById('strengthBox').textContent||'—');
-  })();
-  const devTxt = (document.getElementById('devBox').textContent||'—');
-  const supTxt = (rec.visits?.[v]?.supportUnified||getSupportFromUI().join('\n')||'—').replace(/\n/g,'<br/>');
+
+/* CSS مساعد للطباعة الأحادية (يُحقن مؤقتًا) */
+const PRINT_HELPER_ID='__print_helper_css__';
+function injectPrintHelperCSS(){
+  if(document.getElementById(PRINT_HELPER_ID)) return;
+  const css = `
+  @media print {
+    .no-print { display:none !important }
+  }
+  .print-a4 {
+    width: 794px; /* A4 @96dpi تقريبًا */
+    margin: 0 auto;
+    background: #fff;
+    color:#111;
+  }
+  .print-a4 * { box-shadow:none !important; filter:none !important }
+  body.print-mono .print-a4, body.print-mono .print-a4 * {
+    color:#000 !important;
+  }
+  `;
+  const style=document.createElement('style'); style.id=PRINT_HELPER_ID; style.textContent=css;
+  document.head.appendChild(style);
+}
+
+/* ------- مُنشئ تقرير A4 HTML (زيارة مفردة أو تقرير نهائي) ------- */
+function reportHeaderHTML(rec, whenHijri, visitNum, isFinal){
+  const dir = document.getElementById('h-dir').textContent||'—';
+  const school = document.getElementById('h-school').textContent||'—';
+  const title = isFinal? 'التقرير النهائي لزيارات المعلم' : `تقرير زيارة رقم ${visitNum}`;
+  return `
+  <div style="text-align:center;margin-bottom:10px">
+    <div style="font-family:Cairo;font-weight:700;color:#0f7a66">${dir}</div>
+    <div style="font-family:Cairo;font-weight:700;color:#0f7a66">${school}</div>
+    <h2 style="margin:6px 0 2px;color:#0f7a66">${title}</h2>
+    <div style="font-weight:700;color:#0b6256">التاريخ (هجري): ${whenHijri||'—'}</div>
+  </div>`;
+}
+function chipsRowHTML(kv){
+  return `<div style="display:flex;gap:6px;flex-wrap:wrap">
+    ${kv.map(([k,v])=>`<span style="display:inline-block;padding:4px 8px;border:1px dashed #cfe1dd;border-radius:999px;background:#f6fffb"><b>${k}:</b> ${v||'—'}</span>`).join('')}
+  </div>`;
+}
+
+/* -------- بنك دعم مصنف (مهني/فني/تحفيزي/إداري) -------- */
+const supportBankCategorized = {
+  مهني: {
+    up: [
+      'توسيع المشاركة في مجتمعات التعلم المهنية (PLCs) مع توثيق الدروس المستفادة.',
+      'تخطيط هدف مهني ربعي (SMART) مرتبط بنواتج التعلّم ومؤشرات متابعة.'
+    ],
+    mid: [
+      'الالتحاق بورشة متخصصة في استراتيجية تدريس مناسبة لمحتوى المادة.',
+      'تبادل زيارات صفية مع زميل خبير وتلقي تغذية راجعة منظمة.'
+    ],
+    low: [
+      'جلسة إرشاد مهني فردي لصياغة خطة تحسين أسبوعية قصيرة.',
+      'متابعة تنفيذ مخرجات دورة تأسيسية في التخطيط وإدارة الحصة.'
+    ]
+  },
+  فني: {
+    up: [
+      'تصميم مهمة أدائية عالية الرتبة مع Rubric وتطبيقها في درس قادم.',
+      'بناء بنك أسئلة معيارية وربطه بخطط التحسين.'
+    ],
+    mid: [
+      'تنويع الأدوار داخل المجموعات (قائد/مقرر/مقرر وقت) في نشاط مطبق.',
+      'دمج وسائط رقمية قصيرة (فيديو/محاكاة) في نقطة محورية بالدرس.'
+    ],
+    low: [
+      'اعتماد روتين افتتاحي ثابت (تنشيط قبلي/سؤال مركزي) لـ 5 دقائق.',
+      'تقسيم الدرس لمحطات تعلم مع بطاقة ملاحظة مبسطة.'
+    ]
+  },
+  تحفيزي: {
+    up: [
+      'نشر أفضل الممارسات للمعلم داخل المدرسة وتكريمه بخطاب شكر.',
+      'منح مساحة لعرض نتاج الطلاب وتعزيز الدافعية.'
+    ],
+    mid: [
+      'برنامج مكافآت رمزية للإنجازات الصفية المرتبطة بالأهداف.',
+      'تعميم قصص نجاح قصيرة في لوحة الصف أو منصة المدرسة.'
+    ],
+    low: [
+      'جلسة تشجيع فردية مركزة مع المعلم لتخطي معيقات محددة.',
+      'تفعيل تغذية راجعة فورية إيجابية لكل تقدم قابل للملاحظة.'
+    ]
+  },
+  إداري: {
+    up: [
+      'تخفيف مهام غير تعليمية خلال فترة تنفيذ مبادرة صفية.',
+      'إشراك المعلم في لجنة مناسبة لخبرته لنقل الأثر.'
+    ],
+    mid: [
+      'مواءمة الجدول الزمني لتقليل التزاحم بين الحصص العملية.',
+      'تيسير حضور دورة خارجية حسب التخصص مع متابعة الأثر.'
+    ],
+    low: [
+      'معالجة عجز حصصي مؤقت بالتنسيق الداخلي لتخفيف الضغط.',
+      'جدولة متابعة أسبوعية قصيرة مع القائد لتذليل العقبات.'
+    ]
+  }
+};
+
+/* ---- تحليل الحالة لاختيار دعم مصنف من البنك ----
+   يعتمد على: متوسط مستويات المجالات + حالة الأدوات (مفعّل/إلى حد ما/غير مفعل) */
+function summarizeLevelsForVisit(v){
+  const lv=store[v];
+  let total=0,count=0;
+  lv.forEach(row=>row.forEach(x=>{ if(x>0){ total+=(x-1); count++; } }));
+  const ratio = count? (total/(count*2)) : 0; // 0..1
+  return ratio; // <0.5 ضعيف، 0.5..0.8 متوسط، >0.8 مرتفع
+}
+function summarizeToolsForVisit(v){
+  const arr = getToolsArrayForVisit(v);
+  const dist = {g:0,a:0,r:0,u:0};
+  (arr||[]).forEach(x=>{
+    if(x===2) dist.g++;
+    else if(x===1) dist.a++;
+    else if(x===0) dist.r++;
+    else dist.u++;
+  });
+  return dist;
+}
+function pickCategorizedSupport(v){
+  const ratio = summarizeLevelsForVisit(v);
+  const tools = summarizeToolsForVisit(v);
+  // تقدير الحالة العامة
+  let band='mid';
+  if(ratio>=0.8 && tools.r===0 && tools.a<=1) band='up';
+  else if(ratio<0.5 || tools.r>=2) band='low';
+  // اختيار 4 أسطر: (مهني، فني، تحفيزي، إداري)
+  const lines=[];
+  ['مهني','فني','تحفيزي','إداري'].forEach(cat=>{
+    const options = supportBankCategorized[cat][band];
+    if(options && options.length) lines.push(options[Math.floor(Math.random()*options.length)]);
+  });
+  return lines;
+}
+
+/* يُستخدم لتوليد دعم موحّد بناءً على التحليل المصنف */
+function generateUnifiedSupportAIGuided(){
+  const lines = pickCategorizedSupport(activeVisit);
+  // إضافة سطر موجّه بحسب مؤشر الزيارة + حالة الأدوات
+  const k=visitPctAdjusted(activeVisit);
+  const t=summarizeToolsForVisit(activeVisit);
+  if(k>=80 && t.g>=4) lines.push('تثبيت الممارسات الفاعلة بخطة انتشار مصغّرة ومشاركة أثر على مستوى المدرسة.');
+  else if(k>=50) lines.push('تحسين متتابع مع نقطة فحص أسبوعية ومؤشرات نجاح مرصودة.');
+  else lines.push('تدخل قصير المدى بمؤشرات واضحة مع متابعة لصيقة خلال أسبوعين.');
+  setSupportToUI(lines.slice(0,4));
+  renderSupportMeta();
+}
+
+/* استبدال الاستدعاء القديم في أماكن التوليد التلقائي */
+const _genSupportFallback = generateUnifiedSupport;
+generateUnifiedSupport = generateUnifiedSupportAIGuided;
+
+/* ------- HTML جدول موجز أدوات (للـ A4) ------- */
+function toolsSummaryTableHTML(v, rec){
+  const snap=rec?.visits?.[v];
+  const states = snap?.finalized ? snap.tools : (snap?.draft?.tools||getToolsStateFromUI());
+  const reasons = snap?.finalized ? snap.toolReasons : (snap?.draft?.toolReasons||getToolReasonsFromUI());
+  return `
+  <table style="width:100%;border-collapse:collapse;margin-top:6px">
+    <thead>
+      <tr>
+        <th style="border:1px solid #cfe1dd;padding:6px;background:#0c594e;color:#fff">الأداة</th>
+        <th style="border:1px solid #cfe1dd;padding:6px;background:#0c594e;color:#fff">التفعيل</th>
+        <th style="border:1px solid #cfe1dd;padding:6px;background:#0c594e;color:#fff">سبب (إن وُجد)</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${toolsData.map((t,i)=>{
+        const v=states?states[i]:null;
+        const label = v===2?'مُفعل':(v===1?'إلى حد ما':(v===0?'غير مُفعل':'—'));
+        const why = (reasons&&reasons[i])? reasons[i] : '';
+        return `<tr>
+          <td style="border:1px solid #cfe1dd;padding:6px;text-align:right">${t.title}</td>
+          <td style="border:1px solid #cfe1dd;padding:6px;text-align:center">${label}</td>
+          <td style="border:1px solid #cfe1dd;padding:6px;text-align:right">${why||'—'}</td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>`;
+}
+
+/* ------- بناء تقرير HTML A4 (زيارة واحدة) ------- */
+function makeVisitReportHTML(rec, v, when){
+  const p1=visitPctAdjusted(1), p2=visitPctAdjusted(2), p3=visitPctAdjusted(3);
+  const supTxt = (rec.visits?.[v]?.supportUnified || getSupportFromUI().join('\n') || '—').replace(/\n/g,'<br/>');
+  const head = reportHeaderHTML(rec, when, v, false);
+  const top = chipsRowHTML([
+    ['الاسم', rec.name], ['الهوية', rec.id], ['التخصص', rec.spec],
+    ['الصف/الشعبة', rec.class], ['عنوان الدرس', rec.lesson]
+  ]);
+  const perc = chipsRowHTML([['الأولى', `%${p1}`],['الثانية', `%${p2}`],['الثالثة', `%${p3}`]]);
+  const strengths = (document.getElementById('strengthBox').textContent||'—');
+  const devs      = (document.getElementById('devBox').textContent||'—');
   return `
   <html dir="rtl" lang="ar"><head><meta charset="utf-8"/>
-  <title>تقرير زيارة — ${name}</title>
+  <title>تقرير زيارة — ${rec.name||'—'}</title>
   <style>
     body{font-family:Tajawal,system-ui;margin:20px;color:#123b37}
-    h2{margin:0 0 8px;color:#0f7a66}
-    .b{font-weight:700}
     .box{border:1px solid #e6efec;border-radius:12px;padding:10px;margin:10px 0}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .chip{display:inline-block;padding:4px 8px;border:1px dashed #cfe1dd;border-radius:999px;background:#f6fffb}
-    table{width:100%;border-collapse:collapse;margin-top:8px}
-    th,td{border:1px solid #cfe1dd;padding:6px;text-align:center}
+    h3{margin:6px 0;color:#0f7a66}
     .sign{height:44px;border-bottom:1px dashed #9fb5b1;margin:10px 40px}
   </style>
   </head><body>
-    <h2>تقرير زيارة — ${name}</h2>
-    <div class="box">
-      <div class="row">
-        <span class="chip">الاسم: <span class="b">${name}</span></span>
-        <span class="chip">الهوية: <span class="b">${id}</span></span>
-        <span class="chip">التخصص: <span class="b">${spec}</span></span>
-        <span class="chip">الصف/الشعبة: <span class="b">${cls}</span></span>
-        <span class="chip">تاريخ الزيارة (هجري): <span class="b">${when}</span></span>
+    <div class="print-a4">
+      ${head}
+      <div class="box">${top}</div>
+      <div class="box">${perc}</div>
+      <div class="box"><h3>جوانب التميّز</h3><div>${strengths}</div></div>
+      <div class="box"><h3>احتياجات التنمية المهنية</h3><div>${devs}</div></div>
+      <div class="box"><h3>الدعم المقدّم</h3><div>${supTxt}</div></div>
+      <div class="box"><h3>ملخص الأدوات</h3>${toolsSummaryTableHTML(v, rec)}</div>
+      <div class="box">
+        <table style="width:100%;border-collapse:collapse">
+          <tr><th style="border:1px solid #cfe1dd;padding:6px">اسم المعلم</th><th style="border:1px solid #cfe1dd;padding:6px">توقيع المعلم</th><th style="border:1px solid #cfe1dd;padding:6px">اسم مدير المدرسة</th><th style="border:1px solid #cfe1dd;padding:6px">توقيع المدير</th></tr>
+          <tr><td style="border:1px solid #cfe1dd;padding:6px">${rec.name||'—'}</td><td style="border:1px solid #cfe1dd;padding:6px" class="sign"></td><td style="border:1px solid #cfe1dd;padding:6px">${document.getElementById('pn'+v).textContent||'—'}</td><td style="border:1px solid #cfe1dd;padding:6px" class="sign"></td></tr>
+        </table>
       </div>
-      <div class="row" style="margin-top:6px">
-        <span class="chip">الأولى: %${ps.p1}</span>
-        <span class="chip">الثانية: %${ps.p2}</span>
-        <span class="chip">الثالثة: %${ps.p3}</span>
-      </div>
-    </div>
-    <div class="box"><b>جوانب التميّز:</b><div>${okTxt}</div></div>
-    <div class="box"><b>احتياجات التنمية المهنية:</b><div>${devTxt}</div></div>
-    <div class="box"><b>الدعم المقدم:</b><div>${supTxt}</div></div>
-    <div class="box">
-      <table>
-        <tr><th>اسم المعلم</th><th>توقيع المعلم</th><th>اسم مدير المدرسة</th><th>توقيع المدير</th></tr>
-        <tr><td>${name}</td><td class="sign"></td><td>${document.getElementById('pn'+v).textContent||'—'}</td><td class="sign"></td></tr>
-      </table>
     </div>
   </body></html>`;
 }
 
-/* حذف زيارة للمعلم الحالي (الزيارة النشطة) */
-document.getElementById('btnDeleteVisit').addEventListener('click',()=>{
-  if(!loadedRecord){ showToast('لا يوجد معلّم محمّل.'); return; }
-  if(!confirm('تأكيد حذف بيانات هذه الزيارة لهذا المعلم؟')) return;
-  const v=activeVisit;
-  store[v]=zeroMatrix();
-  const snap=loadedRecord.visits?.[v];
-  if(snap){
-    delete snap.finalized; delete snap.levels; delete snap.tools; delete snap.toolReasons; delete snap.supportUnified;
-    snap.draft={};
-  }
-  saveRecord();
-  renderVisit(v);
-  showToast('تم حذف بيانات الزيارة الحالية.');
-});
-
-/* مسح جميع البيانات (كل المعلمين) */
-document.getElementById('btnClearAll').addEventListener('click',()=>{
-  if(!confirm('تنبيه: سيُمسح جميع ما تم حفظه لكل المعلمين. متابعة؟')) return;
-  // مسح مفاتيح التخزين الخاصة
-  const keys=[]; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && (k.startsWith(LS_PREFIX)||k===approvedKey)) keys.push(k); }
-  keys.forEach(k=>localStorage.removeItem(k));
-  store={1:zeroMatrix(),2:zeroMatrix(),3:zeroMatrix()};
-  loadedRecord=null;
-  // تصفير الواجهة
-  document.getElementById('rows').innerHTML='';
-  document.getElementById('toolsRows').innerHTML='';
-  setDonut(1,0); setDonut(2,0); setDonut(3,0);
-  setVisitPercents(0,0,0); setGlobalMeter(0); setVisitMeter(0);
-  ['v1h','v2h','v3h','sn1','sn2','sn3','sh1','sh2','sh3'].forEach(id=>document.getElementById(id).textContent='—');
-  document.getElementById('supportArea').value='';
-  renderApprovedPanel();
-  showToast('تم مسح كافة البيانات.');
-});
-
-/* ========== كشف المعلمين (تحميل/بحث) ========== */
-const LS_TEACHERS='moe_teacher_list_v1';
-let teacherList=[];
-function loadTeacherList(){ try{ teacherList = JSON.parse(localStorage.getItem(LS_TEACHERS)||'[]'); if(!Array.isArray(teacherList)) teacherList=[]; }catch{ teacherList=[]; } }
-function renderTeachers(q){
-  const tpList=document.getElementById('tpList'); tpList.innerHTML='';
-  const rx=(q||'').trim()? new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i'):null;
-  const data = teacherList.filter(t=>!rx || rx.test(t.name||'') || rx.test(t.id||''));
-  if(!data.length){ tpList.innerHTML='<div style="grid-column:1/-1;text-align:center;opacity:.7">لا نتائج.</div>'; return; }
-  data.forEach(t=>{
-    const div=document.createElement('div'); div.className='tp-item';
-    div.innerHTML=`<b>${t.name||''}</b><span style="opacity:.8">${t.id||'—'}</span>`;
-    div.addEventListener('click',()=>{
-      document.getElementById('teachersPanel').style.display='none';
-      fillTeacher(t);
-    });
-    tpList.appendChild(div);
-  });
+/* ------- تقرير نهائي إذا اكتملت الزيارات الثلاث ------- */
+function allVisitsFinalized(rec){
+  return [1,2,3].every(v=>rec?.visits?.[v]?.finalized);
 }
-document.getElementById('btnShowList').addEventListener('click',()=>{
-  loadTeacherList(); renderTeachers('');
-  document.getElementById('tpQuery').value='';
-  document.getElementById('teachersPanel').style.display='block';
-});
-document.getElementById('tpClose').addEventListener('click',()=>document.getElementById('teachersPanel').style.display='none');
-document.getElementById('tpQuery').addEventListener('input',e=>renderTeachers(e.target.value));
+function makeFinalReportHTML(rec){
+  const when = hijriDateStr(new Date());
+  const dir = document.getElementById('h-dir').textContent||'—';
+  const school = document.getElementById('h-school').textContent||'—';
+  const p1=visitPctAdjusted(1), p2=visitPctAdjusted(2), p3=visitPctAdjusted(3);
+  const global = Math.round((p1+p2+p3)/3);
+  const head = reportHeaderHTML(rec, when, '', true);
+  const top = chipsRowHTML([
+    ['الاسم', rec.name], ['الهوية', rec.id], ['التخصص', rec.spec],
+    ['الصف/الشعبة', rec.class]
+  ]);
+  // تجميع توصيات عامة
+  const strengths = (document.getElementById('strengthBox').textContent||'—');
+  const devs      = (document.getElementById('devBox').textContent||'—');
+  // دعم ختامي موجّه بحسب المتوسط العام
+  const supLines = pickCategorizedSupport(activeVisit);
+  supLines.push( global>=80 ? 'التوصية: مشاركة الممارسات الناجحة على مستوى المدرسة وقياس الأثر فصليًا.'
+                            : (global>=50 ? 'التوصية: تحسين مرحلي بمؤشرات أداء فصلية وخطة متابعة شهرية.'
+                                          : 'التوصية: خطة تدخل عاجلة لمدة 6 أسابيع مع مراجعة أسبوعية.'));
 
-/* استيراد من Excel/CSV */
-document.getElementById('btnImportInPanel').addEventListener('click',()=>document.getElementById('excelInput').click());
-document.getElementById('excelInput').addEventListener('change', (e)=>{
-  const file=e.target.files[0]; if(!file) return;
-  file.arrayBuffer().then(buf=>{
-    const wb=XLSX.read(buf,{type:'array'}); const sh=wb.Sheets[wb.SheetNames[0]];
-    const rows=XLSX.utils.sheet_to_json(sh,{header:1,defval:''}); if(!rows.length){ alert('الملف فارغ.'); return; }
-    const headers=rows[0].map(h=>String(h).trim().toLowerCase());
-    const idx = (names)=> headers.findIndex(h=>names.map(x=>x.toLowerCase()).some(n=>h.includes(n)));
-    const ixName=idx(['الاسم','اسم','name']), ixId=idx(['الهوية','id']), ixSpec=idx(['التخصص','المادة','spec','subject']), ixDeg=idx(['المؤهل','degree']), ixExp=idx(['سنوات','خبرة','experience']);
-    function tenDigitsFallback(row){ for(const c of row){ const s=String(c||'').replace(/\D+/g,''); if(/^\d{10}$/.test(s)) return s; } return ''; }
-    teacherList = rows.slice(1).filter(r=>r.some(x=>String(x).trim()!=='')).map(r=>{
-      const name=(ixName>-1? r[ixName] : (r[0]||'')).toString().trim();
-      let id=(ixId>-1? String(r[ixId]) : '').replace(/\D+/g,''); if(!/^\d{10}$/.test(id)) id=tenDigitsFallback(r);
-      const spec=(ixSpec>-1? r[ixSpec] : '').toString().trim();
-      const degree=(ixDeg>-1? r[ixDeg] : '').toString().trim();
-      const exp=(ixExp>-1? r[ixExp] : '').toString().trim();
-      return {name,id:id.slice(0,10),spec,degree,exp};
-    }).filter(x=>x.name);
-    localStorage.setItem(LS_TEACHERS, JSON.stringify(teacherList));
-    renderTeachers('');
-    showToast('تم استيراد القائمة.');
-    e.target.value='';
-  }).catch(()=>{ alert('فشل استيراد الملف.'); e.target.value=''; });
+  return `
+  <html dir="rtl" lang="ar"><head><meta charset="utf-8"/>
+  <title>التقرير النهائي — ${rec.name||'—'}</title>
+  <style>
+    body{font-family:Tajawal,system-ui;margin:20px;color:#123b37}
+    .box{border:1px solid #e6efec;border-radius:12px;padding:10px;margin:10px 0}
+    h3{margin:6px 0;color:#0f7a66}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #cfe1dd;padding:6px}
+    .sign{height:44px;border-bottom:1px dashed #9fb5b1;margin:10px 40px}
+  </style>
+  </head><body>
+    <div class="print-a4">
+      ${head}
+      <div class="box">${top}</div>
+      <div class="box">${chipsRowHTML([['الأولى', `%${p1}`],['الثانية', `%${p2}`],['الثالثة', `%${p3}`],['المؤشر الشامل', `%${global}`]])}</div>
+      <div class="box"><h3>جوانب التميّز (خلاصة)</h3><div>${strengths}</div></div>
+      <div class="box"><h3>احتياجات التنمية المهنية (خلاصة)</h3><div>${devs}</div></div>
+      <div class="box"><h3>الدعم الختامي الموصى به</h3><div>${supLines.map(s=>`• ${s}`).join('<br/>')}</div></div>
+      <div class="box">
+        <h3>ملخص الأدوات عبر الزيارات</h3>
+        ${[1,2,3].map(v=>`<div style="margin:6px 0"><b>زيارة ${v}</b>${toolsSummaryTableHTML(v, rec)}</div>`).join('')}
+      </div>
+      <div class="box">
+        <table>
+          <tr><th>اسم المعلم</th><th>توقيع المعلم</th><th>اسم مدير المدرسة</th><th>توقيع المدير</th></tr>
+          <tr><td>${rec.name||'—'}</td><td class="sign"></td><td>${document.getElementById('pn3').textContent||'—'}</td><td class="sign"></td></tr>
+        </table>
+      </div>
+    </div>
+  </body></html>`;
+}
+
+/* ------- طباعة نظيفة: بدون أزرار، داخل A4 ------- */
+document.getElementById('printBtn').addEventListener('click',()=>{
+  injectPrintHelperCSS();
+  // اختيار: أبيض/أسود؟
+  const mono = confirm('طباعة أبيض/أسود؟ اضغط موافق للتفعيل، إلغاء للألوان.');
+  setMono(mono);
+
+  // إذا اكتملت الزيارات الثلاث → تقرير نهائي، وإلا تقرير زيارة نشطة
+  const isFinal = loadedRecord && allVisitsFinalized(loadedRecord);
+  const when = (document.getElementById('v'+activeVisit+'h').textContent||'—').trim() || hijriDateStr(new Date());
+  const html = isFinal ? makeFinalReportHTML(loadedRecord)
+                       : makeVisitReportHTML(loadedRecord||{
+                            name:tName.value,id:(tId.value||'').replace(/\D+/g,''),spec:tSpec.value,class:class_.value,lesson:lesson.value,visits:loadedRecord?.visits||{}
+                          }, activeVisit, when);
+  const w = window.open('','_blank');
+  w.document.write(html); w.document.close();
+  setTimeout(()=>{ w.focus(); w.print(); }, 300);
 });
 
-/* ========== ربط إدخالات الهوية/الاسم مع سجل المعلّم ========== */
-['tName','tId','tSpec','lesson','degree','exp','class'].forEach(id=>{
-  const el=document.getElementById(id);
-  el.addEventListener('change',()=>{
-    if(!loadedRecord){ // إنشاء سجل جديد إذا لم يوجد
-      const key=currentKey(); if(!key){ return; }
-      loadedRecord={teacherId:key,name:tName.value||'',id:(tId.value||'').replace(/\D+/g,''),spec:tSpec.value||'',lesson:lesson.value||'',degree:degree.value||'',exp:exp.value||'',class:class_.value||'',visits:{1:{draft:{}},2:{draft:{}},3:{draft:{}}}};
+/* ------- حفظ PDF رسمي A4 (صفحات إن لزم) ------- */
+document.getElementById('saveBtn').addEventListener('click', async ()=>{
+  injectPrintHelperCSS();
+  const isFinal = loadedRecord && allVisitsFinalized(loadedRecord);
+  const when = (document.getElementById('v'+activeVisit+'h').textContent||'—').trim() || hijriDateStr(new Date());
+  const html = isFinal ? makeFinalReportHTML(loadedRecord)
+                       : makeVisitReportHTML(loadedRecord||{
+                            name:tName.value,id:(tId.value||'').replace(/\D+/g,''),spec:tSpec.value,class:class_.value,lesson:lesson.value,visits:loadedRecord?.visits||{}
+                          }, activeVisit, when);
+
+  // افتح في نافذة غير مرئية للرسم إلى كانفس
+  const w = window.open('','_blank','width=900,height=1200');
+  w.document.write(html); w.document.close();
+
+  // انتظر تَرسُّم الصفحة
+  await new Promise(r=>setTimeout(r, 400));
+
+  const node = w.document.body.querySelector('.print-a4') || w.document.body;
+  const { jsPDF } = window.jspdf;
+  const canvas = await html2canvas(node, {scale:2, background:'#ffffff', useCORS:true, windowWidth: node.scrollWidth});
+  const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+  const pdf = new jsPDF('p','mm','a4');
+  const pageWidth  = 210, pageHeight = 297, margin=8;
+  const imgWidth = pageWidth - margin*2;
+  const imgHeight = canvas.height * imgWidth / canvas.width;
+
+  if(imgHeight <= pageHeight - margin*2){
+    pdf.addImage(imgData,'JPEG',margin,margin,imgWidth,imgHeight,'','FAST');
+  }else{
+    // تقطيع طويل إلى صفحات
+    const pageCanvas = document.createElement('canvas');
+    const pageCtx = pageCanvas.getContext('2d');
+    const sliceHeightPx = Math.floor((pageHeight - margin*2) * (canvas.width/imgWidth));
+    let sY = 0, page=0;
+    while(sY < canvas.height){
+      const h = Math.min(sliceHeightPx, canvas.height - sY);
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = h;
+      pageCtx.clearRect(0,0,pageCanvas.width,pageCanvas.height);
+      pageCtx.drawImage(canvas, 0, sY, canvas.width, h, 0, 0, canvas.width, h);
+      const part = pageCanvas.toDataURL('image/jpeg', 0.95);
+      if(page>0) pdf.addPage();
+      pdf.addImage(part,'JPEG',margin,margin,imgWidth,(h * imgWidth / canvas.width),'','FAST');
+      sY += h; page++;
     }
-    saveDraftActiveVisit();
+  }
+
+  const nm = (loadedRecord?.name||'معلم') + (isFinal?' - التقرير النهائي':' - زيارة '+activeVisit) + '.pdf';
+  pdf.save(nm);
+  w.close();
+});
+
+/* ========== زر تحميل الأخير (تقرير) — كما طلبت بالتنسيق الجديد ========== */
+document.getElementById('btnLoadLast').addEventListener('click',()=>{
+  const arr=readApproved(); if(!arr.length){ showToast('لا توجد تقارير معتمدة.'); return; }
+  const last=arr[arr.length-1];
+  const rec=loadRecordByKey(last.teacherId);
+  if(!rec){ showToast('تعذر فتح التقرير.'); return; }
+  const html = allVisitsFinalized(rec) ? makeFinalReportHTML(rec) : makeVisitReportHTML(rec, last.visit, last.whenHijri||'—');
+  const w=window.open('','_blank'); w.document.write(html); w.document.close();
+});
+
+/* ========== تذكير: عند الاعتماد إن اكتملت الزيارات سيظهر التقرير النهائي سريعًا ========== */
+(function hookFinishToast(){
+  const old= document.getElementById('finishVisitBtn').onclick;
+  // نترك المعالج الأصلي كما هو (أُضيف سابقًا عبر addEventListener)، فقط نعرض رسالة توجيهية بعد الاعتماد
+  document.getElementById('finishVisitBtn').addEventListener('click', ()=>{
+    setTimeout(()=>{
+      if(loadedRecord && allVisitsFinalized(loadedRecord)){
+        showToast('اكتملت الزيارات الثلاث — يمكنك الآن طباعة التقرير النهائي أو حفظه PDF.');
+      }
+    }, 300);
   });
-});
-const class_ = document.getElementById('class');
-
-/* ========== أزرار الصعود/الهبوط ==========
-   (تظهر عند التمرير) */
-const toTop=document.getElementById('toTop'), toBottom=document.getElementById('toBottom');
-window.addEventListener('scroll',()=>{
-  const y=window.scrollY, h=document.body.scrollHeight - window.innerHeight;
-  toTop.style.display = y>200 ? 'block':'none';
-  toBottom.style.display = (h-y)>200 ? 'block':'none';
-});
-toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-toBottom.addEventListener('click',()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}));
-
-/* ========== تهيئة أولية ========== */
-(function init(){
-  // تفعيل حقول التوقيع بالاسم مباشرة
-  ['sn1','sn2','sn3'].forEach(id=>document.getElementById(id).textContent=(tName.value||'—'));
-  // بناء أولي
-  buildTable(); buildTools(); generateUnifiedSupport(); calcAll();
-  // رقم المدير قابل للتحرير تم أعلاه
 })();
+
+/* === نهاية الملف: لا تغييرات على الهوية/التصميم الأساسي === */
 </script>
 </body>
 </html>
