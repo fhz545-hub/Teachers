@@ -17,7 +17,7 @@
 :root{
   --moe-dark:#0c594e; --moe-green:#0f7a66; --moe-lite:#e8f4f1;
   --ink:#123b37; --line:#cfe1dd; --border:#e6efec; --bg:#fbfdfc;
-  --good:#16a34a; --mid:#f59e0b; --bad:#ef4444; --strip:#f1fbf7;
+  --good:#16a34a; --mid:#f59e0b; --bad:#ef4444;
   --base: clamp(14px, 1.15vw + 10px, 16.5px);
   --soft-green:#e9f7ee; --soft-green-b:#b9e4c8; --soft-green-t:#0f6a3b;
 }
@@ -52,6 +52,10 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .fld{height:38px;border:1px solid var(--line);border-radius:10px;padding:0 10px;background:#fff;font:inherit;text-align:center}
 .col-3{grid-column:span 3/span 3}.col-12{grid-column:span 12/span 12}
 
+/* make teacher input visually inline but real input preserved — hidden box in UI, visible in print */
+.fld-inline{border:0;background:transparent;padding:6px 8px;text-align:center;border-radius:6px}
+.fld-inline:focus{outline:2px solid rgba(15,122,102,0.06);background:#fff}
+
 /* أزرار: موحّد بلون وزاري */
 .btn-ic{
   display:inline-flex;gap:8px;align-items:center;padding:9px 12px;border-radius:12px;border:1px solid var(--moe-green);
@@ -69,7 +73,7 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .visits{display:flex;gap:clamp(12px,2vw,24px);align-items:flex-start;justify-content:center;flex-wrap:wrap}
 .visitCard{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
 .donut{width:clamp(84px, 10vw + 40px, 140px);height:auto;cursor:pointer}
-.donut .ring{transform:rotate(-90deg);transform-origin:50% 50%}
+.donut .ring{transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dasharray .45s ease,stroke .3s ease}
 .donut text{font-weight:800;fill:var(--moe-dark);font-size:14px}
 .chip{background:var(--moe-lite);border:1px dashed var(--line);padding:4px 10px;border-radius:999px;font-size:clamp(11px,.6vw + 9px,12px);color:var(--moe-dark);cursor:pointer}
 .visitLabel{font-family:"Cairo";font-weight:700;color:var(--moe-dark);font-size:clamp(13px,.8vw + 10px,16px)}
@@ -83,7 +87,7 @@ h1{margin:10px 0 8px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .globalInline.good{color:var(--good)}.globalInline.mid{color:var(--mid)}.globalInline.bad{color:var(--bad)}
 .visitPercents{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:4px}
 .visitPercents .badge{background:#f0faf6;border:1px solid var(--soft-green-b)}
-.globalRow{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.globalRow{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:4px}
 .hbar{position:relative;width:min(700px,95vw);height:14px;border:1px solid var(--border);border-radius:999px;background:linear-gradient(90deg,#ef4444 0%,#f59e0b 50%,#16a34a 100%);margin:4px auto 6px}
 .hthumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--moe-dark)}
 .hmeter{display:flex;flex-direction:column;gap:6px;align-items:center;margin:6px 0 8px}
@@ -249,13 +253,14 @@ body.snapshot .no-print{ display:none !important }
   <div class="box" id="boxInfo">
     <h3>المعلومات العامة</h3>
     <div class="grid" style="padding:10px">
-      <input class="fld col-3" id="tName" placeholder="اسم المعلم">
-      <input class="fld col-3" id="tId" placeholder="رقم الهوية (10 أرقام)" inputmode="numeric" maxlength="10">
-      <input class="fld col-3" id="tSpec" placeholder="التخصص / المادة">
-      <input class="fld col-3" id="lesson" placeholder="عنوان الدرس">
-      <input class="fld col-3" id="degree" placeholder="المؤهل">
-      <input class="fld col-3" id="exp" placeholder="سنوات الخبرة">
-      <input class="fld col-3" id="class" placeholder="الفصل">
+      <!-- الحقول ظاهريا مخفية (fld-inline) لتصبح البيانات متجانسة: تظهر في الطباعة بشكل واضح -->
+      <input class="fld fld-inline col-3" id="tName" placeholder="اسم المعلم">
+      <input class="fld fld-inline col-3" id="tId" placeholder="رقم الهوية (10 أرقام)" inputmode="numeric" maxlength="10">
+      <input class="fld fld-inline col-3" id="tSpec" placeholder="التخصص / المادة">
+      <input class="fld fld-inline col-3" id="lesson" placeholder="عنوان الدرس">
+      <input class="fld fld-inline col-3" id="degree" placeholder="المؤهل">
+      <input class="fld fld-inline col-3" id="exp" placeholder="سنوات الخبرة">
+      <input class="fld fld-inline col-3" id="class" placeholder="الفصل">
 
       <div class="col-3" style="display:flex;gap:6px;align-items:center;justify-content:center">
         <button class="btn-ic tiny no-print" id="btnShowList" title="كشف الأسماء">
@@ -266,6 +271,9 @@ body.snapshot .no-print{ display:none !important }
             <rect x="3" y="4" width="14" height="16" rx="2"/><path d="M7 8h6M7 12h6M7 16h6"/>
             <path d="M17 12l4 4m0-4-4 4"/>
           </svg>قوالب
+        </button>
+        <button class="btn-ic tiny no-print" id="btnReportSmall" title="تقرير زيارة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18"/></svg>تقرير
         </button>
       </div>
     </div>
@@ -422,7 +430,7 @@ body.snapshot .no-print{ display:none !important }
 
     <button class="btn-ic" id="btnApproved" title="المعتمدون"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/><path d="M20 8v6m3-3h-6"/></svg>المعتمدون</button>
     <button class="btn-ic" id="btnDeleteVisit" title="حذف هذه الزيارة لهذا المعلم"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4h8v2"/></svg>حذف زيارة</button>
-    <button class="btn-ic" id="btnClearAll" title="مسح الجميع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 6 3 1 2 13h8l2-13 3-1"/><path d="M5 6h14"/><path d="M10 11v6M14 11v6"/></svg>مسح الجميع</button>
+    <button class="btn-ic" id="btnClearAll" title="مسح الجميع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 6 3 1 2 13h8ل2-13 3-1"/><path d="M5 6h14"/><path d="M10 11v6M14 11v6"/></svg>مسح الجميع</button>
   </div>
 
   <div id="printMark" class="printMark">مبادرة دعم اليعقوبي الثانوي — تاريخ الطباعة: <span id="printHijri">—</span></div>
@@ -568,7 +576,7 @@ document.getElementById('hijriChip').textContent='التاريخ الهجري: '
 
 /* مزامنة تاريخ التوقيع */
 function syncSignatureDates(){ ['1','2','3'].forEach(v=>{ const val=document.getElementById('v'+v+'h').textContent||'—'; document.getElementById('sh'+v).textContent=(val&&val.trim())?val:'—'; }); }
-['v1h','v2h','v3h'].forEach(id=>{ const el=document.getElementById(id); new MutationObserver(syncSignatureDates).observe(el,{characterData:true,subtree:true,childList:true}); });
+['v1h','v2h','v3h'].forEach((id,i)=>{ const el=document.getElementById(id); new MutationObserver(syncSignatureDates).observe(el,{characterData:true,subtree:true,childList:true}); });
 
 /* واتساب: رقم افتراضي قابل للتعديل */
 let waNumber=localStorage.getItem(LS_WA)||'966504532489';
@@ -768,17 +776,10 @@ function buildTools(){
     tr.innerHTML=`<td class="seq">${i+1}</td>
       <td style="text-align:right"><span class="tool-name" style="font-weight:800">${t.title}</span><span class="tool-desc">${t.desc}</span></td>
       <td class="td-proof"><input type="checkbox" class="tool-proof" title="شاهد مُتاح؟"></td>
-     <td class="td-activate">
-  <td class="td-activate">
-  <div class="level">
-    <button data-v="2">مُفعل</button>
-    <button data-v="1">إلى حد ما</button>
-    <button data-v="0">غير مُفعل</button>
-  </div>
-</td>
-<td>
-  <input type="text" class="tool-reason" placeholder="أدخل سبب/ملاحظة عند الحاجة" disabled>
-</td>
+      <td class="td-activate"><div class="pills"><div class="pill" data-v="2">مُفعل</div><div class="pill" data-v="1">إلى حد ما</div><div class="pill" data-v="0">غير مُفعل</div></div></td>
+      <td class="td-reason"><textarea class="tool-reason" placeholder="اكتب السبب عند (غير مُفعل/إلى حد ما)"></textarea></td>`;
+    tBody.appendChild(tr);
+  });
   [...document.querySelectorAll('.pills')].forEach((set)=>{
     const pills=set.querySelectorAll('.pill'); const reason=set.parentElement.nextElementSibling.querySelector('.tool-reason');
     const enableReason=(v)=>{ reason.disabled=(v===2); if(v===2) reason.value=''; };
@@ -1046,6 +1047,8 @@ function cloneForSnapshot(){
   clonedAreas.forEach((ta,idx)=>{ const val=(origAreas[idx]?.value||''); const div=document.createElement('div'); div.className='textarea-print'; div.textContent=val; ta.parentNode.replaceChild(div,ta); });
   const saOrig=document.getElementById('supportArea');
   const sa=cloned.querySelector('#supportArea'); if(sa){ const div=document.createElement('div'); div.className='textarea-print'; div.textContent=(saOrig.value||''); sa.parentNode.replaceChild(div,sa); }
+  // make fld-inline visible in print snapshot
+  cloned.querySelectorAll('.fld-inline').forEach(i=>{ i.style.border='1px solid #ccc'; i.style.background='#fff'; i.style.padding='6px 8px'; });
   return cloned;
 }
 async function snapshotToCanvas(){
