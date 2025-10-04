@@ -17,6 +17,7 @@ html,body{margin:0;background:#fff;color:var(--ink);font-family:"Tajawal",system
 #page{width:min(1200px,100vw);margin-inline:auto}
 .wrap{padding:clamp(8px,2vw,16px)}
 .hidden{display:none}
+.no-print{ }
 .input-error{border-color:var(--warn)!important;background:#fff5f7!important;box-shadow:0 0 0 2px rgba(225,29,72,.12) inset}
 
 /* رأس */
@@ -30,7 +31,7 @@ html,body{margin:0;background:#fff;color:var(--ink);font-family:"Tajawal",system
 h1{margin:10px 0 6px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-size:clamp(18px,1.6vw + 14px,26px);text-align:center}
 .badge{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:10px;background:var(--moe-lite);color:var(--moe-dark);font-weight:700;font-size:12px}
 
-/* شريط أدوات تحت العنوان (مصنَّف وسط) */
+/* شريط أدوات (وسط) */
 .toolbar-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 10px;justify-content:center}
 .toolbar-row .btn-ic{padding:7px 10px}
 
@@ -41,7 +42,7 @@ h1{margin:10px 0 6px;color:var(--moe-green);font-family:"Cairo","Tajawal";font-s
 .lens-menu .row .fld{flex:1}
 .lens-menu select{flex:1;height:40px;border:1px solid var(--line);border-radius:10px;padding:0 10px;background:#fff;font:inherit;text-align:center}
 
-/* صناديق ومعلومات عامة */
+/* الصناديق */
 .box{border:1px solid var(--border);border-radius:14px;background:var(--bg);margin-top:10px;overflow:hidden}
 .box h3{margin:0;padding:10px 12px;border-bottom:1px solid var(--border);font-size:15px;color:var(--moe-dark);display:flex;gap:10px;align-items:center;justify-content:space-between}
 .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px}
@@ -94,6 +95,9 @@ tr.field-row:nth-of-type(even) td{background:var(--rowB)}
 .tbl td.domain-cell{background:#f3faf8;text-align:center;vertical-align:middle;font-weight:800}
 .item-cell{padding:6px 8px;text-align:center}
 .item-title{display:block;font-weight:800;color:var(--moe-dark);font-size:13px}
+
+/* كعب الجداول (شريط سفلي بلون الهوية) */
+.tbl tfoot.tfoot-brand td{background:var(--moe-lite);border-top:3px solid var(--moe-green);padding:4px 6px}
 
 /* مستوى الأداء */
 .level{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:stretch;width:100%}
@@ -148,12 +152,19 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
 /* أزرار سفلية (وسط) */
 .bottom-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;padding:10px;border:1px solid var(--border);border-radius:14px;background:#fbfdfc;margin-top:12px}
 
-/* أسهم تمرير */
+/* أسهم تمرير (الجهة المقابلة) */
 .scroll-arrows{position:fixed;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:2100}
 .scroll-arrows button{background:#10b981;color:#fff;border:1px solid #0f7a66;border-radius:12px;padding:8px 10px;font-weight:900;cursor:pointer;box-shadow:0 10px 26px rgba(16,185,129,.2)}
 .scroll-arrows button:hover{filter:saturate(120%);transform:translateY(-1px)}
 
-/* استجابة */
+/* شارة مصدر الدعم في التقرير */
+.srcBadge{display:inline-block;padding:.1rem .4rem;border-radius:8px;border:1px solid var(--moe-green);color:var(--moe-green);background:#f5fffb;margin-inline-start:6px;font-size:10px;font-weight:800}
+
+/* طباعة */
+@media print{
+  .no-print,.toolbar-row,.scroll-arrows,#snackbar,#approvedPanel,#commsPanel{display:none!important}
+  body{background:#fff}
+}
 @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)} .visits{justify-content:center}}
 @media (max-width:520px){.grid{grid-template-columns:1fr} .toolbar-row{flex-direction:column;align-items:center}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -197,7 +208,7 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
     <button class="btn-ic tiny" id="btnComms" title="مراسلات">✉️ مراسلات</button>
   </div>
 
-  <!-- المعلومات العامة (هنا فقط) -->
+  <!-- المعلومات العامة -->
   <div class="box" id="boxInfo">
     <h3><span>المعلومات العامة</span></h3>
     <div class="grid" style="padding:10px">
@@ -212,7 +223,7 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
     </div>
   </div>
 
-  <!-- المؤشر الشامل (نُقل تحت المعلومات العامة) -->
+  <!-- المؤشر الشامل (تحت المعلومات العامة) -->
   <div class="hmeterTop">
     <span>المؤشر الشامل للأداء <b id="globalPctInline" class="globalInline">ضعيف</b></span>
     <div class="globalRow"><div class="hbar"><div class="hthumb" id="globalThumb" style="left:0%"></div></div></div>
@@ -248,6 +259,7 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
           <tr><th>م</th><th>المجالات</th><th>العناصر</th><th>مستوى الأداء</th><th>جوانب التميّز</th><th>احتياجات التنمية المهنية</th></tr>
         </thead>
         <tbody id="rows"></tbody>
+        <tfoot class="tfoot-brand"><tr><td colspan="6"></td></tr></tfoot>
       </table>
     </div>
   </div>
@@ -259,6 +271,7 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
       <table class="tbl" id="toolsTbl">
         <thead id="toolsHead"><tr><th>م</th><th>الأدوات</th><th>الشواهد</th><th>التفعيل</th><th>أسباب عدم التفعيل</th></tr></thead>
         <tbody id="toolsRows"></tbody>
+        <tfoot class="tfoot-brand"><tr><td colspan="5"></td></tr></tfoot>
       </table>
     </div>
   </div>
@@ -266,7 +279,7 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
   <!-- الدعم -->
   <div class="box" id="supportBox">
     <h3>الدعم المقدّم للمعلم</h3>
-    <div class="support-area"><textarea id="supportArea" placeholder="يُولَّد تلقائيًا: ٤ أسطر ذكية بناءً على التقييمات والأدوات…"></textarea></div>
+    <div class="support-area"><textarea id="supportArea" placeholder="يُولَّد تلقائيًا (٤ أسطر) بناءً على التقييمات والأدوات… ويمكنك التعديل"></textarea></div>
   </div>
 
   <!-- التوقيعات -->
@@ -281,24 +294,24 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
               اسم المعلم: <b id="sn1">—</b>
               <div style="height:1px;border-bottom:1px dashed #9fb5b1;margin:8px 24px"></div>توقيع المعلم
               <div style="height:8px"></div>
-              اسم المدير: <span id="pr1" class="editable" contenteditable="false">فهد حامد الزهراني</span>
-              <button class="inline-pen no-print tiny" data-pen="pr1" title="تعديل اسم المدير">✎</button>
+              اسم المدير: <b id="pr1Name">فهد حامد الزهراني</b>
+              <button class="inline-pen no-print tiny" data-pen="pr1Name" title="تعديل اسم المدير">✎</button>
               <div style="height:1px;border-bottom:1px dashed #9fb5b1;margin:8px 24px"></div>توقيع المدير
             </td>
             <td>
               اسم المعلم: <b id="sn2">—</b>
               <div style="height:1px;border-bottom:1px dashed #9fb5b1;margin:8px 24px"></div>توقيع المعلم
               <div style="height:8px"></div>
-              اسم المدير: <span id="pr2" class="editable" contenteditable="false">فهد حامد الزهراني</span>
-              <button class="inline-pen no-print tiny" data-pen="pr2" title="تعديل اسم المدير">✎</button>
+              اسم المدير: <b id="pr2Name">فهد حامد الزهراني</b>
+              <button class="inline-pen no-print tiny" data-pen="pr2Name" title="تعديل اسم المدير">✎</button>
               <div style="height:1px;border-bottom:1px dashed #9fb5b1;margin:8px 24px"></div>توقيع المدير
             </td>
             <td>
               اسم المعلم: <b id="sn3">—</b>
               <div style="height:1px;border-bottom:1px dashed #9fb5b1;margin:8px 24px"></div>توقيع المعلم
               <div style="height:8px"></div>
-              اسم المدير: <span id="pr3" class="editable" contenteditable="false">فهد حامد الزهراني</span>
-              <button class="inline-pen no-print tiny" data-pen="pr3" title="تعديل اسم المدير">✎</button>
+              اسم المدير: <b id="pr3Name">فهد حامد الزهراني</b>
+              <button class="inline-pen no-print tiny" data-pen="pr3Name" title="تعديل اسم المدير">✎</button>
               <div style="height:1px;border-bottom:1px dashed #9fb5b1;margin:8px 24px"></div>توقيع المدير
             </td>
           </tr>
@@ -308,6 +321,7 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
             <td>تاريخ الزيارة: <span id="sh3">—</span></td>
           </tr>
         </tbody>
+        <tfoot class="tfoot-brand"><tr><td colspan="3"></td></tr></tfoot>
       </table>
     </div>
   </div>
@@ -319,7 +333,7 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
     <button class="btn-ic" id="btnClearAll">♻️ مسح الجميع</button>
   </div>
 
-  <div class="footer-rights no-print">مبادرة مدرسة اليعقوبي الثانوية بالخبر — تنفيذ وتصميم: فهد حامد الزهراني — الإصدار v05</div>
+  <div class="footer-rights no-print">مبادرة مدرسة اليعقوبي الثانوية بالخبر — تنفيذ وتصميم: فهد حامد الزهراني — الإصدار v06</div>
 </div></div>
 
 <!-- الحافظة -->
@@ -351,19 +365,20 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
 <!-- Snackbar -->
 <div id="snackbar"><span class="ic">✅</span><span id="snackText">تم</span></div>
 
-<!-- أسهم تمرير (الجهة المقابلة) -->
+<!-- أسهم تمرير -->
 <div class="scroll-arrows no-print">
   <button id="scrollUp" title="أعلى">▲</button>
   <button id="scrollDown" title="أسفل">▼</button>
 </div>
 
 <script>
-/* اختصارات */
-const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)]; const dfn=(f,m=180)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>f(...a),m);}};
+/* أدوات مساعدة */
+const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
+const dfn=(f,m=180)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>f(...a),m);}};
 
-/* IndexedDB + fallback */
+/* IndexedDB + LocalStorage */
 window.indexedDB=window.indexedDB||window.mozIndexedDB||window.webkitIndexedDB||window.msIndexedDB;
-const hasIDB=!!window.indexedDB, LS_PREFIX='yaqfb_', DB_NAME='yaqoobi_observations', DB_VER=34, STORE='teachers';
+const hasIDB=!!window.indexedDB, LS_PREFIX='yaqfb_', DB_NAME='yaqoobi_observations', DB_VER=35, STORE='teachers';
 let USE_LS=false, dbPromise=null;
 const lsGet=k=>{try{return JSON.parse(localStorage.getItem(LS_PREFIX+k)||'null');}catch{return null;}};
 const lsSet=(k,v)=>{try{localStorage.setItem(LS_PREFIX+k,JSON.stringify(v));}catch{}};
@@ -389,120 +404,119 @@ async function dbAll(){ if(USE_LS){ const out=[]; for(let i=0;i<localStorage.len
 async function dbClear(){ lsClear(); if(USE_LS) return; const db=await openDB(); if(!db) return; await new Promise(r=>{ const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).clear().onsuccess=()=>r(true); tx.onerror=()=>r(true); }); }
 
 /* رأس محفوظ */
-const LS_HEAD='hdr_v2';
+const LS_HEAD='hdr_v3';
 function saveHead(){const o={hsa:$('#h-sa').textContent,hmo:$('#h-moed').textContent,hdir:$('#h-dir').textContent,hschool:$('#h-school').textContent}; localStorage.setItem(LS_HEAD,JSON.stringify(o));}
 (()=>{ try{const o=JSON.parse(localStorage.getItem(LS_HEAD)||'null'); if(o){$('#h-sa').textContent=o.hsa;$('#h-moed').textContent=o.hmo;$('#h-dir').textContent=o.hdir;$('#h-school').textContent=o.hschool;}}catch{} })();
 $('#penDir').onclick=()=>toggleEdit('h-dir'); $('#penSchool').onclick=()=>toggleEdit('h-school');
 function toggleEdit(id){const el=$('#'+id); const on=el.getAttribute('contenteditable')==='true'; el.setAttribute('contenteditable',!on); if(on) saveHead(); el.focus();}
 
-/* أقلام أسماء المدير */
+/* تعديل اسم المدير في التواقيع (موحّد) */
 $$('[data-pen]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const id=btn.getAttribute('data-pen'); const el=$('#'+id);
-    const on=el.getAttribute('contenteditable')==='true';
-    el.setAttribute('contenteditable',!on);
-    if(on){ localStorage.setItem(LS_PREFIX+'principal', el.textContent.trim());}
-    el.focus();
+    const cur=el.textContent.trim();
+    const name=prompt('اكتب اسم المدير:',cur||'');
+    if(name!==null){ ['pr1Name','pr2Name','pr3Name'].forEach(x=>$('#'+x).textContent=name); localStorage.setItem(LS_PREFIX+'principal', name); }
   });
 });
-(()=>{ const pr=localStorage.getItem(LS_PREFIX+'principal'); if(pr){ ['pr1','pr2','pr3'].forEach(id=>{const e=$('#'+id); if(e) e.textContent=pr; }); }})();
+(()=>{ const pr=localStorage.getItem(LS_PREFIX+'principal'); if(pr){ ['pr1Name','pr2Name','pr3Name'].forEach(id=>$('#'+id).textContent=pr); }})();
 
 /* التاريخ الهجري */
 function hijriNow(){ try{ return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date()); }catch{return new Date().toLocaleDateString('ar-SA',{weekday:'long',day:'numeric',month:'long',year:'numeric'})||'—';} }
 
 /* بنك التعليم والتعلّم (تعليقات) */
-const learnBank={
+const learnBank={ /* نفس المحتوى السابق مختصرًا لعدم التكرار الطويل */ 
   "إعداد وتنفيذ خطة للتعلّم":{
     "صياغة أهداف تعلّم سلوكية قابلة للقياس":{ok:"هدف واضح بمؤشر إتقان مُعلن ومتسق مع المحتوى والزمن.",need:"تدريب SMART وتحويل الهدف لسلوكي قابل للقياس وربطه بأداة التقويم."},
-    "مواءمة المحتوى والأنشطة مع الأهداف":{ok:"كل نشاط يخدم هدفًا مُعلَنًا بتسلسل منطقي نحو ناتج محدّد.",need:"خريطة «نشاط↔هدف» وإعادة تصميم الأنشطة غير المحقّقة للهدف."},
-    "تهيئة وربط التعلّم بخبرات المتعلمين السابقة":{ok:"سؤال تشخيصي وأمثلة سياقية قريبة ومعالجة تصورات بديلة.",need:"أسئلة تمهيدية فعّالة وسيناريو ربط بصري قصير."}
+    "مواءمة المحتوى والأنشطة مع الأهداف":{ok:"كل نشاط يخدم هدفًا مُعلَنًا بتسلسل منطقي.",need:"خريطة «نشاط↔هدف» وإعادة تصميم الأنشطة غير المحقّقة."},
+    "تهيئة وربط التعلّم بخبرات المتعلمين السابقة":{ok:"سؤال تشخيصي وأمثلة سياقية.",need:"أسئلة تمهيدية فعّالة وسيناريو ربط بصري."}
   },
   "التنوّع في استراتيجيات التدريس":{
-    "توظيف استراتيجيات تعلّم نشط ومتنوّعة":{ok:"تنويع فردي/ثنائي/جماعي بأدوار وزمن وانتقالات سلسة ومنتج قصير.",need:"حقيبة استراتيجيات بخطوات وبطاقات أدوار ومؤقّت."},
-    "تنمية مهارات التفكير والحوار والمناقشة":{ok:"أسئلة عليا وتوزيع عادل للمشاركة وربط بالهدف وتلخيص.",need:"صياغة أسئلة مفتوحة ونماذج إدارة النقاش وإعادة التوجيه."},
-    "تفريد الأنشطة وفق الفروق الفردية":{ok:"نسخ متدرجة ودعم موجّه وإثراء مع أدلة أداء.",need:"تصميم مهام متمايزة قصيرة وتوثيق أثر التفريد."}
+    "توظيف استراتيجيات تعلّم نشط ومتنوّعة":{ok:"تنويع فردي/ثنائي/جماعي بأدوار وزمن.",need:"حقيبة استراتيجيات وبطاقات أدوار ومؤقّت."},
+    "تنمية مهارات التفكير والحوار والمناقشة":{ok:"أسئلة عليا وتوزيع عادل وتلخيص.",need:"أسئلة مفتوحة ونماذج إدارة النقاش."},
+    "تفريد الأنشطة وفق الفروق الفردية":{ok:"نسخ متدرجة ودعم موجّه وإثراء.",need:"تصميم مهام متمايزة قصيرة وتوثيق الأثر."}
   },
   "إدارة الصف":{
-    "تنظيم الوقت وتقسيم الحصة وانتقالات الأنشطة":{ok:"تقسيم (تهيئة–تعلّم–تقويم) مع مؤقّت وخاتمة وتقليل فاقد.",need:"خط زمني وتقنيات تقليص زمن الانتقال وتجهيز مسبق."},
-    "وضوح القواعد والإجراءات والتدرّج في معالجة السلوك":{ok:"قواعد معلنة واستجابة متدرّجة ولغة مهنية.",need:"ميثاق صفّي مختصر وإدارة السلوك الإيجابي."},
-    "توزيع الأدوار وإدارة المجموعات/الحركة الصفية":{ok:"أدوار واضحة وحركة منظمة وتقارير قصيرة.",need:"هيكلة عمل المجموعات وبطاقات أدوار ومسارات حركة."}
+    "تنظيم الوقت وتقسيم الحصة وانتقالات الأنشطة":{ok:"تهيئة–تعلّم–تقويم مع مؤقّت.",need:"خط زمني وتقليل فاقد الانتقال."},
+    "وضوح القواعد والإجراءات والتدرّج في معالجة السلوك":{ok:"قواعد معلنة واستجابة متدرّجة.",need:"ميثاق صفّي واستراتيجيات تعزيز."},
+    "توزيع الأدوار وإدارة المجموعات/الحركة الصفية":{ok:"أدوار واضحة وحركة منظمة.",need:"بطاقات أدوار ومسارات حركة."}
   },
   "توظيف التقنية ووسائل التعلّم المناسبة":{
-    "توظيف المنصات والموارد الرقمية بما يخدم الهدف":{ok:"نشاط رقمي يقيس الهدف ومتابعة تقدّم وروابط منظّمة.",need:"اختيار أداة مناسبة ونشر/متابعة/تقارير المنصة."},
-    "الالتزام بالسلامة الرقمية وحماية الخصوصية":{ok:"تذكير أمان وعدم مشاركة بيانات واستخدام منصات معتمدة.",need:"سياسة استخدام آمن وقائمة تحقق وحماية الحسابات."}
+    "توظيف المنصات والموارد الرقمية بما يخدم الهدف":{ok:"نشاط رقمي يقيس الهدف وتتبّع تقدّم.",need:"اختيار أداة مناسبة ونشر/تقارير."},
+    "الالتزام بالسلامة الرقمية وحماية الخصوصية":{ok:"تذكير أمان ومنصات معتمدة.",need:"قائمة تحقق وحماية الحسابات."}
   },
   "تهيئة بيئة تعليمية":{
-    "مناخ تعلّم داعم واحترام متبادل":{ok:"تعزيز مرتبط بالأداء ولغة جسد داعمة وتحويل الخطأ لفرصة.",need:"استراتيجيات تعزيز غير مادي وبناء الثقة."},
-    "تهيئة نفسية واجتماعية ملائمة للمرحلة":{ok:"تكييف الأنشطة وكسر جليد مرتبط وإشارات واضحة.",need:"خصائص نمو وأنشطة تهيئة قصيرة وتكييف."},
-    "إثارة الدافعية والمشاركة الإيجابية":{ok:"أهداف معلنة ومهام ذات معنى وتتبع مشاركة.",need:"تصميم محفّزات والربط بالغاية وأدوات مشاركة."}
+    "مناخ تعلّم داعم واحترام متبادل":{ok:"تعزيز مرتبط بالأداء.",need:"تعزيز غير مادي وبناء الثقة."},
+    "تهيئة نفسية واجتماعية ملائمة للمرحلة":{ok:"كسر جليد وإشارات واضحة.",need:"تكييف أنشطة قصيرة."},
+    "إثارة الدافعية والمشاركة الإيجابية":{ok:"مهام ذات معنى وتتبع مشاركة.",need:"محفّزات وربط بالغاية."}
   },
   "تنوّع أساليب وأدوات التقويم":{
-    "تقويم قبلي تشخيصي":{ok:"سؤال افتتاحي مناسب وتوظيف النتيجة فورًا وتوثيق الإجراء.",need:"بنوك أسئلة تشخيصية ومطابقة الأداة للهدف."},
-    "تقويم بنائي مستمر":{ok:"أسئلة فورية + بطاقة خروج وتعديل مسار وتقييم ذاتي.",need:"تصميم أدوات قصيرة وتعليقات نوعية وإشراك الطلاب."},
-    "تقويم ختامي مرتبط بالأهداف":{ok:"مهمة أداء/اختبار يقيس ناتج الهدف مع Rubric مُعلن.",need:"مهام أداء أصيلة وRubrics واضحة."},
-    "تحليل النتائج وتوظيف التغذية الراجعة":{ok:"مؤشرات إتقان/مشاركة وقرارات تحسين ومتابعة أثر.",need:"تحليل بيانات صفّية وخطط تحسين قصيرة."}
+    "تقويم قبلي تشخيصي":{ok:"سؤال افتتاحي وتوظيف مباشر.",need:"بنوك أسئلة ومطابقة الأداة."},
+    "تقويم بنائي مستمر":{ok:"أسئلة فورية + بطاقة خروج.",need:"أدوات قصيرة وتعليقات نوعية."},
+    "تقويم ختامي مرتبط بالأهداف":{ok:"مهمة أداء مع Rubric.",need:"مهام أصيلة وRubrics."},
+    "تحليل النتائج وتوظيف التغذية الراجعة":{ok:"مؤشرات وقرارات تحسين.",need:"تحليل بيانات وخطط قصيرة."}
   },
   "النمو المهني والانعكاس":{
-    "تأمّل مهني وتوثيق الشواهد":{ok:"تأمّل بعد الدرس وربط الشواهد ومشاركة الخلاصة.",need:"نماذج WWW/EBI وتنظيم ملف إنجاز."},
-    "خطة تحسين قصيرة قابلة للقياس ومشاركة الممارسات":{ok:"هدف أسبوعي بمؤشر وإجراء محدّد وتقويم أثر ونشر ممارسة.",need:"صياغة أهداف قصيرة ودورات تحسين سريعة."}
+    "تأمّل مهني وتوثيق الشواهد":{ok:"تأمّل بعد الدرس وربط الشواهد.",need:"WWW/EBI وتنظيم ملف."},
+    "خطة تحسين قصيرة قابلة للقياس ومشاركة الممارسات":{ok:"هدف أسبوعي بمؤشر وإجراء.",need:"صياغة أهداف ودورات سريعة."}
   }
 };
 const fields=Object.keys(learnBank).map(d=>({name:d,items:Object.keys(learnBank[d]).map(k=>[k,""])}));
 
 /* الأدوات */
 const toolsData=[
-  {title:'تحليل نتائج المتعلمين',proof:'مؤشرات سريعة للإتقان والمشاركة.'},
+  {title:'تحليل نتائج المتعلمين',proof:'مؤشرات للإتقان والمشاركة.'},
   {title:'تحسين النتائج بطريقة علمية',proof:'خطة تحسين مبنية على الدليل.'},
-  {title:'تفعيل منصة مدرستي ومتابعتها',proof:'نشر المهام ورصد التقدّم رقميًا.'},
-  {title:'تفعيل كتاب الطالب',proof:'توظيف الكتاب بمهام مرتبطة بالأهداف.'},
-  {title:'أدوات التقويم الإلكتروني السريع',proof:'أسئلة فورية لقياس التقدّم.'},
-  {title:'العروض التقديمية التفاعلية',proof:'شرائح منظّمة بعناصر تفاعلية داعمة.'},
-  {title:'الأنشطة الرقمية الإثرائية',proof:'مهام رقمية قصيرة متدرجة.'},
-  {title:'المحتوى المرئي والمحاكاة',proof:'فيديو/محاكاة تقرّب المفاهيم.'},
-  {title:'التفاعل مع المجتمع المهني',proof:'تبادل ممارسات وشواهد لتحسين التدريس.'},
-  {title:'التفاعل مع أولياء الأمور',proof:'تواصل مختصر داعم لتعلّم الطالب.'}
+  {title:'تفعيل منصة مدرستي ومتابعتها',proof:'نشر المهام ورصد التقدّم.'},
+  {title:'تفعيل كتاب الطالب',proof:'توظيف الكتاب بالأهداف.'},
+  {title:'أدوات التقويم الإلكتروني السريع',proof:'أسئلة فورية.'},
+  {title:'العروض التقديمية التفاعلية',proof:'شرائح منظّمة وتفاعلية.'},
+  {title:'الأنشطة الرقمية الإثرائية',proof:'مهام رقمية قصيرة.'},
+  {title:'المحتوى المرئي والمحاكاة',proof:'فيديو/محاكاة للمفاهيم.'},
+  {title:'التفاعل مع المجتمع المهني',proof:'مشاركة الممارسات.'},
+  {title:'التفاعل مع أولياء الأمور',proof:'تواصل داعم لتعلّم الطالب.'}
 ];
 
-/* بنك الدعم المختصر حسب طلبك (يُستخدم لتوليد ٤ أسطر) */
+/* بنك الدعم المختصر (مع مصدر) */
 const supportBank={
   "إعداد وتنفيذ خطة للتعلّم":[
-    "إعلان هدف سلوكي للحصّة + بطاقة خروج — التقويم الإلكتروني السريع — إتقان ≥ ٨٠٪.",
-    "شريحة تُظهر ارتباط (النشاط↔الهدف) — العروض التفاعلية — اتساق ١٠٠٪.",
-    "مراجعة نتيجتين متتاليتين واتخاذ قرار — تحليل النتائج — تحسّن ≥ ١٠٪."
+    {text:"إعلان هدف سلوكي للحصّة + بطاقة خروج — التقويم الإلكتروني السريع — إتقان ≥ ٨٠٪.", src:"مجال: الخطة"},
+    {text:"شريحة تُظهر ارتباط (النشاط↔الهدف) — العروض التفاعلية — اتساق ١٠٠٪.", src:"مجال: الخطة"},
+    {text:"مراجعة نتيجتين متتاليتين واتخاذ قرار — تحليل النتائج — تحسّن ≥ ١٠٪.", src:"مجال: الخطة"}
   ],
   "التنوّع في استراتيجيات التدريس":[
-    "تطبيق «فكر–زاوج–شارك» لمدّة ٦ د بأدوار واضحة — أنشطة إثرائية — مشاركة ≥ ٧٠٪.",
-    "سؤالان مفتوحان مع توزيع الفرص بالأسماء — التقويم الإلكتروني السريع — مشاركة ≥ ٦٥٪.",
-    "تفريد المهمة بنسختين عبر المنصّة — منصة مدرستي — إكمال ≥ ٩٠٪."
+    {text:"تطبيق «فكر–زاوج–شارك» ٦ دقائق بأدوار واضحة — أنشطة إثرائية — مشاركة ≥ ٧٠٪.", src:"مجال: الاستراتيجيات"},
+    {text:"سؤالان مفتوحان مع توزيع الفرص بالأسماء — التقويم الإلكتروني السريع — مشاركة ≥ ٦٥٪.", src:"مجال: الاستراتيجيات"},
+    {text:"تفريد المهمة بنسختين عبر المنصّة — منصة مدرستي — إكمال ≥ ٩٠٪.", src:"مجال: الاستراتيجيات"}
   ],
   "إدارة الصف":[
-    "تقسيم ٥–٢٥–١٠ مع مؤقّت مرئي — العروض التفاعلية — فاقد زمن ≤ دقيقتين.",
-    "شريحة قواعد + تدرّج تربوي في الاستجابة — العروض التفاعلية — انخفاض الملاحظات ≥ ٥٠٪ خلال أسبوعين.",
-    "بطاقات أدوار وتقرير مجموعة ٦٠ ث — العروض التفاعلية — تقارير المجموعات ١٠٠٪."
+    {text:"تقسيم ٥–٢٥–١٠ مع مؤقّت مرئي — العروض التفاعلية — فاقد ≤ دقيقتين.", src:"مجال: إدارة الصف"},
+    {text:"شريحة قواعد + تدرّج تربوي — انخفاض الملاحظات ≥ ٥٠٪ خلال أسبوعين.", src:"مجال: إدارة الصف"},
+    {text:"بطاقات أدوار وتقرير مجموعة ٦٠ ث — تقارير المجموعات ١٠٠٪.", src:"مجال: إدارة الصف"}
   ],
   "توظيف التقنية ووسائل التعلّم":[
-    "واجب قصير مرتبط بالهدف عبر المنصّة — منصة مدرستي — إكمال ≥ ٩٠٪.",
-    "إدراج موردين رقميين موثوقين في الدرس — العروض التفاعلية — استخدام موثّق مرّة واحدة على الأقل.",
-    "استخراج تقرير للمتعثرين وخطة علاج قصيرة — تحليل النتائج — تحسّن ≥ ١٠٪ خلال أسبوع."
+    {text:"واجب قصير مرتبط بالهدف عبر المنصّة — إكمال ≥ ٩٠٪.", src:"مجال: التقنية"},
+    {text:"إدراج موردين رقميين موثوقين — استخدام موثّق مرة واحدة.", src:"مجال: التقنية"},
+    {text:"تقرير متعثرين وخطة علاج قصيرة — تحسّن ≥ ١٠٪ خلال أسبوع.", src:"مجال: التقنية"}
   ],
   "تهيئة بيئة تعليمية":[
-    "تمهيد مرئي ٦٠–١٢٠ ث يربط بخبرة الطالب — محتوى مرئي/محاكاة — مشاركة افتتاحية ≥ ٦٠٪.",
-    "تعزيز مرتبط بالأداء أثناء النشاط — العروض التفاعلية — زيادة المشاركة ≥ ١٠٪.",
-    "استبانة مناخ صفّي قصيرة — التقويم الإلكتروني السريع — رضا ≥ ٨٠٪."
+    {text:"تمهيد مرئي ٦٠–١٢٠ ث يربط بخبرة الطالب — مشاركة افتتاحية ≥ ٦٠٪.", src:"مجال: البيئة"},
+    {text:"تعزيز مرتبط بالأداء أثناء النشاط — زيادة المشاركة ≥ ١٠٪.", src:"مجال: البيئة"},
+    {text:"استبانة مناخ صفّي قصيرة — رضا ≥ ٨٠٪.", src:"مجال: البيئة"}
   ],
   "تنوّع أساليب وأدوات التقويم":[
-    "سؤال افتتاحي + بطاقة خروج للهدف نفسه — التقويم الإلكتروني السريع — اتساق ١٠٠٪ وتحسّن ≥ ١٠٪.",
-    "مهمة أداء مع سُلّم تقدير مُعلن — العروض/المنصّة — إنجاز ≥ ٨٠٪.",
-    "لوحة مؤشّرات أسبوعية (إتقان/مشاركة) — تحليل النتائج — تحديث أسبوعي + قرار واحد."
+    {text:"سؤال افتتاحي + بطاقة خروج لنفس الهدف — اتساق ١٠٠٪ وتحسّن ≥ ١٠٪.", src:"مجال: التقويم"},
+    {text:"مهمة أداء مع سُلّم تقدير مُعلن — إنجاز ≥ ٨٠٪.", src:"مجال: التقويم"},
+    {text:"لوحة مؤشّرات أسبوعية (إتقان/مشاركة) — تحديث + قرار.", src:"مجال: التقويم"}
   ],
   "النمو المهني والانعكاس":[
-    "تأمّل «ما نجح/سيكون أفضل لو…» بعد كل درس — مجتمع مهني — فقرتان موثّقتان.",
-    "هدف أسبوعي قصير بإجراء واحد واضح — تحسين النتائج بطريقة علمية — تحقّق ≥ هدف واحد/أسبوع.",
-    "مشاركة ممارسة ناجحة في لقاء المادة (٥ دقائق) — مجتمع مهني — عرض بشاهد واحد."
+    {text:"تأمّل «ما نجح/سيكون أفضل لو…» بعد كل درس — فقرتان موثّقتان.", src:"مجال: النمو المهني"},
+    {text:"هدف أسبوعي قصير بإجراء واحد واضح — تحقّق ≥ هدف/أسبوع.", src:"مجال: النمو المهني"},
+    {text:"مشاركة ممارسة ناجحة في لقاء المادة (٥ دقائق).", src:"مجال: النمو المهني"}
   ]
 };
 
-/* الحالة */
+/* مصفوفة الحالة */
 function zeroMatrix(){ return fields.map(f=>Array(f.items.length).fill(0)); }
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 let store={1:zeroMatrix(),2:zeroMatrix(),3:zeroMatrix()}, activeVisit=1, loadedRecord=null, fixedKey=null;
@@ -586,7 +600,7 @@ function updateToolsSummary(){
   $('#toolsMeta').textContent=`${toolsData.length} أداة • محدد: ${toolsData.length-u} • غير محدد: ${u}`;
 }
 
-/* المؤشرات والحساب */
+/* حساب المؤشرات */
 function visitScore(v){
   const area=store[v].flat().filter(Boolean);
   const areaPct=area.length? (area.reduce((a,b)=>a+b,0)/(area.length*3))*85:0;
@@ -616,8 +630,69 @@ function switchVisit(v){
   activeVisit=v; buildLearning(); buildTools(); renderFromRecord(); setDonut(1,visitScore(1)); setDonut(2,visitScore(2)); setDonut(3,visitScore(3)); setVisitMeter(); setGlobalMeter();
 }
 
-/* حفظ / تحميل */
+/* مفتاح السجل */
 function currentKey(){ if(fixedKey) return fixedKey; const id=($('#tId').value||'').replace(/\D+/g,''); if(/^\d{10}$/.test(id)) return id; const name=($('#tName').value||'').trim(); return name?('name:'+name):''; }
+
+/* توليد دعم خوارزمي مفصل (مع مصدر) */
+function supportFromLogicDetailed(){
+  // أضعف مجالين
+  const worst=[];
+  fields.forEach((f,fi)=>{
+    const arr=(store[activeVisit][fi]||[]).filter(v=>v>0);
+    const avg=arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;
+    worst.push({fi,avg});
+  });
+  worst.sort((a,b)=>a.avg-b.avg);
+  const out=[];
+  function pickFor(fi){
+    const dom=fields[fi].name;
+    const scores=store[activeVisit][fi]||[];
+    const hasWeak=scores.some(v=>v===1), hasMid=scores.some(v=>v===2);
+    const bank=supportBank[dom]||[];
+    if(hasWeak) return bank[0];
+    if(hasMid) return bank[1]||bank[0];
+    return bank[2]||bank[0];
+  }
+  if(worst[0]){ const l=pickFor(worst[0].fi); if(l) out.push(l); }
+  if(worst[1]){ const l=pickFor(worst[1].fi); if(l) out.push(l); }
+
+  // أضعف أداتين
+  const states=[...document.querySelectorAll('.tool-level')].map(set=>{
+    const act=set.querySelector('button.active'); return act?Number(act.dataset.v):0; // 1/2/3
+  });
+  const reasons=[...document.querySelectorAll('.tool-reason')].map(e=>e.value.trim());
+  states.map((v,i)=>({i,v})).sort((a,b)=>a.v-b.v).slice(0,2).forEach(({i,v})=>{
+    const t=(toolsData[i]||{}).title||'أداة';
+    let text=v>=3?`توسيع تفعيل ${t} عبر قالب جاهز.`:v===2?`ترقية ${t} بإضافة سؤال بنائي فوري.`:`بدء تفعيل ${t} بتجربة قصيرة داخل الحصة.`;
+    const why=reasons[i]; if(why) text+=` (مانع: ${why.slice(0,40)})`;
+    out.push({text,src:`أداة: ${t}`});
+  });
+
+  // حد أعلى 4
+  return out.filter(Boolean).slice(0,4);
+}
+
+/* التأكد من وجود ٤ أسطر دعم مع حفظ المصدر */
+function ensureSupport(){
+  const txt=($('#supportArea').value||'').split('\n').map(s=>s.trim()).filter(s=>s.length>0);
+  let detailed=[];
+  if(txt.length>=4){
+    // اعتبرها يدوية
+    detailed=txt.slice(0,4).map(t=>({text:t,src:'يدوي'}));
+  }else{
+    detailed=supportFromLogicDetailed();
+    // دمج أي أسطر يدوية موجودة أولًا
+    if(txt.length>0){
+      const rest=detailed.slice(txt.length);
+      detailed=[...txt.map(t=>({text:t,src:'يدوي'})), ...rest].slice(0,4);
+    }
+    // اكتبها في الواجهة
+    $('#supportArea').value=detailed.map(x=>x.text).join('\n');
+  }
+  return detailed;
+}
+
+/* حفظ/تحميل السجل */
 async function ensureRecord(){
   const key=currentKey(); if(!key) return null;
   let rec=await dbGet(key);
@@ -634,9 +709,9 @@ async function ensureRecord(){
       phone: localStorage.getItem(LS_PREFIX+'waPhone') || '9665',
       email: localStorage.getItem(LS_PREFIX+'mailTo') || 'example@school.edu.sa',
       visits:{
-        1:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],date:''}},
-        2:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],date:''}},
-        3:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],date:''}}
+        1:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],supportDetailed:[],date:''}},
+        2:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],supportDetailed:[],date:''}},
+        3:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],supportDetailed:[],date:''}}
       }
     };
   }
@@ -647,52 +722,21 @@ async function saveDraft(){
   const rec=await ensureRecord(); if(!rec) return;
   const v=activeVisit;
   rec.name=$('#tName').value.trim(); rec.nationalId=$('#tId').value.replace(/\D+/g,'').slice(0,10);
-  rec.spec=$('#tSpec').value.trim(); rec.degree=$('#degree').value.trim(); rec.exp=$('#exp').value.trim(); rec.class=$('#class').value.trim(); rec.lesson=$('#lesson').value.trim();
-  // حافظ على phone/email إن وُجدت
+  rec.spec=$('#tSpec').value.trim(); rec.degree=$('#degree').value.trim(); rec.exp=$('#exp').value.trim();
+  rec.class=$('#class').value.trim(); rec.lesson=$('#lesson').value.trim();
   rec.phone = rec.phone || (localStorage.getItem(LS_PREFIX+'waPhone')||'9665');
   rec.email = rec.email || (localStorage.getItem(LS_PREFIX+'mailTo')||'example@school.edu.sa');
+
   rec.visits[v]??={finalized:false,draft:{}};
   rec.visits[v].draft.ratings=clone(store[v]);
   rec.visits[v].draft.tools=getToolsStateFromUI();
   rec.visits[v].draft.reasons=getToolReasonsFromUI();
-  const supp=supportFromLogic(); $('#supportArea').value=supp.join('\n');
-  rec.visits[v].draft.support=supp;
+  const detailed=ensureSupport();
+  rec.visits[v].draft.supportDetailed=detailed;
+  rec.visits[v].draft.support=detailed.map(x=>x.text);
   rec.visits[v].draft.date=$('#v'+v+'h').textContent||'';
   await dbPut(rec);
   setDonut(1,visitScore(1)); setDonut(2,visitScore(2)); setDonut(3,visitScore(3)); setVisitMeter(); setGlobalMeter();
-}
-
-/* توليد ٤ أسطر دعم */
-function supportFromLogic(){
-  const worst=[];
-  fields.forEach((f,fi)=>{
-    const arr=(store[activeVisit][fi]||[]).filter(v=>v>0);
-    const avg=arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;
-    worst.push({fi,avg});
-  });
-  worst.sort((a,b)=>a.avg-b.avg);
-  const lines=[];
-  function pickFor(fi){
-    const dom=fields[fi].name;
-    const scores=store[activeVisit][fi]||[];
-    const minIdx=scores.findIndex(v=>v===1) > -1 ? scores.findIndex(v=>v===1) : scores.findIndex(v=>v===2);
-    const bank=supportBank[dom];
-    if(!bank) return null;
-    const lvl = minIdx>-1 ? (store[activeVisit][fi][minIdx]) : 1;
-    return bank[Math.min(bank.length-1, Math.max(0,lvl-1))];
-  }
-  if(worst[0]){ const l=pickFor(worst[0].fi); if(l) lines.push(l); }
-  if(worst[1]){ const l=pickFor(worst[1].fi); if(l) lines.push(l); }
-
-  const states=getToolsStateFromUI(); const reasons=getToolReasonsFromUI();
-  const ord=states.map((v,i)=>({i,v})).sort((a,b)=>(a.v??-1)-(b.v??-1));
-  ord.slice(0,2).forEach(({i,v})=>{
-    const t=(toolsData[i]||{}).title||'أداة';
-    let phrase=v===2?`توسيع تفعيل ${t} عبر قالب جاهز.`:v===1?`ترقية ${t} بإضافة سؤال بنائي فوري.`:`بدء تفعيل ${t} بتجربة قصيرة داخل الحصة.`;
-    const why=(reasons[i]||'').trim(); if(why) phrase+=` (مانع: ${why.slice(0,40)}).`;
-    lines.push(phrase);
-  });
-  return lines.filter(Boolean).slice(0,4);
 }
 
 /* عرض من السجل */
@@ -704,11 +748,21 @@ async function renderFromRecord(){
     if(snap?.ratings) store[v]=clone(snap.ratings);
     if(snap?.date) { $('#v'+v+'h').textContent=snap.date; if(v===activeVisit) $('#visitDateInline').value=snap.date; }
   });
-  buildLearning();
+  buildLearning(); buildTools();
+
   const arr=rec.visits?.[activeVisit]?.draft?.tools||[]; const reasons=rec.visits?.[activeVisit]?.draft?.reasons||[];
   setToolsStateToUI(arr);
   [...document.querySelectorAll('.tool-reason')].forEach((ta,i)=>{ ta.value=(reasons&&typeof reasons[i]!=='undefined')?reasons[i]:''; ta.disabled=(arr&&arr[i]===2); });
-  const supp=rec.visits?.[activeVisit]?.draft?.support||[]; $('#supportArea').value=(supp.length?supp:supportFromLogic()).join('\n');
+
+  // دعم: استخدم الموجود أو ولّد
+  const det=rec.visits?.[activeVisit]?.draft?.supportDetailed||[];
+  if(det.length>=4){ $('#supportArea').value=det.map(x=>x.text).join('\n'); }
+  else{ $('#supportArea').value=supportFromLogicDetailed().map(x=>x.text).join('\n'); }
+
+  // تحديث التواقيع بالأسماء
+  syncSignNames();
+  const pr=localStorage.getItem(LS_PREFIX+'principal'); if(pr){ ['pr1Name','pr2Name','pr3Name'].forEach(id=>$('#'+id).textContent=pr); }
+
   setDonut(1,visitScore(1)); setDonut(2,visitScore(2)); setDonut(3,visitScore(3)); setVisitMeter(); setGlobalMeter();
 }
 
@@ -741,7 +795,7 @@ lensSelect.addEventListener('change',async e=>{
   const rec=await dbGet(key); if(!rec) return;
   $('#tName').value=rec.name||''; $('#tId').value=rec.nationalId||''; $('#tSpec').value=rec.spec||''; $('#degree').value=rec.degree||''; $('#exp').value=rec.exp||''; $('#class').value=rec.class||''; $('#lesson').value=rec.lesson||'';
   fixedKey=rec.teacherId; loadedRecord=rec;
-  buildLearning(); buildTools(); await renderFromRecord();
+  await renderFromRecord();
   lensMenu.style.display='none';
 });
 
@@ -774,7 +828,7 @@ $('#excelInput').addEventListener('change',async e=>{
         exp: String(r[idxExp]||'').trim(),
         phone: String(r[idxPhone]||'').replace(/\D+/g,''),
         email: String(r[idxEmail]||'').trim(),
-        visits:{1:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],date:''}},2:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],date:''}},3:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],date:''}}}
+        visits:{1:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],supportDetailed:[],date:''}},2:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],supportDetailed:[],date:''}},3:{finalized:false,draft:{ratings:zeroMatrix(),tools:[],reasons:[],support:[],supportDetailed:[],date:''}}}
       };
     }).filter(Boolean);
     for(const rec of list){ const old=await dbGet(rec.teacherId); await dbPut({...old,...rec}); }
@@ -859,7 +913,9 @@ function openReport(){
     toolsHTML+=`<tr><td>${i+1}</td><td>${t.title}<div class="mini">${t.proof||''}</div></td><td>${lv}</td><td>${(reasons[i]||'—')}</td></tr>`;
   });
 
-  const supp=($('#supportArea').value||'').split('\n').filter(Boolean).slice(0,4);
+  // الدعم + المصدر مع مربّع
+  const rec=loadedRecord; const det=(rec?.visits?.[activeVisit]?.draft?.supportDetailed)||ensureSupport();
+  const suppHTML=det.slice(0,4).map(o=>`<li>□ ${o.text} <span class="srcBadge">${o.src}</span></li>`).join('');
 
   const html=`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
   <title>تقرير زيارة</title>
@@ -876,14 +932,16 @@ function openReport(){
     .sub th{background:#f0f7f5;color:#0c594e}
     .ghead{background:#0c594e;color:#fff;text-align:center}
     .mini{font-size:10px;opacity:.9}
+    .tfoot-brand td{background:#e8f4f1;border-top:3px solid #0f7a66;padding:4px 6px}
+    ul{margin:6px 0 0 0;padding:0 18px}
+    li{margin:4px 0}
+    .srcBadge{display:inline-block;padding:.1rem .4rem;border-radius:8px;border:1px solid #0f7a66;color:#0f7a66;background:#f5fffb;margin-inline-start:6px;font-size:10px;font-weight:800}
     .signs-inline{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px}
     .signItem{border:1px solid #cfe1dd;padding:6px 10px;border-radius:10px;min-width:48%;text-align:center;font-size:11px}
     .footnames{margin:10px 0 4px;text-align:center;font-size:11px}
-    .note{position:fixed;left:50%;transform:translateX(-50%);top:10px;background:#fff7ed;border:1px solid #fed7aa;color:#92400e;padding:6px 10px;border-radius:10px;font-weight:800}
     @media print {.note{display:none} .sheet{margin:0 auto}}
   </style></head><body>
   <div class="sheet">
-    <div class="note">للطباعة اضغط ⌘/Ctrl + P</div>
     <div class="hdr">
       <div>المملكة العربية السعودية</div>
       <div>وزارة التعليم</div>
@@ -906,20 +964,22 @@ function openReport(){
     <table>
       <thead class="sub"><tr><th>العنصر</th><th>المستوى</th><th>جوانب التميّز</th><th>الاحتياجات</th></tr></thead>
       <tbody>${learnHTML}</tbody>
+      <tfoot class="tfoot-brand"><tr><td colspan="4"></td></tr></tfoot>
     </table>
 
     <h3>الأدوات المساندة لعملية التعليم والتعلّم</h3>
     <table>
       <thead class="sub"><tr><th>م</th><th>الأداة</th><th>التفعيل</th><th>أسباب عدم التفعيل</th></tr></thead>
       <tbody>${toolsHTML}</tbody>
+      <tfoot class="tfoot-brand"><tr><td colspan="4"></td></tr></tfoot>
     </table>
 
     <h3>الدعم المقدّم للمعلم</h3>
-    <ul>${supp.map(l=>`<li>${l}</li>`).join('')}</ul>
+    <ul>${suppHTML}</ul>
 
     <div class="signs-inline">
       <div class="signItem">اسم المعلم وتوقيعه: <b>${name}</b></div>
-      <div class="signItem">اسم المدير وتوقيعه: <b>${($('#pr1').textContent||'').trim()||'—'}</b></div>
+      <div class="signItem">اسم المدير وتوقيعه: <b>${($('#pr1Name').textContent||'').trim()||'—'}</b></div>
     </div>
 
     <div class="footnames">حرر في: ${date}</div>
@@ -928,7 +988,7 @@ function openReport(){
   const w=window.open('about:blank','_blank'); w.document.write(html); w.document.close();
 }
 
-/* تحقق الاعتماد */
+/* تحقق الاعتماد (إصلاح شرط الدعم) */
 function validateBeforeFinalize(){
   const errs=[];
   $$('.req').forEach(el=>el.classList.remove('input-error'));
@@ -938,11 +998,16 @@ function validateBeforeFinalize(){
   if(count<6) errs.push('اختيارات كافية في التعليم والتعلّم (٦ على الأقل)');
   const tMarked=getToolsStateFromUI().filter(v=>v!==null).length;
   if(tMarked<4) errs.push('تحديد تفعيل ٤ أدوات على الأقل');
-  const supp=($('#supportArea').value||'').split('\n').filter(Boolean);
-  if(supp.length<4) errs.push('اكتمال ٤ أسطر في الدعم المقدّم');
+
+  // دعم: يتم الإكمال تلقائي إن كان أقل من ٤
+  const detailed=ensureSupport();
+  if(detailed.length<4) errs.push('اكتمال ٤ أسطر في الدعم المقدّم'); // احتياط نادر جدًا
+
   return errs;
 }
 $('#btnFinalize').onclick=async ()=>{
+  // توليد/استكمال الدعم أوتوماتيكياً قبل الفحص
+  ensureSupport();
   const errs=validateBeforeFinalize();
   if(errs.length){ snack('نواقص: '+errs.join(' • '),false); return; }
   await saveDraft();
@@ -958,13 +1023,13 @@ $('#btnDeleteVisit').onclick=async ()=>{
 };
 $('#btnClearAll').onclick=async ()=>{ if(!confirm('مسح جميع السجلات؟')) return; await dbClear(); store={1:zeroMatrix(),2:zeroMatrix(),3:zeroMatrix()}; buildLearning(); buildTools(); $('#supportArea').value=''; ['v1h','v2h','v3h'].forEach(id=>$('#'+id).textContent='—'); $('#visitDateInline').value=''; snack('تم المسح الكلي.'); };
 
-/* تزامن اسم المعلم في التوقيع */
+/* تزامن اسم المعلم في التوقيع لكل الأعمدة */
 function syncSignNames(){ const n=$('#tName').value||'—'; ['sn1','sn2','sn3'].forEach(id=>$('#'+id).textContent=n); }
 ['#tName','#tSpec','#degree','#exp','#class','#lesson','#tId'].forEach(sel=>{
   $(sel.replace('#','\\#'))?.addEventListener('input',dfn(()=>{ saveDraft(); syncSignNames(); },200));
 });
 
-/* أسهم التمرير */
+/* أسهم تمرير */
 $('#scrollUp').onclick=()=>window.scrollBy({top:-window.innerHeight*0.9,behavior:'smooth'});
 $('#scrollDown').onclick=()=>window.scrollBy({top:window.innerHeight*0.9,behavior:'smooth'});
 
@@ -993,8 +1058,9 @@ function composeSummary(){
   const kpi=levelLabel(visitScore(activeVisit));
   const tools=getToolsStateFromUI().map((s,i)=>`${toolsData[i].title}: ${s===2?'مُفعل':s===1?'إلى حد ما':s===0?'غير مُفعل':'—'}`).join(' | ');
   const reasons=getToolReasonsFromUI().map((r,i)=>r?`${toolsData[i].title}: ${r}`:null).filter(Boolean).join(' | ') || '—';
-  const support=$('#supportArea').value.split('\n').filter(Boolean).slice(0,4).map((l,i)=>`${i+1}) ${l}`).join('\n');
-  const principal=(localStorage.getItem(LS_PREFIX+'principal')||$('#pr1').textContent||'').trim();
+  const det=ensureSupport();
+  const support=det.map((o,i)=>`${i+1}) ${o.text} [${o.src}]`).join('\n');
+  const principal=(localStorage.getItem(LS_PREFIX+'principal')||$('#pr1Name').textContent||'').trim();
   return `المدرسة: ${school} — ${dir}
 المعلم: ${name} — الهوية: ${nid} — التخصص: ${spec}
 زيارة: ${vLbl} — التاريخ: ${date} — المستوى: ${kpi}
@@ -1019,7 +1085,6 @@ $('#btnOpenWA').onclick=async()=>{
   const phone=($('#waPhone').value||rec?.phone||localStorage.getItem(LS_PREFIX+'waPhone')||'9665').replace(/\D+/g,'');
   const txt=encodeURIComponent($('#commsTxt').value||composeSummary());
   window.open(`https://wa.me/${phone}?text=${txt}`,'_blank');
-  // سجّل الإرسال
   if(rec){ rec.lastWhatsAppSent=Date.now(); await dbPut(rec); }
 };
 $('#btnOpenMail').onclick=async()=>{
@@ -1028,7 +1093,6 @@ $('#btnOpenMail').onclick=async()=>{
   const subject=encodeURIComponent('تقرير زيارة معلم');
   const body=encodeURIComponent($('#commsTxt').value||composeSummary());
   window.location.href=`mailto:${to}?subject=${subject}&body=${body}`;
-  // سجّل الإرسال
   if(rec){ rec.lastEmailSent=Date.now(); await dbPut(rec); }
 };
 
