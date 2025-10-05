@@ -216,7 +216,7 @@ textarea.comms-preview{min-height:200px;border:1px dashed var(--line);border-rad
       <input class="fld fld-inline col-3" id="tId" placeholder="رقم الهوية (10 أرقام)" inputmode="numeric" maxlength="10">
       <input class="fld fld-inline col-3 req" id="tSpec" placeholder="التخصص / المادة">
       <input class="fld fld-inline col-3" id="lesson" placeholder="عنوان الدرس">
-      <input class="fld fld-inline col-3" id="degree" placeholder="المؤهل">
+      <input class="fld fld-inline col-3" id="degree" placeholder="المرتبة">
       <input class="fld fld-inline col-3" id="exp" placeholder="سنوات الخبرة">
       <input class="fld fld-inline col-3" id="class" placeholder="الفصل">
       <input class="fld fld-inline col-3" id="visitDateInline" placeholder="تاريخ الزيارة (هجري)" readonly>
@@ -841,8 +841,8 @@ $('#excelInput').addEventListener('change',async e=>{
 /* تصدير قالب Excel */
 $('#lensTemplate').onclick=()=>{
   const data=[
-    { "اسم المعلم":"محمد أحمد", "رقم الهوية":"1012345678", "التخصص":"رياضيات", "المؤهل":"بكالوريوس", "سنوات الخبرة":"5", "رقم الجوال":"9665xxxxxxxx", "الايميل":"example@school.edu.sa" },
-    { "اسم المعلم":"— اكتب الاسم —", "رقم الهوية":"", "التخصص":"", "المؤهل":"", "سنوات الخبرة":"", "رقم الجوال":"9665", "الايميل":"example@school.edu.sa" }
+    { "اسم المعلم":"محمد أحمد", "رقم الهوية":"1012345678", "التخصص":"رياضيات", "المرتبة":"بكالوريوس", "سنوات الخبرة":"5", "رقم الجوال":"9665xxxxxxxx", "الايميل":"example@school.edu.sa" },
+    { "اسم المعلم":"— اكتب الاسم —", "رقم الهوية":"", "التخصص":"", "المرتبة":"", "سنوات الخبرة":"", "رقم الجوال":"9665", "الايميل":"example@school.edu.sa" }
   ];
   const ws=XLSX.utils.json_to_sheet(data);
   const wb=XLSX.utils.book_new();
