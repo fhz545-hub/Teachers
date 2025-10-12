@@ -27,7 +27,7 @@ a{color:inherit;text-decoration:none}
 .section h2{margin:0 0 10px; font-size:clamp(18px,2vw,22px); color:#0a4a46; display:flex; align-items:center; gap:10px}
 .section h2 .tag{margin-inline-start:auto; background:#ebf5f4; color:#0a4a46; padding:3px 10px; border-radius:999px; font-size:12px}
 
-/* صف منصات + مبادراتي */
+/* صف منصات + المبادرات */
 .row-plat-init{display:grid; gap:12px; margin:12px 0; grid-template-columns:2fr 1fr}
 @media (max-width:1100px){ .row-plat-init{grid-template-columns:1fr} }
 
@@ -37,15 +37,17 @@ a{color:inherit;text-decoration:none}
 .chip.active{background:linear-gradient(90deg,#e8fbf5,#e9f6ff); border-color:#cfeae6}
 .search{position:relative; flex:1; min-width:200px}
 .search input{width:100%; border:1px solid var(--line); background:#fbfefe; padding:10px 12px; border-radius:12px; font-size:14px}
+
 .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
 @media (max-width:1100px){ .cards{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:640px){ .cards{grid-template-columns:1fr} }
 
+/* بطاقة عامة */
 .card{
   background:linear-gradient(180deg,#ffffff,#f8fcfc);
   border:1px solid var(--line); border-radius:14px; padding:14px;
   display:grid; grid-template-columns:1fr auto; gap:8px; align-items:start;
-  transition:transform .15s ease, box-shadow .2s ease;
+  transition:transform .15s ease, box-shadow .2s ease, background .3s ease;
 }
 .card:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.06)}
 .card .title{font-weight:800; color:#064a45; font-size:15px}
@@ -53,15 +55,24 @@ a{color:inherit;text-decoration:none}
 .badges{display:flex; gap:6px; flex-wrap:wrap}
 .badge{font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid var(--line); background:#f5fbfb; color:#0a5a56}
 .actions{display:flex; gap:8px}
-.btn{border:1px solid var(--line); background:#fff; padding:7px 10px; border-radius:10px; font-weight:700; font-size:12px}
+
+/* بطاقات قابلة للنقر بالكامل (منصات + المبادرات) */
+.linkcard{grid-template-columns:1fr; cursor:pointer; position:relative}
+.linkcard::after{content:""; position:absolute; inset:0; border-radius:14px}
+.linkcard .desc{grid-column:auto}
+.linkcard .actions{display:none}
+
+/* أزرار */
+.btn{border:1px solid var(--line); background:#fff; padding:7px 10px; border-radius:10px; font-weight:700; font-size:12px; display:inline-flex; align-items:center; gap:6px}
 .btn:hover{background:#f2faf8}
-.btn.whatsapp{color:#0f8e59; border-color:#cfeadf}
+.btn.open{color:#0a4a46}
+.btn.download{color:#0a6e5f; border-color:#cfeadf}
 
 /* الأدلّة والأنظمة */
 .columns{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0}
 @media (max-width:900px){ .columns{grid-template-columns:1fr} }
 
-/* مبادراتي (قائمة مفردة) */
+/* المبادرات (قائمة مفردة) */
 .list{display:grid; grid-template-columns:1fr; gap:12px}
 
 /* لوحة الإدارة (مودال) */
@@ -94,7 +105,7 @@ a{color:inherit;text-decoration:none}
     <img src="logo.png" alt="منصة أعمال ومبادرات ثانوية اليعقوبي بالخبر">
   </header>
 
-  <!-- صف: منصات + مبادراتي -->
+  <!-- صف: منصات + المبادرات -->
   <div class="row-plat-init">
 
     <!-- منصات ومواقع تعليمية -->
@@ -111,9 +122,9 @@ a{color:inherit;text-decoration:none}
       <div class="cards" id="platformGrid"></div>
     </section>
 
-    <!-- مبادراتي -->
+    <!-- المبادرات -->
     <section class="section" id="initiatives">
-      <h2>مبادراتي</h2>
+      <h2>المبادرات</h2>
       <div class="list" id="initList"></div>
     </section>
 
@@ -135,7 +146,7 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- مودال إدارة الأدلّة -->
+<!-- مودالات الإدارة -->
 <div class="modal-back" id="docsModalBack" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="docsModalTitle">
     <header>
@@ -188,7 +199,6 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- مودال تحرير المنصات -->
 <div class="modal-back" id="platModalBack" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="platModalTitle">
     <header>
@@ -218,7 +228,7 @@ const ADMIN_PIN = "1447";
 const KEY_DOCS = "docs_custom_v1";
 const KEY_PLAT = "platforms_custom_v1";
 
-/* ================= المنصات (من الملف + تحسينات) ================= */
+/* ================= المنصات (مع حسابات X الإضافية) ================= */
 const PLATFORMS_DEFAULT = [
   {name:"الدعم الموحّد (IAM)", desc:"نظام النفاذ الموحّد لبوابات وزارة التعليم", url:"https://iam.moe.gov.sa/", tags:["وزارة","دخول"]},
   {name:"مدرستي", desc:"منصة المدرسة للتعليم الإلكتروني", url:"https://schools.madrasati.sa/", tags:["تعلم"]},
@@ -226,19 +236,20 @@ const PLATFORMS_DEFAULT = [
   {name:"قناة عين", desc:"البث التعليمي ومكتبة الفيديو", url:"http://www.ientv.edu.sa/", tags:["تعلم"]},
   {name:"حضوري", desc:"إثبات الحضور والانصراف", url:"https://hather-ui.moe.gov.sa/dashboard", tags:["وزارة","دخول"]},
   {name:"فارس", desc:"الخدمة الذاتية لمنسوبي التعليم", url:"https://sshr.moe.gov.sa/", tags:["وزارة","دخول"]},
-  {name:"منصة نيوبد (FutureX)", desc:"برامج التطوير المهني الرقمي", url:"https://niepd.futurex.sa/", tags:["تعلم"]},
-  {name:"Outlook", desc:"البريد المؤسسي", url:"https://outlook.office.com/mail/", tags:["دخول"]},
-  {name:"خدماتي", desc:"بوابة خدمات التعليم", url:"https://khadamati.moe.gov.sa/sp", tags:["وزارة"]},
-  /* يمكنك إضافة/حذف إدارات تعليم هنا أو من محرر JSON */
-  {name:"إدارة تعليم الشرقية", desc:"الموقع الرسمي لإدارة تعليم الشرقية", url:"https://www.edueast.gov.sa/", tags:["وزارة"]},
-  {name:"إدارة تعليم الرياض", desc:"الموقع الرسمي لإدارة تعليم الرياض", url:"https://www.riyadhedu.gov.sa/", tags:["وزارة"]},
-  {name:"إدارة تعليم مكة", desc:"الموقع الرسمي لإدارة تعليم مكة", url:"https://edu.moe.gov.sa/makkah/", tags:["وزارة"]}
+  {name:"Microsoft Forms", desc:"نماذج واستبانات وأنشطة تقييمية", url:"https://forms.office.com/", tags:["تعلم"]},
+  {name:"Zoom", desc:"اجتماعات ودروس افتراضية", url:"https://zoom.us/", tags:["تعلم","دخول"]},
+
+  /* حسابات X لجهات التعليم */
+  {name:"وزارة التعليم — X", desc:"الحساب الرسمي على منصة X", url:"https://x.com/moe_gov_sa", tags:["وزارة"]},
+  {name:"المتحدث الرسمي — X", desc:"الحساب الرسمي للمتحدث باسم وزارة التعليم", url:"https://x.com/spokesp_moe", tags:["وزارة"]},
+  {name:"هيئة تقويم التعليم — X", desc:"الحساب الرسمي لهيئة تقويم التعليم والتدريب", url:"https://x.com/EtecKsa", tags:["وزارة"]},
+  {name:"تعليم الشرقية — X", desc:"الحساب الرسمي لإدارة تعليم الشرقية", url:"https://x.com/edueast", tags:["وزارة"]},
+  {name:"تعليم الرياض — X", desc:"الحساب الرسمي لإدارة تعليم الرياض", url:"https://x.com/riyadhedu", tags:["وزارة"]},
+  {name:"تعليم مكة — X", desc:"الحساب الرسمي لإدارة تعليم مكة", url:"https://x.com/MakkahEdu", tags:["وزارة"]},
+  {name:"تعليم القصيم — X", desc:"الحساب الرسمي لإدارة تعليم القصيم", url:"https://x.com/QassimEdu", tags:["وزارة"]}
 ];
 
-/* ================= الأدلّة والأنظمة (14 عنصرًا) =================
-   تم ملء الروابط وفق ترتيب الروابط في ملف PDF الذي زوّدته.
-   يمكنك تغيير أي رابط لاحقًا من لوحة الإدارة.
-*/
+/* ================= الأدلّة (روابط تعمل + إدارة) ================= */
 const DOCS_DEFAULT = [
   {title:"الدليل التنظيمي لمدارس التعليم العام", kind:"دليل",
    url:"https://drive.google.com/file/d/1E604s0Wni9ht-UnfaB4ywlN55YyjW9Wj/view?usp=sharing",
@@ -276,7 +287,6 @@ const DOCS_DEFAULT = [
   {title:"دليل السلوك المهني لموظفي وزارة التعليم 2025", kind:"دليل",
    url:"https://drive.google.com/file/d/1HbFSJb9wX4i4Bs6YDHrnF2jj8_NwYraq/view?usp=sharing",
    desc:"القيم والمبادئ المهنية لضمان بيئة عمل تربوية."},
-  /* الاستبدال المتفق عليه بدل «الأمن الفكري» */
   {title:"استمارة الزيارة الفني لمشرف الإدارة المدرسية", kind:"نموذج",
    url:"https://drive.google.com/file/d/1Q2SnbnnteJCIgyz8WZCESV01Jk_3rPMh/view?usp=sharing",
    desc:"نموذج توثيق الزيارة: معايير، مؤشرات، وتوصيات."},
@@ -285,7 +295,7 @@ const DOCS_DEFAULT = [
    desc:"تنظيم مشاركة الطلاب في التطوع ودعم رؤية 2030."}
 ];
 
-/* ===== مبادراتي ===== */
+/* ===== المبادرات ===== */
 const INITIATIVES = [
   {title:"استمارة دعم وتطوير الهيئة التعليمية", url:"https://fhz545-hub.github.io/teachervisit/", note:"توثيق الزيارات الصفّية ونقاط التحسين."},
   {title:"الشؤون الإدارية والمتابعة", url:"https://fhz545-hub.github.io/teacher-eval-1447/", note:"متابعة الانضباط والزيارات الإشرافية."},
@@ -298,7 +308,7 @@ const INITIATIVES = [
 let PLATFORMS = JSON.parse(localStorage.getItem(KEY_PLAT) || 'null') || PLATFORMS_DEFAULT;
 let DOCS = JSON.parse(localStorage.getItem(KEY_DOCS) || 'null') || DOCS_DEFAULT;
 
-/* ============ توليد واجهة المنصات ============ */
+/* ============ توليد واجهة المنصات (بطاقة = رابط كامل) ============ */
 const grid = document.getElementById('platformGrid');
 const countP = document.getElementById('countP');
 const search = document.getElementById('platformSearch');
@@ -314,16 +324,11 @@ function renderPlatforms(){
     if(inFilter && inSearch){
       shown++;
       grid.insertAdjacentHTML('beforeend', `
-        <article class="card" data-tags="${(p.tags||[]).join(',')}">
-          <div>
-            <div class="title">${p.name}</div>
-            <div class="desc">${p.desc||''}</div>
-            <div class="badges">${(p.tags||[]).map(t=>`<span class="badge">${t}</span>`).join('')}</div>
-          </div>
-          <div class="actions">
-            <a class="btn" href="${p.url}" target="_blank" rel="noopener">فتح</a>
-          </div>
-        </article>
+        <a class="card linkcard" href="${p.url}" target="_blank" rel="noopener" data-tags="${(p.tags||[]).join(',')}">
+          <div class="title">${p.name}</div>
+          <div class="desc">${p.desc||''}</div>
+          <div class="badges">${(p.tags||[]).map(t=>`<span class="badge">${t}</span>`).join('')}</div>
+        </a>
       `);
     }
   });
@@ -333,40 +338,60 @@ filterChips.forEach(c=>c.addEventListener('click',()=>{filterChips.forEach(x=>x.
 search.addEventListener('input', renderPlatforms);
 renderPlatforms();
 
-/* ============ توليد واجهة «مبادراتي» ============ */
+/* ============ «المبادرات» (بطاقة = رابط كامل) ============ */
 const initList = document.getElementById('initList');
 INITIATIVES.forEach(it=>{
   initList.insertAdjacentHTML('beforeend', `
-    <article class="card">
-      <div>
-        <div class="title">${it.title}</div>
-        <div class="desc">${it.note||''}</div>
-      </div>
-      <div class="actions"><a class="btn" href="${it.url}" target="_blank" rel="noopener">فتح</a></div>
-    </article>
+    <a class="card linkcard" href="${it.url}" target="_blank" rel="noopener">
+      <div class="title">${it.title}</div>
+      <div class="desc">${it.note||''}</div>
+    </a>
   `);
 });
 
 /* ============ الأدلّة: عرض + إدارة ============ */
 const docsCols = document.getElementById('docsCols');
-
 function linkFor(d){ return d.fileDataUrl ? d.fileDataUrl : (d.url || "#"); }
+
+/* تحويل روابط Google Drive إلى تنزيل مباشر عند الإمكان */
+function driveDirectDownload(u){
+  try{
+    const m = u.match(/drive\.google\.com\/file\/d\/([^/]+)\//i);
+    if(m && m[1]) return `https://drive.google.com/uc?export=download&id=${m[1]}`;
+    return u;
+  }catch{ return u; }
+}
+
+/* اسم ملف آمن للتحميل */
+function safeName(t){
+  return (t||'document').replace(/[\\/:*?"<>|]+/g,' ').trim() + '.pdf';
+}
 
 function renderDocs(){
   docsCols.innerHTML = '';
   const colA = document.createElement('div');
   const colB = document.createElement('div');
   DOCS.forEach((d,i)=>{
+    const openHref = linkFor(d);
+    const dlHref   = d.fileDataUrl ? d.fileDataUrl : driveDirectDownload(d.url||'#');
     const html = `
-      <article class="card">
+      <article class="card" style="grid-template-columns:1fr auto">
         <div>
           <div class="title">${d.title}</div>
           <div class="desc">${d.desc||''}</div>
           <div class="badges"><span class="badge">${d.kind||"دليل"}</span></div>
         </div>
         <div class="actions">
-          <a class="btn" href="${linkFor(d)}" target="_blank" rel="noopener">فتح</a>
-          <a class="btn whatsapp" href="https://wa.me/?text=${encodeURIComponent(d.title + ' — ' + (d.url||location.href))}" target="_blank" rel="noopener">واتساب</a>
+          <a class="btn open" href="${openHref}" target="_blank" rel="noopener" title="فتح في تبويب جديد">
+            <!-- أيقونة فتح -->
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3l-1.42-1.42l9.3-9.29H14V3ZM5 5h7v2H7v10h10v-5h2v7H5V5Z"/></svg>
+            فتح
+          </a>
+          <a class="btn download" href="${dlHref}" download="${safeName(d.title)}" title="تنزيل الملف">
+            <!-- أيقونة تحميل -->
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293l1.414 1.414L12 16.414l-4.707-4.707l1.414-1.414L11 12.586V4a1 1 0 0 1 1-1ZM5 20a1 1 0 0 1-1-1v-2h2v1h12v-1h2v2a1 1 0 0 1-1 1H5Z"/></svg>
+            تحميل
+          </a>
         </div>
       </article>`;
     (i<7?colA:colB).insertAdjacentHTML('beforeend', html);
