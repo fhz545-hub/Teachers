@@ -146,7 +146,7 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- مودالات الإدارة -->
+<!-- مودالات الإدارة: الأدلّة -->
 <div class="modal-back" id="docsModalBack" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="docsModalTitle">
     <header>
@@ -199,11 +199,12 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
+<!-- مودالات الإدارة: المنصات -->
 <div class="modal-back" id="platModalBack" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="platModalTitle">
     <header>
       <h3 id="platModalTitle">تحرير قائمة المنصات والمواقع</h3>
-      <span class="kbd">JSON</span>
+      <span class="kbd">PIN</span> ١٤٤٧
     </header>
     <div class="body">
       <p style="margin:4px 0 8px; color:#456; font-size:13px">
@@ -352,20 +353,10 @@ INITIATIVES.forEach(it=>{
 /* ============ الأدلّة: عرض + إدارة ============ */
 const docsCols = document.getElementById('docsCols');
 function linkFor(d){ return d.fileDataUrl ? d.fileDataUrl : (d.url || "#"); }
-
-/* تحويل روابط Google Drive إلى تنزيل مباشر عند الإمكان */
 function driveDirectDownload(u){
-  try{
-    const m = u.match(/drive\.google\.com\/file\/d\/([^/]+)\//i);
-    if(m && m[1]) return `https://drive.google.com/uc?export=download&id=${m[1]}`;
-    return u;
-  }catch{ return u; }
+  try{ const m = u.match(/drive\.google\.com\/file\/d\/([^/]+)\//i); if(m && m[1]) return `https://drive.google.com/uc?export=download&id=${m[1]}`; return u; }catch{ return u; }
 }
-
-/* اسم ملف آمن للتحميل */
-function safeName(t){
-  return (t||'document').replace(/[\\/:*?"<>|]+/g,' ').trim() + '.pdf';
-}
+function safeName(t){ return (t||'document').replace(/[\\/:*?"<>|]+/g,' ').trim() + '.pdf'; }
 
 function renderDocs(){
   docsCols.innerHTML = '';
@@ -383,12 +374,10 @@ function renderDocs(){
         </div>
         <div class="actions">
           <a class="btn open" href="${openHref}" target="_blank" rel="noopener" title="فتح في تبويب جديد">
-            <!-- أيقونة فتح -->
             <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3l-1.42-1.42l9.3-9.29H14V3ZM5 5h7v2H7v10h10v-5h2v7H5V5Z"/></svg>
             فتح
           </a>
           <a class="btn download" href="${dlHref}" download="${safeName(d.title)}" title="تنزيل الملف">
-            <!-- أيقونة تحميل -->
             <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293l1.414 1.414L12 16.414l-4.707-4.707l1.414-1.414L11 12.586V4a1 1 0 0 1 1-1ZM5 20a1 1 0 0 1-1-1v-2h2v1h12v-1h2v2a1 1 0 0 1-1 1H5Z"/></svg>
             تحميل
           </a>
@@ -483,7 +472,7 @@ window.delDoc = (i)=>{
 }
 function fileToDataUrl(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
 
-/* ===== محرّر المنصات (JSON) ===== */
+/* ===== محرّر المنصات (JSON) + قفل بالـ PIN ===== */
 const Pback = document.getElementById('platModalBack');
 const btnPlat = document.getElementById('btnEditPlatforms');
 const txtPlat = document.getElementById('platEditor');
@@ -491,10 +480,15 @@ const btnSavePlat = document.getElementById('savePlat');
 const btnResetPlat = document.getElementById('resetPlat');
 const btnCancelPlat = document.getElementById('cancelPlat');
 
-btnPlat.addEventListener('click', ()=>{
+function openPlatModal(){
+  const ok = sessionStorage.getItem('plat_admin_ok')==='1' || prompt('أدخل رمز الإدارة (PIN)')===ADMIN_PIN;
+  if(!ok){return;}
+  sessionStorage.setItem('plat_admin_ok','1');
   txtPlat.value = JSON.stringify(PLATFORMS, null, 2);
   Pback.style.display='grid';
-});
+}
+
+btnPlat.addEventListener('click', openPlatModal);
 btnCancelPlat.addEventListener('click', ()=> Pback.style.display='none');
 btnResetPlat.addEventListener('click', ()=>{
   if(confirm('إرجاع قائمة المنصات للوضع المبدئي؟')){
@@ -515,9 +509,14 @@ btnSavePlat.addEventListener('click', ()=>{
   }catch(e){ alert('JSON غير صالح:\n' + e.message); }
 });
 
-/* إغلاق المودالات عند النقر خارجها */
+/* إغلاق أي مودال بالنقر خارجها أو بمفتاح ESC */
 document.querySelectorAll('.modal-back').forEach(back=>{
   back.addEventListener('click', (e)=>{ if(e.target===back) back.style.display='none'; });
+});
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='Escape'){
+    document.querySelectorAll('.modal-back').forEach(back=> back.style.display='none');
+  }
 });
 </script>
 </body>
