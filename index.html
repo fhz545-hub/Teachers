@@ -7,100 +7,146 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* أبعاد الهيدر المرجعية من تصميمك: 2048×478 ≈ 4.28:1 */
+  /* أبعاد الهيدر المرجعية: 2048×478 ≈ 4.28:1 */
   --heroW:2048; --heroH:478;
 
-  --ink:#0e3134; --muted:#5f7280; --line:#e7eff0;
+  --ink:#0e3134; --muted:#556872; --line:#e1ecec;
   --paper:#fff; --bg:#f3f7f7; --accent:#0a8a7a;
+  --shine: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 45%, rgba(255,255,255,0) 60%);
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
 a{color:inherit;text-decoration:none}
-.container{max-width:calc(var(--heroW) * 1px); margin-inline:auto; padding:0 10px}
+.container{
+  max-width:calc(var(--heroW) * 1px);
+  margin-inline:auto; padding:0 12px 14px;
+}
+
+/* لمعة خفيفة على الصفحة */
+.container::before{
+  content:""; display:block; height:10px; margin:10px 0 8px;
+  background:linear-gradient(90deg,#dff5f1,#f0fbff,#dff5f1);
+  border-radius:10px; filter:brightness(1.04) saturate(1.05);
+}
 
 /* الهيدر */
-.hero{width:100%; aspect-ratio: var(--heroW) / var(--heroH); position:relative; overflow:hidden; border-radius:10px}
+.hero{
+  width:100%; aspect-ratio: var(--heroW) / var(--heroH);
+  position:relative; overflow:hidden; border-radius:12px;
+  box-shadow:0 14px 28px rgba(0,0,0,.06);
+}
 .hero img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none}
 
 /* عامة للأقسام */
-.section{background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:16px; box-shadow:0 12px 28px rgba(0,0,0,.04)}
-.section h2{margin:0 0 10px; font-size:clamp(18px,2vw,22px); color:#0a4a46; display:flex; align-items:center; gap:10px}
-.section h2 .tag{margin-inline-start:auto; background:#ebf5f4; color:#0a4a46; padding:3px 10px; border-radius:999px; font-size:12px}
+.section{
+  background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:16px;
+  box-shadow:0 12px 28px rgba(0,0,0,.04);
+  position:relative; overflow:hidden;
+}
+.section::after{
+  /* لمعة مائلة خفيفة */
+  content:""; position:absolute; inset:-40% -60%;
+  background:radial-gradient(600px 120px at 0% 0%, rgba(255,255,255,.7), transparent 60%);
+  transform:rotate(3deg); pointer-events:none; mix-blend-mode:soft-light;
+}
+.section h2{
+  margin:0 0 10px; font-size:clamp(18px,2.1vw,21px); color:#0a4a46;
+  display:flex; align-items:center; gap:10px
+}
 
 /* صف منصات + المبادرات */
-.row-plat-init{display:grid; gap:12px; margin:12px 0; grid-template-columns:2fr 1fr}
+.row-plat-init{display:grid; gap:14px; margin:14px 0; grid-template-columns:2fr 1fr}
 @media (max-width:1100px){ .row-plat-init{grid-template-columns:1fr} }
 
-/* منصات */
+/* شريط أدوات */
 .toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:10px}
 .chip{border:1px solid var(--line); border-radius:999px; padding:6px 10px; font-size:13px; background:#f5fbfb; color:#0a5c58; cursor:pointer}
 .chip.active{background:linear-gradient(90deg,#e8fbf5,#e9f6ff); border-color:#cfeae6}
-.search{position:relative; flex:1; min-width:200px}
-.search input{width:100%; border:1px solid var(--line); background:#fbfefe; padding:10px 12px; border-radius:12px; font-size:14px}
+.search{position:relative; flex:1; min-width:220px}
+.search input{width:100%; border:1px solid var(--line); background:#fbfefe; padding:10px 12px; border-radius:12px; font-size:13.5px}
 
+/* شبكات البطاقات */
 .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
 @media (max-width:1100px){ .cards{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:640px){ .cards{grid-template-columns:1fr} }
 
-/* بطاقة عامة */
+/* بطاقة عامة + لمعة */
 .card{
-  background:linear-gradient(180deg,#ffffff,#f8fcfc);
+  background:
+    linear-gradient(180deg,#ffffff,#f8fcfc);
   border:1px solid var(--line); border-radius:14px; padding:14px;
   display:grid; grid-template-columns:1fr auto; gap:8px; align-items:start;
   transition:transform .15s ease, box-shadow .2s ease, background .3s ease;
+  position:relative; overflow:hidden;
 }
-.card:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.06)}
+.card::before{
+  content:""; position:absolute; top:-120%; inset-inline:-40%;
+  height:220%; background:var(--shine); transform:translateX(-60%) rotate(10deg);
+  transition:transform .6s ease; pointer-events:none;
+}
+.card:hover{transform:translateY(-2px); box-shadow:0 12px 26px rgba(0,0,0,.07)}
+.card:hover::before{ transform:translateX(120%) rotate(10deg) }
 .card .title{font-weight:800; color:#064a45; font-size:15px}
-.card .desc{grid-column:1 / -1; font-size:13px; color:#5f7280}
+.card .desc{grid-column:1 / -1; font-size:13.5px; color:var(--muted)}
 .badges{display:flex; gap:6px; flex-wrap:wrap}
-.badge{font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid var(--line); background:#f5fbfb; color:#0a5a56}
+.badge{font-size:11.5px; padding:3px 8px; border-radius:999px; border:1px solid var(--line); background:#f5fbfb; color:#0a5a56}
 .actions{display:flex; gap:8px}
 
-/* بطاقات قابلة للنقر بالكامل (منصات + المبادرات) */
+/* بطاقات قابلة للنقر بالكامل (منصات + مبادرات) */
 .linkcard{grid-template-columns:1fr; cursor:pointer; position:relative}
 .linkcard::after{content:""; position:absolute; inset:0; border-radius:14px}
 .linkcard .desc{grid-column:auto}
 .linkcard .actions{display:none}
 
 /* أزرار */
-.btn{border:1px solid var(--line); background:#fff; padding:7px 10px; border-radius:10px; font-weight:700; font-size:12px; display:inline-flex; align-items:center; gap:6px}
+.btn{
+  border:1px solid var(--line); background:#fff; padding:7px 10px; border-radius:11px;
+  font-weight:700; font-size:12.5px; display:inline-flex; align-items:center; gap:7px
+}
 .btn:hover{background:#f2faf8}
 .btn.open{color:#0a4a46}
 .btn.download{color:#0a6e5f; border-color:#cfeadf}
 
-/* الأدلّة والأنظمة */
-.columns{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0}
-@media (max-width:900px){ .columns{grid-template-columns:1fr} }
+/* الأدلّة والأنظمة — ثلاثة أعمدة متجاوبة */
+.columns{display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin:12px 0}
+@media (max-width:1200px){ .columns{grid-template-columns:repeat(2, 1fr)} }
+@media (max-width:700px){ .columns{grid-template-columns:1fr} }
 
-/* المبادرات (قائمة مفردة) */
+/* قائمة مفردة (المبادرات) */
 .list{display:grid; grid-template-columns:1fr; gap:12px}
 
 /* لوحة الإدارة (مودال) */
-.modal-back{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; place-items:center; z-index:50; padding:10px}
-.modal{width:min(860px,96vw); background:#fff; border-radius:14px; border:1px solid var(--line); box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-back{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; place-items:center; z-index:50; padding:12px}
+.modal{width:min(880px,96vw); background:#fff; border-radius:14px; border:1px solid var(--line); box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .modal header{padding:12px 14px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px}
 .modal header h3{margin:0; font-size:16px}
-.modal .body{padding:12px 14px; max-height:min(70vh,700px); overflow:auto}
+.modal .body{padding:12px 14px; max-height:min(70vh,720px); overflow:auto}
 .modal .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-.modal label{font-size:12px; color:#335}
+.modal label{font-size:12.5px; color:#335}
 .modal input[type=text], .modal textarea, .modal select{
-  width:100%; border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-family:inherit; font-size:14px; background:#fbfefe;
+  width:100%; border:1px solid var(--line); border-radius:10px; padding:9px 11px; font-family:inherit; font-size:13.5px; background:#fbfefe;
 }
-.modal textarea{min-height:80px; resize:vertical}
-.modal .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px}
-.modal footer{padding:10px 14px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:8px}
+.modal textarea{min-height:90px; resize:vertical}
+.modal .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px}
+.modal footer{padding:10px 14px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:10px}
 .kbd{background:#eef4f3; border:1px solid #d7e7e4; padding:0 6px; border-radius:6px; font-size:12px}
 
 /* التذييل الصغير */
-.footer{background:linear-gradient(90deg,#0e6462,#2f7f79); color:#e8fffb; text-align:center; padding:8px 10px; border-radius:14px; margin:16px 0; font-size:12px}
+.footer{
+  background:linear-gradient(90deg,#0e6462,#2f7f79);
+  color:#e8fffb; text-align:center; padding:9px 12px; border-radius:14px; margin:16px 0; font-size:12.5px
+}
 .footer b{color:#fff}
+
+/* إخفاء عدد الروابط */
+#countP{display:none}
 </style>
 </head>
 <body>
 
 <div class="container">
 
-  <!-- الهيدر بصورة واحدة بنسبة ثابتة لمنع التشوّه -->
+  <!-- الهيدر بنسبة ثابتة لمنع التشوّه -->
   <header class="hero" aria-label="هيدر المنصة">
     <img src="logo.png" alt="منصة أعمال ومبادرات ثانوية اليعقوبي بالخبر">
   </header>
@@ -110,21 +156,27 @@ a{color:inherit;text-decoration:none}
 
     <!-- منصات ومواقع تعليمية -->
     <section class="section" id="platforms">
-      <h2>منصات ومواقع تعليمية <span class="tag" id="countP"></span></h2>
+      <h2>
+        منصات ومواقع تعليمية
+        <span id="countP"></span>
+        <button id="btnEditPlatforms" class="btn" title="تحرير قائمة المنصات" style="margin-inline-start:auto">⚙️ تحرير</button>
+      </h2>
       <div class="toolbar">
         <button class="chip active" data-filter="all">الكل</button>
         <button class="chip" data-filter="وزارة">وزارة</button>
         <button class="chip" data-filter="تعلم">تعلم</button>
         <button class="chip" data-filter="دخول">دخول</button>
         <div class="search"><input id="platformSearch" placeholder="ابحث باسم المنصة أو الوصف…"></div>
-        <button id="btnEditPlatforms" class="btn" title="تحرير قائمة المنصات">⚙️ تحرير المنصات</button>
       </div>
       <div class="cards" id="platformGrid"></div>
     </section>
 
     <!-- المبادرات -->
     <section class="section" id="initiatives">
-      <h2>المبادرات</h2>
+      <h2>
+        المبادرات
+        <button id="btnEditInit" class="btn" title="تحرير قائمة المبادرات" style="margin-inline-start:auto">⚙️ تحرير</button>
+      </h2>
       <div class="list" id="initList"></div>
     </section>
 
@@ -134,7 +186,6 @@ a{color:inherit;text-decoration:none}
   <section class="section" id="docs">
     <h2>
       الأدلّة والأنظمة
-      <span class="tag">عمودان ٧ + ٧</span>
       <button id="btnManageDocs" class="btn" style="margin-inline-start:auto">⚙️ إدارة الأدلّة</button>
     </h2>
     <div class="columns" id="docsCols"></div>
@@ -142,11 +193,11 @@ a{color:inherit;text-decoration:none}
 
   <!-- التذييل -->
   <div class="footer">
-    <b>تنفيذ وتجميع:</b> فهد حامد الزهراني — منصة داخلية تربط أدوات التطوير والتعليم والإدارة في منظومة واحدة.
+    <b>تنفيذ وتجميع:</b> فهد حامد الزهراني
   </div>
 </div>
 
-<!-- مودالات الإدارة: الأدلّة -->
+<!-- مودال: الأدلّة -->
 <div class="modal-back" id="docsModalBack" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="docsModalTitle">
     <header>
@@ -190,7 +241,7 @@ a{color:inherit;text-decoration:none}
     <footer>
       <div class="row">
         <button class="btn" id="saveDoc">💾 حفظ/تحديث</button>
-        <button class="btn" id="cancelDoc">إلغاء</button>
+        <button class="btn" id="cancelDoc">إغلاق</button>
       </div>
       <div class="row">
         <span style="font-size:12px;color:#6b7">ملاحظة: ملفات PDF تُحفظ محليًا في المتصفح (Data URL). لا تُرفع لخادم.</span>
@@ -199,7 +250,7 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- مودالات الإدارة: المنصات -->
+<!-- مودال: المنصات -->
 <div class="modal-back" id="platModalBack" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="platModalTitle">
     <header>
@@ -210,7 +261,7 @@ a{color:inherit;text-decoration:none}
       <p style="margin:4px 0 8px; color:#456; font-size:13px">
         عدّل العناصر بصيغة JSON (الحقول: <b>name</b>, <b>desc</b>, <b>url</b>, <b>tags</b>).
       </p>
-      <textarea id="platEditor" style="width:100%; min-height:320px; border:1px solid var(--line); border-radius:10px; padding:10px; font-family:ui-monospace,mono; font-size:13px"></textarea>
+      <textarea id="platEditor" style="width:100%; min-height:340px; border:1px solid var(--line); border-radius:10px; padding:10px; font-family:ui-monospace,mono; font-size:13px"></textarea>
     </div>
     <footer>
       <div class="row">
@@ -218,7 +269,31 @@ a{color:inherit;text-decoration:none}
         <button class="btn" id="resetPlat">♻️ تصفير للقائمة المبدئية</button>
         <button class="btn" id="cancelPlat">إغلاق</button>
       </div>
-      <span style="font-size:12px;color:#6b7">تُحفظ القائمة محليًا تحت المفتاح platforms_custom_v1</span>
+      <span style="font-size:12.5px;color:#6b7">تُحفظ القائمة محليًا تحت المفتاح platforms_custom_v1</span>
+    </footer>
+  </div>
+</div>
+
+<!-- مودال: المبادرات -->
+<div class="modal-back" id="initModalBack" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="initModalTitle">
+    <header>
+      <h3 id="initModalTitle">تحرير قائمة المبادرات</h3>
+      <span class="kbd">PIN</span> ١٤٤٧
+    </header>
+    <div class="body">
+      <p style="margin:4px 0 8px; color:#456; font-size:13px">
+        عدّل العناصر بصيغة JSON (الحقول: <b>title</b>, <b>url</b>, <b>note</b>).
+      </p>
+      <textarea id="initEditor" style="width:100%; min-height:340px; border:1px solid var(--line); border-radius:10px; padding:10px; font-family:ui-monospace,mono; font-size:13px"></textarea>
+    </div>
+    <footer>
+      <div class="row">
+        <button class="btn" id="saveInit">💾 حفظ</button>
+        <button class="btn" id="resetInit">♻️ تصفير للقائمة المبدئية</button>
+        <button class="btn" id="cancelInit">إغلاق</button>
+      </div>
+      <span style="font-size:12.5px;color:#6b7">تُحفظ القائمة محليًا تحت المفتاح initiatives_custom_v1</span>
     </footer>
   </div>
 </div>
@@ -228,8 +303,9 @@ a{color:inherit;text-decoration:none}
 const ADMIN_PIN = "1447";
 const KEY_DOCS = "docs_custom_v1";
 const KEY_PLAT = "platforms_custom_v1";
+const KEY_INIT = "initiatives_custom_v1";
 
-/* ================= المنصات (مع حسابات X الإضافية) ================= */
+/* ================= المنصات (Teams بدل Zoom) ================= */
 const PLATFORMS_DEFAULT = [
   {name:"الدعم الموحّد (IAM)", desc:"نظام النفاذ الموحّد لبوابات وزارة التعليم", url:"https://iam.moe.gov.sa/", tags:["وزارة","دخول"]},
   {name:"مدرستي", desc:"منصة المدرسة للتعليم الإلكتروني", url:"https://schools.madrasati.sa/", tags:["تعلم"]},
@@ -238,7 +314,7 @@ const PLATFORMS_DEFAULT = [
   {name:"حضوري", desc:"إثبات الحضور والانصراف", url:"https://hather-ui.moe.gov.sa/dashboard", tags:["وزارة","دخول"]},
   {name:"فارس", desc:"الخدمة الذاتية لمنسوبي التعليم", url:"https://sshr.moe.gov.sa/", tags:["وزارة","دخول"]},
   {name:"Microsoft Forms", desc:"نماذج واستبانات وأنشطة تقييمية", url:"https://forms.office.com/", tags:["تعلم"]},
-  {name:"Zoom", desc:"اجتماعات ودروس افتراضية", url:"https://zoom.us/", tags:["تعلم","دخول"]},
+  {name:"Microsoft Teams", desc:"اجتماعات ودروس افتراضية", url:"https://teams.microsoft.com/", tags:["تعلم","دخول"]},
 
   /* حسابات X لجهات التعليم */
   {name:"وزارة التعليم — X", desc:"الحساب الرسمي على منصة X", url:"https://x.com/moe_gov_sa", tags:["وزارة"]},
@@ -296,8 +372,8 @@ const DOCS_DEFAULT = [
    desc:"تنظيم مشاركة الطلاب في التطوع ودعم رؤية 2030."}
 ];
 
-/* ===== المبادرات ===== */
-const INITIATIVES = [
+/* ===== المبادرات (الافتراضي) ===== */
+const INITIATIVES_DEFAULT = [
   {title:"استمارة دعم وتطوير الهيئة التعليمية", url:"https://fhz545-hub.github.io/teachervisit/", note:"توثيق الزيارات الصفّية ونقاط التحسين."},
   {title:"الشؤون الإدارية والمتابعة", url:"https://fhz545-hub.github.io/teacher-eval-1447/", note:"متابعة الانضباط والزيارات الإشرافية."},
   {title:"نموذج تقييم الأداء الوظيفي", url:"https://fhz545-hub.github.io/taqyeem/", note:"التخطيط والمراجعة النصفية والتقييم النهائي."},
@@ -308,8 +384,9 @@ const INITIATIVES = [
 /* ============ حالة التخزين المحلي ============ */
 let PLATFORMS = JSON.parse(localStorage.getItem(KEY_PLAT) || 'null') || PLATFORMS_DEFAULT;
 let DOCS = JSON.parse(localStorage.getItem(KEY_DOCS) || 'null') || DOCS_DEFAULT;
+let INITIATIVES = JSON.parse(localStorage.getItem(KEY_INIT) || 'null') || INITIATIVES_DEFAULT;
 
-/* ============ توليد واجهة المنصات (بطاقة = رابط كامل) ============ */
+/* ============ توليد واجهة المنصات ============ */
 const grid = document.getElementById('platformGrid');
 const countP = document.getElementById('countP');
 const search = document.getElementById('platformSearch');
@@ -333,22 +410,26 @@ function renderPlatforms(){
       `);
     }
   });
-  countP.textContent = `${shown} رابط`;
+  countP.textContent = "";
 }
 filterChips.forEach(c=>c.addEventListener('click',()=>{filterChips.forEach(x=>x.classList.remove('active')); c.classList.add('active'); renderPlatforms();}));
 search.addEventListener('input', renderPlatforms);
 renderPlatforms();
 
-/* ============ «المبادرات» (بطاقة = رابط كامل) ============ */
+/* ============ المبادرات ============ */
 const initList = document.getElementById('initList');
-INITIATIVES.forEach(it=>{
-  initList.insertAdjacentHTML('beforeend', `
-    <a class="card linkcard" href="${it.url}" target="_blank" rel="noopener">
-      <div class="title">${it.title}</div>
-      <div class="desc">${it.note||''}</div>
-    </a>
-  `);
-});
+function renderInitiatives(){
+  initList.innerHTML='';
+  INITIATIVES.forEach(it=>{
+    initList.insertAdjacentHTML('beforeend', `
+      <a class="card linkcard" href="${it.url}" target="_blank" rel="noopener">
+        <div class="title">${it.title}</div>
+        <div class="desc">${it.note||''}</div>
+      </a>
+    `);
+  });
+}
+renderInitiatives();
 
 /* ============ الأدلّة: عرض + إدارة ============ */
 const docsCols = document.getElementById('docsCols');
@@ -358,14 +439,17 @@ function driveDirectDownload(u){
 }
 function safeName(t){ return (t||'document').replace(/[\\/:*?"<>|]+/g,' ').trim() + '.pdf'; }
 
+/* توزيع ثلاثي الأعمدة (Round-Robin) */
 function renderDocs(){
   docsCols.innerHTML = '';
   const colA = document.createElement('div');
   const colB = document.createElement('div');
+  const colC = document.createElement('div');
+
   DOCS.forEach((d,i)=>{
     const openHref = linkFor(d);
     const dlHref   = d.fileDataUrl ? d.fileDataUrl : driveDirectDownload(d.url||'#');
-    const html = `
+    const card = `
       <article class="card" style="grid-template-columns:1fr auto">
         <div>
           <div class="title">${d.title}</div>
@@ -382,14 +466,18 @@ function renderDocs(){
             تحميل
           </a>
         </div>
-      </article>`;
-    (i<7?colA:colB).insertAdjacentHTML('beforeend', html);
+      </article>
+    `;
+    if(i % 3 === 0) colA.insertAdjacentHTML('beforeend', card);
+    else if(i % 3 === 1) colB.insertAdjacentHTML('beforeend', card);
+    else colC.insertAdjacentHTML('beforeend', card);
   });
-  docsCols.appendChild(colA); docsCols.appendChild(colB);
+
+  docsCols.appendChild(colA); docsCols.appendChild(colB); docsCols.appendChild(colC);
 }
 renderDocs();
 
-/* ===== لوحة إدارة الأدلّة ===== */
+/* ===== لوحة إدارة الأدلّة (PIN) ===== */
 const Mback = document.getElementById('docsModalBack');
 const btnManage = document.getElementById('btnManageDocs');
 const listAdmin = document.getElementById('docsListAdmin');
@@ -472,7 +560,7 @@ window.delDoc = (i)=>{
 }
 function fileToDataUrl(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
 
-/* ===== محرّر المنصات (JSON) + قفل بالـ PIN ===== */
+/* ===== محرّر المنصات (PIN) ===== */
 const Pback = document.getElementById('platModalBack');
 const btnPlat = document.getElementById('btnEditPlatforms');
 const txtPlat = document.getElementById('platEditor');
@@ -506,6 +594,44 @@ btnSavePlat.addEventListener('click', ()=>{
     localStorage.setItem(KEY_PLAT, JSON.stringify(PLATFORMS));
     renderPlatforms();
     Pback.style.display='none';
+  }catch(e){ alert('JSON غير صالح:\n' + e.message); }
+});
+
+/* ===== محرّر المبادرات (PIN) ===== */
+const Iback = document.getElementById('initModalBack');
+const btnInit = document.getElementById('btnEditInit');
+const txtInit = document.getElementById('initEditor');
+const btnSaveInit = document.getElementById('saveInit');
+const btnResetInit = document.getElementById('resetInit');
+const btnCancelInit = document.getElementById('cancelInit');
+
+function openInitModal(){
+  const ok = sessionStorage.getItem('init_admin_ok')==='1' || prompt('أدخل رمز الإدارة (PIN)')===ADMIN_PIN;
+  if(!ok){return;}
+  sessionStorage.setItem('init_admin_ok','1');
+  txtInit.value = JSON.stringify(INITIATIVES, null, 2);
+  Iback.style.display='grid';
+}
+
+btnInit.addEventListener('click', openInitModal);
+btnCancelInit.addEventListener('click', ()=> Iback.style.display='none');
+btnResetInit.addEventListener('click', ()=>{
+  if(confirm('إرجاع قائمة المبادرات للوضع المبدئي؟')){
+    INITIATIVES = [...INITIATIVES_DEFAULT];
+    localStorage.removeItem(KEY_INIT);
+    renderInitiatives();
+    txtInit.value = JSON.stringify(INITIATIVES, null, 2);
+  }
+});
+btnSaveInit.addEventListener('click', ()=>{
+  try{
+    const parsed = JSON.parse(txtInit.value);
+    if(!Array.isArray(parsed)) throw new Error('يجب أن تكون مصفوفة عناصر');
+    parsed.forEach((it,i)=>{ if(!it.title || !it.url) throw new Error(`عنصر #${i+1}: الحقول title و url مطلوبة`); });
+    INITIATIVES = parsed;
+    localStorage.setItem(KEY_INIT, JSON.stringify(INITIATIVES));
+    renderInitiatives();
+    Iback.style.display='none';
   }catch(e){ alert('JSON غير صالح:\n' + e.message); }
 });
 
