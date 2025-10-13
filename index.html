@@ -196,7 +196,7 @@ const KEY_DOCS = "docs_custom_v1";
 const KEY_PLAT = "platforms_custom_v1";
 const KEY_INIT = "initiatives_custom_v1";
 
-/* ================= المنصات (ثابتة كما آخر نسخة) ================= */
+/* ================= المنصات (مُحدّثة حسب طلبك) ================= */
 const PLATFORMS_DEFAULT = [
   {name:"الدعم الموحّد (IAM)", desc:"نظام النفاذ الموحّد لبوابات وزارة التعليم", url:"https://iam.moe.gov.sa/", tags:["وزارة","دخول"]},
   {name:"مدرستي", desc:"منصة المدرسة للتعليم الإلكتروني", url:"https://schools.madrasati.sa/", tags:["تعلم"]},
@@ -204,77 +204,70 @@ const PLATFORMS_DEFAULT = [
   {name:"قناة عين", desc:"البث التعليمي ومكتبة الفيديو", url:"http://www.ientv.edu.sa/", tags:["تعلم"]},
   {name:"حضوري", desc:"إثبات الحضور والانصراف", url:"https://hather-ui.moe.gov.sa/dashboard", tags:["وزارة","دخول"]},
   {name:"فارس", desc:"الخدمة الذاتية لمنسوبي التعليم", url:"https://sshr.moe.gov.sa/", tags:["وزارة","دخول"]},
+
+  {name:"المركز الوطني للمناهج", desc:"المنصة الرسمية للمركز الوطني للمناهج", url:"https://sncc.gov.sa/index_ar.html", tags:["وزارة"]},
+  {name:"المركز الوطني للتعليم الإلكتروني", desc:"موقع المركز الوطني للتعليم الإلكتروني", url:"https://nelc.gov.sa/", tags:["تعلم"]},
+
   {name:"Microsoft Forms", desc:"نماذج واستبانات وأنشطة تقييمية", url:"https://forms.office.com/", tags:["تعلم"]},
   {name:"Microsoft Teams", desc:"اجتماعات ودروس افتراضية", url:"https://teams.microsoft.com/", tags:["تعلم","دخول"]},
+
   {name:"وزارة التعليم — X", desc:"الحساب الرسمي على منصة X", url:"https://x.com/moe_gov_sa", tags:["وزارة"]},
   {name:"المتحدث الرسمي — X", desc:"الحساب الرسمي للمتحدث باسم وزارة التعليم", url:"https://x.com/spokesp_moe", tags:["وزارة"]},
   {name:"هيئة تقويم التعليم — X", desc:"الحساب الرسمي لهيئة تقويم التعليم والتدريب", url:"https://x.com/EtecKsa", tags:["وزارة"]},
-  {name:"تعليم الشرقية — X", desc:"الحساب الرسمي لإدارة تعليم الشرقية", url:"https://x.com/edueast", tags:["وزارة"]},
-  {name:"تعليم الرياض — X", desc:"الحساب الرسمي لإدارة تعليم الرياض", url:"https://x.com/riyadhedu", tags:["وزارة"]},
-  {name:"تعليم مكة — X", desc:"الحساب الرسمي لإدارة تعليم مكة", url:"https://x.com/MakkahEdu", tags:["وزارة"]},
-  {name:"تعليم القصيم — X", desc:"الحساب الرسمي لإدارة تعليم القصيم", url:"https://x.com/QassimEdu", tags:["وزارة"]}
+
+  /* إدارات التعليم على X (روابط مُحدّثة) */
+  {name:"تعليم الشرقية — X", desc:"الحساب الرسمي لإدارة تعليم الشرقية", url:"https://x.com/MOE_EPR", tags:["وزارة"]},
+  {name:"تعليم الرياض — X", desc:"الحساب الرسمي لإدارة تعليم الرياض", url:"https://x.com/MOE_RYH", tags:["وزارة"]},
+  {name:"تعليم مكة — X", desc:"الحساب الرسمي لإدارة تعليم مكة", url:"https://x.com/MOE_MHC", tags:["وزارة"]}
 ];
 
-/* ================= الأدلّة والأنظمة (روابط مُصحّحة) ================= */
+/* ================= الأدلّة والأنظمة (آخر نسخة صحيحة) ================= */
 const DOCS_DEFAULT = [
   {title:"الدليل التنظيمي لمدارس التعليم العام", kind:"دليل",
    url:"https://drive.google.com/file/d/1E604s0Wni9ht-UnfaB4ywlN55YyjW9Wj/view?usp=sharing",
    desc:"مرجع يوضّح مهام وصلاحيات المدرسة وهيكلها الإداري."},
-
   {title:"الدليل الإجرائي لمدارس التعليم العام", kind:"دليل",
    url:"https://drive.google.com/file/d/18rVycmGYJ3vNrUq2hsAbZiDGv9WaZULR/view?usp=sharing",
    desc:"خطوات العمل والإجراءات التفصيلية للمهام المدرسية."},
-
   {title:"لائحة تقويم الطالب 2025م", kind:"لائحة",
    url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view?usp=sharing",
    desc:"أساليب وأدوات وضوابط التقويم لرفع نواتج التعلّم."},
-
   {title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م", kind:"دليل",
    url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view",
    desc:"آليات تطبيق اللائحة داخل المدرسة."},
-
   {title:"قواعد السلوك والمواظبة 1447هـ", kind:"قواعد",
    url:"https://drive.google.com/file/d/1RYIYPFlAcT9Ya-RnPw3bnpQASVQIz0FX/view",
    desc:"حقوق وواجبات الطالب وضوابط الإجراءات التربوية."},
-
   {title:"آلية تنفيذ النشاط الطلابي 1447هـ", kind:"آلية",
    url:"https://drive.google.com/file/d/1ak9uHKDbi8cPecgYzV8_cIqv2-NlmOR_/view",
    desc:"تفعيل البرامج وفق دليل الخطط الدراسية."},
-
   {title:"الدليل الاسترشادي لمشرف دعم التميز", kind:"دليل",
    url:"https://drive.google.com/file/d/17l_qlhdWdUBRWEbDcFKT0iCkUh2gifu4/view?usp=sharing",
    desc:"تمكين المشرف من دعم التميز والجودة."},
-
   {title:"توزيع درجات الطلاب 2025م", kind:"لائحة",
    url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view?usp=sharing",
    desc:"آلية احتساب الدرجات بين الاختبارات وأعمال الفصل."},
-
   {title:"دليل العمل التطوعي", kind:"دليل",
    url:"https://drive.google.com/file/d/1MBrdcVABkZajfh97JS1Csv7juRwuvsM9/view?usp=sharing",
    desc:"تنظيم مشاركة الطلاب في التطوع ودعم رؤية 2030."},
-
   {title:"دليل الاختبارات 2025م", kind:"دليل",
    url:"https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view?usp=sharing",
    desc:"الأسس الفنية والتنظيمية لتنفيذ الاختبارات."},
-
   {title:"دليل خدمة الجدول المدرسي 2025م", kind:"دليل",
    url:"https://drive.google.com/file/d/1XAMG04koxiH2pd8jfVwgFTYKvGX_JqHf/view?usp=sharing",
    desc:"إعداد وإدارة الجداول إلكترونيًا."},
-
   {title:"دليل الزي المدرسي والرياضي لطلبة التعليم العام", kind:"دليل",
    url:"https://drive.google.com/file/d/1dJaj5cH6sUOpUh2shay36xH7FctVxZXh/view?usp=sharing",
    desc:"المواصفات المعتمدة للزي بما يعزز الهوية والانضباط."},
-
   {title:"دليل السلوك المهني لموظفي وزارة التعليم 2025", kind:"دليل",
    url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view?usp=sharing",
    desc:"القيم والمعايير المهنية لمنسوبي التعليم."},
-
   {title:"استمارة الزيارة الفني لمشرف الإدارة المدرسية", kind:"نموذج",
    url:"https://drive.google.com/file/d/1Q2SnbnnteJCIgyz8WZCESV01Jk_3rPMh/view?usp=sharing",
    desc:"نموذج توثيق الزيارة: معايير، مؤشرات، وتوصيات."}
 ];
 
-/* ===== المبادرات ===== */
+/* ===== المبادرات (ثابتة كما هي) ===== */
 const INITIATIVES_DEFAULT = [
   {title:"استمارة دعم وتطوير الهيئة التعليمية", url:"https://fhz545-hub.github.io/teachervisit/", note:"توثيق الزيارات الصفّية ونقاط التحسين."},
   {title:"الشؤون الإدارية والمتابعة", url:"https://fhz545-hub.github.io/teacher-eval-1447/", note:"متابعة الانضباط والزيارات الإشرافية."},
@@ -356,11 +349,11 @@ function renderDocs(){
         </div>
         <div class="actions">
           <a class="btn open" href="${openHref}" target="_blank" rel="noopener" title="فتح في تبويب جديد">
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3l-1.42-1.42l9.3-9.29H14V3ZM5 5h7v2H7v10h10v-5h2v7H5V5Z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3l-1.42-1.42l9.3-9.29H14V3ZM5 5h7v2H7v10h10v-5h2v7H5V5Z"/></svg>
             فتح
           </a>
           <a class="btn download" href="${dlHref}" download="${safeName(d.title)}" title="تنزيل الملف">
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293l1.414 1.414L12 16.414l-4.707-4.707l1.414-1.414L11 12.586V4a1 1 0 0 1 1-1ZM5 20a1 1 0 0 1-1-1v-2h2v1h12v-1h2v2a1 1 0 0 1-1 1H5Z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293l1.414 1.414L12 16.414l-4.707-4.707l1.414-1.414L11 12.586V4a1 1 0 0 1 1-1ZM5 20a1 1 0 0 1-1-1v-2h2v1h12v-1h2v2a1 1 0 0 1-1 1H5Z"/></svg>
             تحميل
           </a>
         </div>
