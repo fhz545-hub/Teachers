@@ -8,7 +8,13 @@
 <style>
 :root{
   --ink:#0b3f43; --muted:#5d737a; --bg:#f5f8f8; --paper:#ffffff; --line:#e3ecec;
-  --brand:#0b7e88; --accent:#0a6e5f; --shadow:0 14px 28px rgba(0,0,0,.07)
+  --brand:#0b7e88; --accent:#0a6e5f; --shadow:0 14px 28px rgba(0,0,0,.07);
+
+  /* ألوان جذابة لعناوين مجموعات الأدلة */
+  --grp1:#0aa694; --grp2:#2c7be5; --grp3:#7c4dff;
+  --grp4:#ff7a59; --grp5:#17a2b8; --grp6:#ffa000;
+  --grp7:#5cb85c; --grp8:#9c27b0; --grp9:#795548;
+  --grp10:#607d8b; --grp11:#26a69a;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
@@ -32,13 +38,26 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 @media (max-width:720px){.columns{grid-template-columns:1fr}}
 
 /* accordion */
-.group{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
-.group summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#f7fbfb,#ffffff);border-bottom:1px solid var(--line)}
+.group{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;transition:box-shadow .2s}
+.group:hover{box-shadow:0 10px 24px rgba(0,0,0,.06)}
+.group summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);position:relative}
 .group summary::-webkit-details-marker{display:none}
 .group .gtitle{font-weight:800;color:#0a4a46}
-.group .gcount{margin-inline-start:auto;background:#ecf8f6;border:1px solid #cfeae6;color:#0a5a56;border-radius:999px;padding:2px 8px;font-size:12px}
-.group .wrap{padding:10px}
+.group .gcount{margin-inline-start:auto;background:#fff;border:1px solid rgba(255,255,255,.6);color:#fff;border-radius:999px;padding:2px 8px;font-size:12px;opacity:.9}
+.group .wrap{padding:10px;background:#fff}
 .group .empty{padding:12px;border:1px dashed var(--line);border-radius:10px;background:#f9fcfc;color:#6b7;font-size:12.5px}
+/* رؤوس ملونة جذابة لكل مجموعة */
+.group[data-i="1"] summary{background:linear-gradient(90deg,var(--grp1),#55d6c2);color:#fff}
+.group[data-i="2"] summary{background:linear-gradient(90deg,var(--grp2),#66a8ff);color:#fff}
+.group[data-i="3"] summary{background:linear-gradient(90deg,var(--grp3),#b39bff);color:#fff}
+.group[data-i="4"] summary{background:linear-gradient(90deg,var(--grp4),#ffb199);color:#fff}
+.group[data-i="5"] summary{background:linear-gradient(90deg,var(--grp5),#6bd5e1);color:#fff}
+.group[data-i="6"] summary{background:linear-gradient(90deg,var(--grp6),#ffcc66);color:#fff}
+.group[data-i="7"] summary{background:linear-gradient(90deg,var(--grp7),#9be1a1);color:#fff}
+.group[data-i="8"] summary{background:linear-gradient(90deg,var(--grp8),#d1a1e4);color:#fff}
+.group[data-i="9"] summary{background:linear-gradient(90deg,var(--grp9),#b59a8c);color:#fff}
+.group[data-i="10"] summary{background:linear-gradient(90deg,var(--grp10),#b0c8d0);color:#fff}
+.group[data-i="11"] summary{background:linear-gradient(90deg,var(--grp11),#7de1d7);color:#fff}
 
 /* doc row */
 .row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:8px;margin:6px 0;background:#ffffffc7;transition:transform .12s, box-shadow .12s}
@@ -95,7 +114,7 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
     <div class="columns" id="docsCols"><!-- يُولّد تلقائيًا --></div>
   </div>
 
-  <!-- المنصات التعليمية (بدون تغيير) -->
+  <!-- المنصات التعليمية -->
   <div class="section" id="platforms">
     <h2>المنصات التعليمية</h2>
     <div class="cards">
@@ -153,13 +172,13 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
     </div>
   </div>
 
-  <!-- تذييل مختصر بالاسم فقط -->
+  <!-- تذييل -->
   <div class="section" style="text-align:center;background:linear-gradient(90deg,#0e6462,#2f7f79);color:#e8fffb">
-    <b>مدير المدرسة:</b> فهد حامد الزهراني
+    <b>تجميع وتنفيذ:</b> فهد حامد الزهراني
   </div>
 </div>
 
-<!-- شريط الأيقونات السفلي (كما كان) -->
+<!-- شريط الأيقونات السفلي -->
 <nav class="bottom-bar" aria-label="شريط أدوات">
   <div class="bottom-inner">
     <button class="bottom-btn" data-tip="الأدلّة" data-target="#docs" aria-label="الأدلّة"><span class="ico">🏛️</span></button>
@@ -194,7 +213,7 @@ const GROUP_TITLES = {
   forms:"نماذج وزيارات"
 };
 
-/* البيانات (كما في نسختك المحدّثة) */
+/* البيانات */
 const DOCS_DATA = [
   {group:"grading", title:"لائحة تقويم الطالب 2025م", desc:"سياسة التقييم وأدوات القياس.", kind:"لائحة", url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view"},
   {group:"grading", title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م", desc:"آليات تطبيق اللائحة داخل المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view"},
@@ -260,7 +279,9 @@ function renderDocs(){
 
   ORDER.forEach((key,i)=>{
     const items=perGroup.get(key)||[];
-    const det=document.createElement('details'); det.className='group'; if(i<3) det.open=true;
+    const det=document.createElement('details'); det.className='group'; 
+    det.setAttribute('data-i', String(i+1)); // لون العنوان
+    // لا نفتح أي قسم افتراضيًا
     det.innerHTML=`<summary><span>📁</span><span class="gtitle">${GROUP_TITLES[key]||'قسم'}</span><span class="gcount">${items.length}</span></summary><div class="wrap"></div>`;
     const wrap=det.querySelector('.wrap');
 
