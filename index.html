@@ -10,39 +10,28 @@
   --ink:#0b3f43; --muted:#5d737a; --bg:#f5f8f8; --paper:#ffffff; --line:#e3ecec;
   --brand:#0b7e88; --accent:#0a6e5f; --shadow:0 14px 28px rgba(0,0,0,.07)
 }
-*{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
 a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 
 /* container */
 .container{max-width:1160px;margin-inline:auto;padding:0 14px 92px}
 .container::before{content:"";display:block;height:8px;margin:12px 0;background:linear-gradient(90deg,#dff5f1,#f0fbff,#dff5f1);border-radius:999px}
 
-/* appbar */
-.appbar{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#ffffff,rgba(255,255,255,.96));border-bottom:1px solid var(--line);backdrop-filter:saturate(.9) blur(6px)}
-.brand{display:flex;align-items:center;gap:12px;padding:12px}
-.brand .logo{width:64px;height:64px;border-radius:16px;border:1px solid var(--line);display:grid;place-items:center;background:#fff}
-.brand .logo span{font-size:38px}
-.brand .titles b{font-size:18px} .brand .titles span{color:var(--muted);font-size:13px}
-
-/* hero */
-.hero{width:100%;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);background:linear-gradient(120deg,#ebfbf8,#ffffff)}
-.hero-inner{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:center;padding:18px}
-@media (max-width:560px){.hero-inner{grid-template-columns:110px 1fr}}
-.hero .hero-logo{width:100%;aspect-ratio:1/1;background:#fff;border:1px solid var(--line);border-radius:18px;display:grid;place-items:center}
-.hero .hero-logo span{font-size:72px}
-.hero h1{margin:0;font-size:clamp(20px,3.4vw,26px);color:#0a4a46}
-.hero p{margin:.4rem 0 0;color:#5d737a;font-size:14px}
+/* masthead image */
+.masthead{display:flex;justify-content:center;align-items:center;padding:20px 0 8px}
+.masthead img{width:clamp(420px,60vw,980px);height:auto;display:block;object-fit:contain;filter:drop-shadow(0 8px 22px rgba(0,0,0,.06));border-radius:10px}
 
 /* sections */
 .section{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 10px 24px rgba(0,0,0,.05)}
 .section h2{margin:0 0 10px;font-size:18px;color:#0a4a46;display:flex;align-items:center;gap:10px}
 
-/* grid columns */
+/* columns */
 .columns{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
 @media (max-width:1200px){.columns{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:720px){.columns{grid-template-columns:1fr}}
 
-/* accordion group */
+/* accordion */
 .group{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
 .group summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#f7fbfb,#ffffff);border-bottom:1px solid var(--line)}
 .group summary::-webkit-details-marker{display:none}
@@ -58,22 +47,28 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 .desc{font-size:12.5px;color:#5d737a}
 .badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
 .badge{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:#f5fbfb;color:#0a5a56}
+.badge.warn{background:#fff3f3;border-color:#ffd1d1;color:#b60000}
 .actions{display:flex;gap:8px}
 .btn{border:1px solid var(--line);background:#fff;padding:7px 10px;border-radius:10px;font-weight:700;font-size:12.5px}
 .btn.open{color:#0a4a46} .btn.download{color:#0a6e5f;border-color:#cfeadf}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
-/* simple cards */
+/* cards */
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 @media (max-width:1100px){.cards{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:760px){.cards{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:520px){.cards{grid-template-columns:1fr}}
-.card{background:linear-gradient(180deg,#ffffff,#f8fcfc);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr;gap:6px;min-height:86px}
+.card{background:linear-gradient(180deg,#ffffff,#f8fcfc);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr;gap:6px;min-height:86px;position:relative}
 .card .title{font-size:15px;font-weight:800;color:#064a45}
 .card .desc{font-size:13px;color:#5d737a}
 
-/* locked card */
-.card.locked{position:relative;opacity:.85;cursor:not-allowed}
-.card.locked::after{content:"خاص";position:absolute;top:8px;inset-inline-end:8px;background:#b41d3a;color:#fff;font-size:11px;padding:3px 8px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.18)}
+/* locked ribbon "خاص" */
+.card.locked::after{
+  content:"خاص";
+  position:absolute; top:10px; inset-inline-start:10px;
+  background:#b41d3a; color:#fff; font-size:12px; padding:4px 10px;
+  border-radius:999px; box-shadow:0 4px 10px rgba(0,0,0,.18)
+}
 .card.locked .ico{filter:grayscale(1)}
 
 /* bottom bar */
@@ -88,36 +83,19 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 </head>
 <body>
 
-<!-- appbar -->
-<div class="appbar">
-  <div class="brand">
-    <div class="logo" aria-hidden="true"><span>📚</span></div>
-    <div class="titles">
-      <b>منصة التنظيم المدرسي والموارد التعليمية</b>
-      <span>بوابة تربوية تنظِّم الوصول إلى الأدلة واللوائح والروابط في واجهة موحّدة</span>
-    </div>
-  </div>
+<!-- الهيدر بالصورة -->
+<div class="masthead" aria-label="هوية الجهة">
+  <img src="logo2.png" alt="هوية وزارة التعليم">
 </div>
 
 <div class="container">
-  <!-- hero -->
-  <section class="hero" aria-label="هوية المنصة">
-    <div class="hero-inner">
-      <div class="hero-logo" aria-hidden="true"><span>🧭</span></div>
-      <div>
-        <h1>منصة التنظيم المدرسي والموارد التعليمية</h1>
-        <p>دليل مرجعي سريع يسهّل الوصول الموثوق إلى الوثائق التعليمية والتنظيمية.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- الأدلّة والأنظمة -->
   <div class="section" id="docs">
     <h2>الأدلّة والأنظمة</h2>
     <div class="columns" id="docsCols"><!-- يُولّد تلقائيًا --></div>
   </div>
 
-  <!-- المنصات التعليمية -->
+  <!-- المنصات التعليمية (بدون تغيير) -->
   <div class="section" id="platforms">
     <h2>المنصات التعليمية</h2>
     <div class="cards">
@@ -147,35 +125,41 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
       *ملاحظة: يتم حاليًّا تجميع جميع السجلات والملفات التي تخدم قائد المدرسة، وسيُتاح الوصول إليها تباعًا بإذن الله.*
     </p>
     <div class="cards">
-      <a class="card" href="https://fhz545-hub.github.io/teachervisit/" target="_blank" rel="noopener" style="text-align:center">
-        <div class="ico" style="font-size:28px">🧩</div>
-        <div class="title" style="margin-top:6px">استمارة دعم وتطوير الهيئة التعليمية</div>
-        <div class="desc">توثيق الزيارات ومعالجة الفجوات.</div>
+      <!-- خاص: منصة التحليل والتحسين المدرسي (بديل الجدول) -->
+      <a class="card locked" href="https://fhz545-hub.github.io/Analysis/" target="_blank" rel="noopener" style="text-align:center">
+        <div class="ico" style="font-size:28px">📈</div>
+        <div class="title" style="margin-top:6px">منصة التحليل والتحسين المدرسي</div>
+        <div class="desc">لوحات تحليلية وأدوات تحسين — وصول خاص.</div>
       </a>
-      <div class="card locked" style="text-align:center">
-        <div class="ico" style="font-size:28px">🔒</div>
-        <div class="title" style="margin-top:6px">الشؤون الإدارية والمتابعة</div>
-        <div class="desc">محتوى إداري خاص — غير متاح للعرض العام.</div>
-      </div>
+
       <a class="card" href="https://fhz545-hub.github.io/taqyeem/" target="_blank" rel="noopener" style="text-align:center">
         <div class="ico" style="font-size:28px">📊</div>
         <div class="title" style="margin-top:6px">تقييم الأداء الوظيفي</div>
         <div class="desc">تخطيط ومراجعة وتقييم.</div>
       </a>
+
+      <!-- خاص: الشؤون الإدارية والمتابعة -->
       <div class="card locked" style="text-align:center">
         <div class="ico" style="font-size:28px">🔒</div>
-        <div class="title" style="margin-top:6px">جدول المدرسة اللحظي</div>
-        <div class="desc">معلومات تشغيلية لحظية — وصول خاص.</div>
+        <div class="title" style="margin-top:6px">الشؤون الإدارية والمتابعة</div>
+        <div class="desc">محتوى إداري خاص — غير متاح للعرض العام.</div>
       </div>
+
+      <a class="card" href="https://fhz545-hub.github.io/teachervisit/" target="_blank" rel="noopener" style="text-align:center">
+        <div class="ico" style="font-size:28px">🧩</div>
+        <div class="title" style="margin-top:6px">استمارة دعم وتطوير الهيئة التعليمية</div>
+        <div class="desc">توثيق الزيارات ومعالجة الفجوات.</div>
+      </a>
     </div>
   </div>
 
+  <!-- تذييل مختصر بالاسم فقط -->
   <div class="section" style="text-align:center;background:linear-gradient(90deg,#0e6462,#2f7f79);color:#e8fffb">
-    <b>إعداد وتجميع:</b> فهد حامد الزهراني
+    <b>مدير المدرسة:</b> فهد حامد الزهراني
   </div>
 </div>
 
-<!-- bottom bar -->
+<!-- شريط الأيقونات السفلي (كما كان) -->
 <nav class="bottom-bar" aria-label="شريط أدوات">
   <div class="bottom-inner">
     <button class="bottom-btn" data-tip="الأدلّة" data-target="#docs" aria-label="الأدلّة"><span class="ico">🏛️</span></button>
@@ -195,7 +179,7 @@ document.querySelectorAll('.bottom-btn').forEach(btn=>{
   });
 });
 
-/* ===== عناوين الأقسام ===== */
+/* عناوين الأقسام */
 const GROUP_TITLES = {
   grading:"التقويم والدرجات",
   exams:"الاختبارات",
@@ -207,137 +191,98 @@ const GROUP_TITLES = {
   staff:"شاغلو الوظائف التعليمية",
   platformsOps:"منصات التشغيل والمعاملات",
   uniform:"المظهر والزي",
-  forms:"نماذج وزيارات",
-  safety:"السلامة والأمن المدرسي",
-  partnerships:"الشراكات المجتمعية",
-  kg:"رياض الأطفال"
+  forms:"نماذج وزيارات"
 };
 
-/* ===== البيانات (مُنقّحة + جديدة من رسالتك) ===== */
+/* البيانات (كما في نسختك المحدّثة) */
 const DOCS_DATA = [
-  /* موجودة سابقًا */
-  {group:"grading", title:"لائحة تقويم الطالب 2025م", desc:"سياسة التقييم وأدوات القياس.", kind:"لائحة", url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view?usp=sharing"},
+  {group:"grading", title:"لائحة تقويم الطالب 2025م", desc:"سياسة التقييم وأدوات القياس.", kind:"لائحة", url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view"},
   {group:"grading", title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م", desc:"آليات تطبيق اللائحة داخل المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view"},
-  {group:"grading", title:"المذكرة التفسيرية للائحة التقويم", desc:"تفسير المواد وتطبيقاتها.", kind:"مذكرة", url:"https://drive.google.com/file/d/16cRGcxRsx3EyFlAl5lsmVp1NkiED80yX/view?usp=drivesdk"},
-  {group:"grading", title:"توزيع درجات الطلاب 2025م", desc:"نِسَب عناصر التقويم.", kind:"دليل", url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view?usp=sharing"},
+  {group:"grading", title:"توزيع درجات الطلاب 2025م", desc:"نِسَب عناصر التقويم.", kind:"دليل", url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view"},
 
-  {group:"exams", title:"دليل الاختبارات 2025م", desc:"أسس تنفيذ الاختبارات وتنظيمها.", kind:"دليل", url:"https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view?usp=sharing"},
-  {group:"exams", title:"أنظمة وإجراءات الاختبارات", desc:"تنظيم الاختبارات وضبطها.", kind:"دليل", url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view?usp=drivesdk"},
+  {group:"exams", title:"دليل الاختبارات 2025م", desc:"أسس تنفيذ الاختبارات وتنظيمها.", kind:"دليل", url:"https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view"},
 
-  {group:"attendance", title:"دليل المستخدم لتطبيق حضوري (الموظفين)", desc:"تسجيل الحضور والانصراف.", kind:"دليل", url:"https://drive.google.com/file/d/15l5lyrsrmzTDqrgNTCu9s0BnkUUA3266/view?usp=drivesdk"},
-  {group:"attendance", title:"لوحة تحكم حضوري (مدير)", desc:"إدارة حضور منسوبي المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/15jjMYR9Sk027nLMHTew7D-aZ8w3k70wn/view?usp=drivesdk"},
+  {group:"attendance", title:"دليل المستخدم لتطبيق حضوري (الموظفين)", desc:"تسجيل الحضور والانصراف.", kind:"دليل", url:"https://www.moe.gov.sa/ar/aboutus/hr/Documents/huduri-user-manual.pdf"},
+  {group:"attendance", title:"لوحة تحكم حضوري (مدير)", desc:"إدارة حضور منسوبي المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1BC6s9RyFiImAWYcELrwZyb9-WvhOmFPa/view"},
 
-  {group:"facilities", title:"الدليل الإرشادي لإدارة وتشغيل المرافق", desc:"تشغيل مرافق المدرسة بكفاءة.", kind:"دليل", url:"https://drive.google.com/file/d/16GvGTt4Tv32Blq_IB5WMPV6wxWKuHBtK/view?usp=drivesdk"},
-  {group:"facilities", title:"دليل خدمة الجدول المدرسي 2025م", desc:"إعداد وإدارة الجداول إلكترونيًا.", kind:"دليل", url:"https://drive.google.com/file/d/1XAMG04koxiH2pd8jfVwgFTYKvGX_JqHf/view?usp=sharing"},
+  {group:"facilities", title:"الدليل الإرشادي لإدارة وتشغيل المرافق", desc:"تشغيل مرافق المدرسة بكفاءة.", kind:"دليل", url:"https://drive.google.com/file/d/1uuz81m2i23EBpmmSuWUnqHhySKv_5Rpn/view"},
+  {group:"facilities", title:"دليل خدمة الجدول المدرسي 2025م", desc:"إعداد وإدارة الجداول إلكترونيًا.", kind:"دليل", url:"https://drive.google.com/file/d/1XAMG04koxiH2pd8jfVwgFTYKvGX_JqHf/view"},
+  {group:"facilities", title:"دليل إجراءات عمل مدارس التعليم العام", desc:"أطر الإجراءات التشغيلية اليومية.", kind:"دليل", url:"https://drive.google.com/file/d/15OFadSAX9fxHcYknN2pb0RDSOu4EBOM8/view"},
 
-  {group:"quality", title:"الدليل الاسترشادي لمشرف دعم التميز", desc:"تمكين المشرف من دعم التميز والجودة.", kind:"دليل", url:"https://drive.google.com/file/d/17l_qlhdWdUBRWEbDcFKT0iCkUh2gifu4/view?usp=sharing"},
+  {group:"quality", title:"الدليل الاسترشادي لمشرف دعم التميز", desc:"تمكين المشرف من دعم التميز والجودة.", kind:"دليل", url:"https://drive.google.com/file/d/17l_qlhdWdUBRWEbDcFKT0iCkUh2gifu4/view"},
+  {group:"quality", title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا)", desc:"إطار التحسين المستمر.", kind:"دليل", url:"https://drive.google.com/file/d/1DXr6D6B57noKsxmb35WPcqd9rQK9IVfk/view"},
+  {group:"quality", title:"خطة التحسين المدرسية", desc:"نمذجة خطة التحسين ومتابعتها.", kind:"خطة", url:"https://drive.google.com/file/d/1Aes1VOyU8Vkzf94JgC0o7mmxqWUw-e5W/view"},
 
   {group:"conduct", title:"قواعد السلوك والمواظبة 1447هـ", desc:"حقوق الطالب وإجراءات الانضباط.", kind:"قواعد", url:"https://drive.google.com/file/d/1RYIYPFlAcT9Ya-RnPw3bnpQASVQIz0FX/view"},
-  {group:"conduct", title:"دليل السلوك المهني لموظفي وزارة التعليم 2025", desc:"معايير السلوك المهني.", kind:"دليل", url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view?usp=sharing"},
+  {group:"conduct", title:"دليل السلوك المهني لموظفي وزارة التعليم 2025", desc:"معايير السلوك المهني.", kind:"دليل", url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view"},
+  {group:"conduct", title:"مدونة السلوك الوظيفي وأخلاقيات الوظيفة العامة", desc:"قواعد السلوك الوظيفي في القطاع الحكومي.", kind:"مدونة", url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view?usp=sharing"},
 
-  {group:"policies", title:"وثيقة سياسة التعليم بالمملكة", desc:"مرتكزات وسياسة التعليم.", kind:"وثيقة", url:"https://drive.google.com/file/d/14mLvyh5SaGFSis9P15dBm9fk4857rQF2/view?usp=drivesdk"},
-  {group:"policies", title:"نظام الانضباط الوظيفي", desc:"أحكام الانضباط في بيئة العمل.", kind:"نظام", url:"https://drive.google.com/file/d/153qd1HGE5B3N7bxYGxG9mUCYKqwh_Srd/view?usp=drivesdk"},
-
-  {group:"staff", title:"القواعد التنظيمية لشاغلي الوظائف التعليمية", desc:"الصلاحيات والواجبات المهنية.", kind:"قواعد", url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view?usp=drivesdk"},
-  {group:"staff", title:"صلاحيات قائد المدرسة", desc:"حدود ومسؤوليات قائد المدرسة.", kind:"صلاحيات", url:"https://drive.google.com/file/d/17LYzCksGBqvzgS_8iedKaF1zYBBxeqGy/view?usp=drivesdk"},
-
-  {group:"platformsOps", title:"الدليل المبسّط لنظام نور", desc:"خطوات سريعة في نور.", kind:"دليل", url:"https://drive.google.com/file/d/16rTZA76BkmvPeYL__3coIObOzSCmbXVH/view?usp=drivesdk"},
-  {group:"platformsOps", title:"عمليات القبول في المدارس", desc:"إجراءات القبول والتسجيل.", kind:"دليل", url:"https://drive.google.com/file/d/1648GyxMfLWqBQSWRsS8uW-9QubH6KgvH/view?usp=drivesdk"},
-  {group:"platformsOps", title:"دليل الخطط الدراسية", desc:"بناء الجداول وفق الخطط.", kind:"دليل", url:"https://drive.google.com/file/d/16C8NyJLqFqbfZdDdRBNSX6cn_EDZ6d4q/view?usp=drivesdk"},
-  {group:"platformsOps", title:"دليل العمل التطوعي", desc:"تنظيم مشاركة الطلاب في التطوع.", kind:"دليل", url:"https://drive.google.com/file/d/1MBrdcVABkZajfh97JS1Csv7juRwuvsM9/view?usp=sharing"},
-
-  {group:"uniform", title:"دليل الزي المدرسي والرياضي لطلبة التعليم العام", desc:"المواصفات المعتمدة للزي.", kind:"دليل", url:"https://drive.google.com/file/d/1dJaj5cH6sUOpUh2shay36xH7FctVxZXh/view?usp=sharing"},
-
-  {group:"forms", title:"استمارة الزيارة الفني لمشرف الإدارة المدرسية", desc:"معايير ومؤشرات وتوصيات.", kind:"نموذج", url:"https://drive.google.com/file/d/1Q2SnbnnteJCIgyz8WZCESV01Jk_3rPMh/view?usp=sharing"},
-
-  /* ==== مضاف من رسالتك ==== */
-
-  // شاغلو الوظائف التعليمية
-  {group:"staff", title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية", desc:"خطوات عملية لتقويم الأداء الوظيفي.", kind:"دليل", url:"https://drive.google.com/file/d/16KRyOlQUTD0TS4449L-T-rBluiYJ5-FO/view"},
-  {group:"staff", title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم", desc:"منهجية التخطيط والتمكين الوظيفي.", kind:"دليل", url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view"},
-  {group:"forms", title:"نماذج تقييم أداء شاغلي الوظائف التعليمية", desc:"نماذج جاهزة للتقويم.", kind:"نماذج", url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdkT0H5vMJvSzYn7/view"},
-  {group:"forms", title:"نموذج الحصص الأسبوعية في الفصلين الدراسيين", desc:"نموذج تنظيم الحصص.", kind:"نموذج", url:"https://drive.google.com/file/d/157rFurVpjSpxV6o7pRfMTZInLGMv5rjx/view"},
-  {group:"staff", title:"إسناد تدريس المواد التي ليس لها تخصص", desc:"ضوابط الإسناد الاستثنائي.", kind:"تعليمات", url:"https://drive.google.com/file/d/153qd1HGE5B3N7bxYGxG9mUCYKqwh_Srd/view"},
-
-  // رياض الأطفال
-  {group:"kg", title:"الدليل التنظيمي للحضانة ورياض الأطفال (1438–1439-1)", desc:"مرجع إدارة وتشغيل رياض الأطفال.", kind:"دليل", url:"https://drive.google.com/file/d/1BzZtwzOQtO45A5A3SCq5j6XqbwEZOkDT/view"},
-
-  // السلوك والمهني والسياسات
-  {group:"conduct", title:"مدونة السلوك الوظيفي وأخلاقيات الوظيفة العامة", desc:"قواعد السلوك المهني في القطاع الحكومي.", kind:"مدونة", url:"https://drive.google.com/file/d/16yj4HIO14Dqw4pYJqZKkd1D8Z-zNdCQi/view"},
-  {group:"platformsOps", title:"دليل المستخدم: تهيئة الموظف الجديد على نظام فارس", desc:"خطوات التهيئة الأولى بنظام فارس.", kind:"دليل", url:"https://drive.google.com/file/d/15idPnrerHN3eJT7Pu_xePZduYjZKL7hd/view"},
-  {group:"conduct", title:"دليل السلوك الرقمي لمنصة مدرستي", desc:"ضوابط التعلّم الآمن والمسؤول رقميًا.", kind:"دليل", url:"https://drive.google.com/file/d/19ym1Uih9GbXyXhDRcpP1qlk-kbgGfjQ_/view"},
-  {group:"conduct", title:"تعزيز السلوك الإيجابي", desc:"ممارسات عملية لتعزيز الانضباط الإيجابي.", kind:"دليل", url:"https://drive.google.com/file/d/1EA5oYQ4PtSxM_rLjbgm9c4iQJATDTEKq/view"},
-  {group:"policies", title:"القواعد التنظيمية لفصول ومدارس الموهوبين", desc:"تنظيم البرامج والمسارات للموهوبين.", kind:"قواعد", url:"https://drive.google.com/file/d/15g8C3aVaStWcftLa4toBJQtP-2wP113O/view"},
+  {group:"policies", title:"القواعد التنظيمية لفصول ومدارس الموهوبين", desc:"تنظيم البرامج والمسارات.", kind:"قواعد", url:"https://drive.google.com/file/d/15g8C3aVaStWcftLa4toBJQtP-2wP113O/view"},
   {group:"policies", title:"ضوابط تسريع انتقال الطلبة الموهوبين 1447هـ", desc:"آليات وإجراءات التسريع الأكاديمي.", kind:"ضوابط", url:"https://drive.google.com/file/d/15ekZaGwDQY2PJSk7yyAbctOvx0gZghsw/view"},
+  {group:"policies", title:"نظام الانضباط الوظيفي", desc:"أحكام الانضباط في بيئة العمل.", kind:"نظام", url:"https://www.hrsd.gov.sa/sites/default/files/2022-10/08102022.pdf"},
   {group:"policies", title:"دليل إرشادي للحفاظ على الوثائق والاتصالات", desc:"حفظ الملفات والمراسلات وفق الضوابط.", kind:"دليل", url:"https://drive.google.com/file/d/1T4DbU8mJDQyC1c9yvvjeKoC8MKZBr420/view"},
 
-  // منصات التشغيل والمعاملات
+  {group:"staff", title:"القواعد التنظيمية لشاغلي الوظائف التعليمية", desc:"الصلاحيات والواجبات المهنية.", kind:"قواعد", url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view"},
+  {group:"staff", title:"صلاحيات قائد المدرسة", desc:"حدود ومسؤوليات قائد المدرسة.", kind:"صلاحيات", url:"https://drive.google.com/file/d/17LYzCksGBqvzgS_8iedKaF1zYBBxeqGy/view"},
+  {group:"staff", title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية", desc:"خطوات عملية لتقويم الأداء.", kind:"دليل", url:"https://drive.google.com/file/d/16KRyOlQUTD0TS4449L-T-rBluiYJ5-FO/view"},
+  {group:"staff", title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم", desc:"منهجية التخطيط والتمكين الوظيفي.", kind:"دليل", url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view"},
+
+  {group:"platformsOps", title:"الدليل المبسّط لنظام نور", desc:"خطوات سريعة في نور.", kind:"دليل", url:"https://drive.google.com/file/d/16rTZA76BkmvPeYL__3coIObOzSCmbXVH/view"},
+  {group:"platformsOps", title:"عمليات القبول في المدارس", desc:"إجراءات القبول والتسجيل.", kind:"دليل", url:"https://drive.google.com/file/d/1648GyxMfLWqBQSWRsS8uW-9QubH6KgvH/view"},
+  {group:"platformsOps", title:"دليل الخطط الدراسية", desc:"بناء الجداول وفق الخطط.", kind:"دليل", url:"https://drive.google.com/file/d/16C8NyJLqFqbfZdDdRBNSX6cn_EDZ6d4q/view"},
   {group:"platformsOps", title:"خدمة متابعة حالات الطلبة (التحصيلية/السلوكية) في نظام نور", desc:"متابعة الحالات عبر النظام.", kind:"دليل", url:"https://drive.google.com/file/d/15t7S2de_uzWuQvjQAIl60C1_Nkf_DhHS/view"},
-  {group:"platformsOps", title:"عمليات القبول في المدارس", desc:"نسخة أخرى للرابط ذاته — تُزال تلقائيًا كمكرر بالعنوان.", kind:"دليل", url:"https://drive.google.com/file/d/15X2onJSDocCUqjH3krIqPt7HNoyXpneJ/view"},
 
-  // التميز والجودة / خطط
-  {group:"quality", title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا)", desc:"إطار العمل للتحسين المستمر.", kind:"دليل", url:"https://drive.google.com/file/d/1DXr6D6B57noKsxmb35WPcqd9rQK9IVfk/view"},
-  {group:"quality", title:"خطة التحسين المدرسية", desc:"نمذجة خطة التحسين ومتابعتها.", kind:"خطة", url:"https://drive.google.com/file/d/1Aes1VOyU8Vkzf94JgC0o7mmxqWUw-e5W/view"},
-  {group:"facilities", title:"إضاءات حول آلية تنفيذ خطط الأنشطة الطلابية", desc:"موجهات لتفعيل الأنشطة المدرسية.", kind:"إضاءات", url:"https://drive.google.com/file/d/1sfjuD1oWpum1_5UsRrjNSLg63tH6q7eT/view"},
+  {group:"uniform", title:"دليل الزي المدرسي والرياضي لطلبة التعليم العام", desc:"المواصفات المعتمدة للزي.", kind:"دليل", url:"https://drive.google.com/file/d/1dJaj5cH6sUOpUh2shay36xH7FctVxZXh/view"},
 
-  // السياسات والأنظمة العامة (مكرر عنوان — يُبقي واحدًا)
-  {group:"policies", title:"الدليل التنظيمي لمدارس التعليم العام", desc:"مهام وصلاحيات وهيكل المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1SHal2Aj58oJIgswXw6vHRpyJQz3WK_ah/view"},
-
-  // إجراءات عمل مدارس التعليم العام (رابطان -> عنوان موحّد لإزالة التكرار)
-  {group:"facilities", title:"دليل إجراءات عمل مدارس التعليم العام", desc:"أطر الإجراءات التشغيلية اليومية.", kind:"دليل", url:"https://drive.google.com/file/d/15OFadSAX9fxHcYknN2pb0RDSOu4EBOM8/view"},
-  {group:"facilities", title:"دليل إجراءات عمل مدارس التعليم العام", desc:"رابط آخر لنفس الدليل — يزال تلقائيًا.", kind:"دليل", url:"https://drive.google.com/file/d/1v0IWFXqyPeBNoq1WUaYu9_nissamYuLC/view"}
+  {group:"forms", title:"استمارة الزيارة الفني لمشرف الإدارة المدرسية", desc:"معايير ومؤشرات وتوصيات.", kind:"نموذج", url:"https://drive.google.com/file/d/1Q2SnbnnteJCIgyz8WZCESV01Jk_3rPMh/view"}
 ];
 
-/* ===== العرض مع منع التكرار (بالاسم + معرّف Drive) ===== */
-const ORDER = ["grading","exams","attendance","facilities","quality","conduct","policies","staff","platformsOps","uniform","forms","safety","partnerships","kg"];
+const ORDER = ["grading","exams","attendance","facilities","quality","conduct","policies","staff","platformsOps","uniform","forms"];
 
 function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m?m[1]:"";}
 function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?export=download&id=${id}`:u;}
+function isValidUrl(u){return /^https:\/\/.+/i.test(u||"");}
 function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
 
 function renderDocs(){
   const byId=new Set(), byTitle=new Set();
   const perGroup=new Map(ORDER.map(k=>[k,[]]));
-
   DOCS_DATA.forEach(d=>{
-    const id=driveId(d.url); const t=String(d.title||"").trim().toLowerCase();
+    const id=driveId(d.url); const t=(d.title||"").trim().toLowerCase();
     if(id && byId.has(id)) return;
     if(t && byTitle.has(t)) return;
     if(id) byId.add(id); if(t) byTitle.add(t);
-    if(!perGroup.has(d.group)) perGroup.set(d.group,[]);
-    perGroup.get(d.group).push(d);
+    perGroup.get(d.group)?.push(d);
   });
 
   const host=document.getElementById('docsCols'); host.innerHTML='';
   const columns=[document.createElement('div'),document.createElement('div'),document.createElement('div')];
-  columns.forEach(c=>c.className='col');
 
   ORDER.forEach((key,i)=>{
     const items=perGroup.get(key)||[];
     const det=document.createElement('details'); det.className='group'; if(i<3) det.open=true;
-    det.innerHTML=`
-      <summary><span>📁</span>
-        <span class="gtitle">${GROUP_TITLES[key]||'قسم'}</span>
-        <span class="gcount">${items.length}</span>
-      </summary>
-      <div class="wrap"></div>`;
+    det.innerHTML=`<summary><span>📁</span><span class="gtitle">${GROUP_TITLES[key]||'قسم'}</span><span class="gcount">${items.length}</span></summary><div class="wrap"></div>`;
     const wrap=det.querySelector('.wrap');
 
     if(items.length===0){
       wrap.innerHTML=`<div class="empty">لا توجد روابط مضافة هنا بعد.</div>`;
     }else{
       items.forEach(d=>{
+        const ok=isValidUrl(d.url);
         const dl=toDirect(d.url);
         wrap.insertAdjacentHTML('beforeend',`
           <div class="row">
             <div>
               <div class="title">${esc(d.title)}</div>
               <div class="desc">${esc(d.desc||'')}</div>
-              <div class="badges"><span class="badge">${esc(d.kind||'دليل')}</span></div>
+              <div class="badges">
+                <span class="badge">${esc(d.kind||'دليل')}</span>
+                ${ok?"" : '<span class="badge warn">⚠️ بحاجة لتحديث الرابط</span>'}
+              </div>
             </div>
             <div class="actions">
-              <a class="btn open" target="_blank" rel="noopener" href="${d.url}">فتح</a>
-              <a class="btn download" href="${dl}">تحميل</a>
+              <a class="btn open" ${ok?'target="_blank" rel="noopener" href="'+d.url+'"' : 'disabled'}>فتح</a>
+              <a class="btn download" ${ok?'href="'+dl+'"' : 'disabled'}>تحميل</a>
             </div>
           </div>
         `);
@@ -346,7 +291,7 @@ function renderDocs(){
     columns[i%3].appendChild(det);
   });
 
-  columns.forEach(c=>host.appendChild(c));
+  columns.forEach(c=>{c.className='col'; host.appendChild(c);});
 }
 renderDocs();
 </script>
