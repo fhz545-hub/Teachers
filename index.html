@@ -7,33 +7,67 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --heroW:2048; --heroH:478; /* نسبة الهيدر لمنع التشوّه */
-  --ink:#0e3134; --muted:#556872; --line:#e1ecec;
-  --paper:#fff; --bg:#f3f7f7; --accent:#0a8a7a;
-  --shine:linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 45%, rgba(255,255,255,0) 60%);
+  /* لوحة ألوان تعليمية مستوحاة من MoE */
+  --moe-ink:#0b3f43; --moe-main:#0b7e88; --moe-emerald:#0aa58f;
+  --bg:#f4f7f7; --paper:#ffffff; --line:#e3ecec; --muted:#5d737a; --ink:#0e3134;
+  --brand:#0a8a7a; --brand-2:#0f9b8e; --chip:#eef7f6; --chip-b:#cfeae6;
+  --shadow:0 14px 28px rgba(0,0,0,.07);
+  --radius:16px; --radius-lg:22px; --radius-sm:12px;
+  --pad:14px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal",system-ui,sans-serif;}
 a{color:inherit;text-decoration:none}
-.container{max-width:calc(var(--heroW) * 1px);margin-inline:auto;padding:0 12px 14px}
-.container::before{content:"";display:block;height:10px;margin:10px 0 8px;background:linear-gradient(90deg,#dff5f1,#f0fbff,#dff5f1);border-radius:10px;filter:brightness(1.04) saturate(1.05)}
-.hero{width:100%;aspect-ratio:var(--heroW)/var(--heroH);position:relative;overflow:hidden;border-radius:12px;box-shadow:0 14px 28px rgba(0,0,0,.06)}
-.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none}
-.section{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 28px rgba(0,0,0,.04);position:relative;overflow:hidden}
-.section::after{content:"";position:absolute;inset:-40% -60%;background:radial-gradient(600px 120px at 0% 0%, rgba(255,255,255,.7), transparent 60%);transform:rotate(3deg);pointer-events:none;mix-blend-mode:soft-light}
-.section h2{margin:0 0 10px;font-size:clamp(18px,2.1vw,21px);color:#0a4a46;display:flex;align-items:center;gap:10px}
+button{font-family:inherit}
+
+/* ===== حاوية عامة ===== */
+.container{max-width:1080px;margin-inline:auto;padding:0 14px 18px}
+.container::before{content:"";display:block;height:8px;margin:12px 0;background:linear-gradient(90deg,#dff5f1,#f0fbff,#dff5f1);border-radius:999px;filter:brightness(1.05) saturate(1.03)}
+
+/* ===== شريط علوي ثابت (هوية) ===== */
+.appbar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,#ffffff,rgba(255,255,255,.92));backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.brand .logo{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:#fff;overflow:hidden}
+.brand .logo img{width:100%;height:100%;object-fit:contain}
+.brand .titles{display:flex;flex-direction:column;line-height:1.1}
+.brand .titles b{color:var(--moe-ink);font-size:clamp(15px,2.8vw,18px)}
+.brand .titles span{color:#3b6368;font-size:12.5px}
+
+/* تبويب أقسام + بحث */
+.navbar{display:flex;gap:8px;align-items:center;padding:0 14px 12px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:999px;font-weight:700;font-size:13px;color:#0a5a56;cursor:pointer}
+.tab.active{background:linear-gradient(90deg,#e8fbf5,#e9f6ff);border-color:var(--chip-b)}
+.nav-spacer{flex:1}
+.search{position:relative;min-width:210px;flex:1}
+.search input{width:100%;border:1px solid var(--line);background:#fbfefe;padding:10px 12px;border-radius:12px;font-size:13.5px}
+.search .hint{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);font-size:12px;color:#678}
+
+/* ===== الهيدر المرئي بطلّة الهوية (بدون تشوّه) ===== */
+.hero{width:100%;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);background:linear-gradient(120deg,#ebfbf8,#ffffff)}
+.hero-inner{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;padding:12px}
+@media (max-width:560px){.hero-inner{grid-template-columns:64px 1fr}}
+.hero .hero-logo{width:100%;aspect-ratio:1/1;background:#fff;border:1px solid var(--line);border-radius:14px;display:grid;place-items:center;overflow:hidden}
+.hero .hero-logo img{width:90%;height:90%;object-fit:contain}
+.hero h1{margin:0;font-size:clamp(18px,3.2vw,22px);color:#0a4a46}
+.hero p{margin:.25rem 0 0;color:var(--muted);font-size:13.5px}
+
+/* ===== أقسام ===== */
+.section{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:var(--pad);box-shadow:0 10px 24px rgba(0,0,0,.05);position:relative;overflow:hidden}
+.section h2{margin:0 0 10px;font-size:clamp(17px,2.3vw,20px);color:#0a4a46;display:flex;align-items:center;gap:10px}
+.section h2 .count{font-weight:700;background:#ecf8f6;border:1px solid var(--chip-b);padding:2px 8px;border-radius:999px;color:#0a5a56;font-size:12px}
+
 .row-plat-init{display:grid;gap:14px;margin:14px 0;grid-template-columns:2fr 1fr}
 @media (max-width:1100px){.row-plat-init{grid-template-columns:1fr}}
+
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
-.chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:13px;background:#f5fbfb;color:#0a5c58;cursor:pointer}
-.chip.active{background:linear-gradient(90deg,#e8fbf5,#e9f6ff);border-color:#cfeae6}
-.search{position:relative;flex:1;min-width:220px}
-.search input{width:100%;border:1px solid var(--line);background:#fbfefe;padding:10px 12px;border-radius:12px;font-size:13.5px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:13px;background:var(--chip);color:#0a5c58;cursor:pointer}
+.chip.active{background:linear-gradient(90deg,#e8fbf5,#e9f6ff);border-color:var(--chip-b)}
+
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media (max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:640px){.cards{grid-template-columns:1fr}}
 .card{background:linear-gradient(180deg,#ffffff,#f8fcfc);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;transition:transform .15s,box-shadow .2s,background .3s;position:relative;overflow:hidden}
-.card::before{content:"";position:absolute;top:-120%;inset-inline:-40%;height:220%;background:var(--shine);transform:translateX(-60%) rotate(10deg);transition:transform .6s;pointer-events:none}
+.card::before{content:"";position:absolute;top:-120%;inset-inline:-40%;height:220%;background:linear-gradient(120deg,rgba(255,255,255,0) 0%, rgba(255,255,255,.38) 45%, rgba(255,255,255,0) 60%);transform:translateX(-60%) rotate(10deg);transition:transform .6s;pointer-events:none}
 .card:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.07)}
 .card:hover::before{transform:translateX(120%) rotate(10deg)}
 .card .title{font-weight:800;color:#064a45;font-size:15px}
@@ -44,19 +78,30 @@ a{color:inherit;text-decoration:none}
 .linkcard{grid-template-columns:1fr;cursor:pointer;position:relative}
 .linkcard .desc{grid-column:auto}
 .linkcard .actions{display:none}
-.btn{border:1px solid var(--line);background:#fff;padding:7px 10px;border-radius:11px;font-weight:700;font-size:12.5px;display:inline-flex;align-items:center;gap:7px}
+.btn{border:1px solid var(--line);background:#fff;padding:7px 10px;border-radius:11px;font-weight:700;font-size:12.5px;display:inline-flex;align-items:center;gap:7px;cursor:pointer}
 .btn:hover{background:#f2faf8}
 .btn.open{color:#0a4a46}
 .btn.download{color:#0a6e5f;border-color:#cfeadf}
+
 .columns{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
 @media (max-width:1200px){.columns{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:700px){.columns{grid-template-columns:1fr}}
 .list{display:grid;grid-template-columns:1fr;gap:12px}
-.modal-back{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;place-items:center;z-index:50;padding:12px}
-.modal{width:min(880px,96vw);background:#fff;border-radius:14px;border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+
+/* ===== شريط أدوات جانبي مبتكر (سطح المكتب) + FAB للجوال ===== */
+.side-rail{position:fixed;inset-block:auto 24px;inset-inline-end:22px;display:flex;flex-direction:column;gap:10px;z-index:70}
+.rail-btn{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);cursor:pointer}
+.rail-btn:hover{transform:translateY(-2px)}
+@media (max-width:720px){.side-rail{inset-inline:auto;inset-block:auto 16px;left:50%;transform:translateX(-50%);flex-direction:row}
+  .rail-btn{width:56px;height:56px;border-radius:18px}
+}
+
+/* ===== مودالات محسّنة (Full-sheet على الجوال) ===== */
+.modal-back{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;place-items:center;z-index:80;padding:12px}
+.modal{width:min(880px,96vw);max-height:min(90vh,820px);background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.25);display:flex;flex-direction:column}
 .modal header{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
 .modal header h3{margin:0;font-size:16px}
-.modal .body{padding:12px 14px;max-height:min(70vh,720px);overflow:auto}
+.modal .body{padding:12px 14px;overflow:auto}
 .modal .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .modal label{font-size:12.5px;color:#335}
 .modal input[type=text],.modal textarea,.modal select{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-family:inherit;font-size:13.5px;background:#fbfefe}
@@ -64,25 +109,63 @@ a{color:inherit;text-decoration:none}
 .modal .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
 .modal footer{padding:10px 14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
 .kbd{background:#eef4f3;border:1px solid #d7e7e4;padding:0 6px;border-radius:6px;font-size:12px}
+@media (max-width:640px){.modal{width:100vw;height:92vh;border-radius:18px 18px 0 0;align-self:end}}
+
+/* ===== تذييل ===== */
 .footer{background:linear-gradient(90deg,#0e6462,#2f7f79);color:#e8fffb;text-align:center;padding:9px 12px;border-radius:14px;margin:16px 0;font-size:12.5px}
 .footer b{color:#fff}
-#countP{display:none}
+
+/* طباعة بسيطة وواضحة عند الحاجة */
+@media print{
+  .appbar,.side-rail,.navbar{display:none !important}
+  .container{max-width:100%;padding:0}
+  .section{break-inside:avoid}
+}
 </style>
 </head>
 <body>
 
+<!-- شريط الهوية الثابت -->
+<div class="appbar">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">
+      <img src="logo.png" alt="شعار المدرسة" onerror="this.style.display='none'">
+    </div>
+    <div class="titles">
+      <b>ثانوية اليعقوبي بالخبر</b>
+      <span>منصة الأعمال والمبادرات – هوية حديثة متوافقة مع الأجهزة</span>
+    </div>
+  </div>
+  <div class="navbar" role="tablist" aria-label="أقسام المنصة">
+    <button class="tab active" data-target="#platforms">المنصات</button>
+    <button class="tab" data-target="#initiatives">المبادرات</button>
+    <button class="tab" data-target="#docs">الأدلّة والأنظمة</button>
+    <div class="nav-spacer"></div>
+    <div class="search">
+      <input id="globalSearch" placeholder="ابحث في المنصات والأدلّة والمبادرات…" aria-label="بحث عام">
+      <span class="hint">⌕</span>
+    </div>
+  </div>
+</div>
+
 <div class="container">
-  <!-- الهيدر -->
-  <header class="hero" aria-label="هيدر المنصة">
-    <img src="logo.png" alt="منصة أعمال ومبادرات ثانوية اليعقوبي بالخبر">
-  </header>
+  <!-- هيرو هوية نظيف ومضغوط -->
+  <section class="hero" aria-label="هوية المنصة">
+    <div class="hero-inner">
+      <div class="hero-logo"><img src="logo.png" alt="شعار ثانوية اليعقوبي" onerror="this.style.display='none'"></div>
+      <div>
+        <h1>منصة أعمال ومبادرات ثانوية اليعقوبي بالخبر</h1>
+        <p>تجميعٌ ذكي لجميع الروابط والأدلّة والمبادرات مع أدوات إدارة مبسّطة (PIN: ١٤٤٧)</p>
+      </div>
+    </div>
+  </section>
 
   <!-- صف: المنصات + المبادرات -->
   <div class="row-plat-init">
     <section class="section" id="platforms">
       <h2>
         منصات ومواقع تعليمية
-        <span id="countP"></span>
+        <span id="countP" class="count" aria-live="polite"></span>
         <button id="btnEditPlatforms" class="btn" style="margin-inline-start:auto">⚙️ تحرير</button>
       </h2>
       <div class="toolbar">
@@ -90,7 +173,7 @@ a{color:inherit;text-decoration:none}
         <button class="chip" data-filter="وزارة">وزارة</button>
         <button class="chip" data-filter="تعلم">تعلم</button>
         <button class="chip" data-filter="دخول">دخول</button>
-        <div class="search"><input id="platformSearch" placeholder="ابحث باسم المنصة أو الوصف…"></div>
+        <div class="search" style="flex:1;min-width:220px"><input id="platformSearch" placeholder="ابحث باسم المنصة أو الوصف…" aria-label="بحث في المنصات"></div>
       </div>
       <div class="cards" id="platformGrid"></div>
     </section>
@@ -98,6 +181,7 @@ a{color:inherit;text-decoration:none}
     <section class="section" id="initiatives">
       <h2>
         المبادرات
+        <span id="countI" class="count"></span>
         <button id="btnEditInit" class="btn" style="margin-inline-start:auto">⚙️ تحرير</button>
       </h2>
       <div class="list" id="initList"></div>
@@ -108,12 +192,21 @@ a{color:inherit;text-decoration:none}
   <section class="section" id="docs">
     <h2>
       الأدلّة والأنظمة
+      <span id="countD" class="count"></span>
       <button id="btnManageDocs" class="btn" style="margin-inline-start:auto">⚙️ إدارة الأدلّة</button>
     </h2>
     <div class="columns" id="docsCols"></div>
   </section>
 
   <div class="footer"><b>تنفيذ وتجميع:</b> فهد حامد الزهراني</div>
+</div>
+
+<!-- شريط إجراءات جانبي مبتكر / FAB -->
+<div class="side-rail" aria-label="إجراءات سريعة">
+  <button class="rail-btn" title="إلى أعلى" id="goTop" aria-label="الرجوع للأعلى">⬆️</button>
+  <button class="rail-btn" title="تحرير المنصات" id="goPlat" aria-label="تحرير المنصات">🗂️</button>
+  <button class="rail-btn" title="تحرير المبادرات" id="goInit" aria-label="تحرير المبادرات">📝</button>
+  <button class="rail-btn" title="إدارة الأدلّة" id="goDocs" aria-label="إدارة الأدلّة">📚</button>
 </div>
 
 <!-- مودال الأدلّة -->
@@ -191,12 +284,12 @@ a{color:inherit;text-decoration:none}
 
 <script>
 /* ================= مفاتيح التخزين ================= */
-const ADMIN_PIN = "0000";
+const ADMIN_PIN = "1447";
 const KEY_DOCS = "docs_custom_v1";
 const KEY_PLAT = "platforms_custom_v1";
 const KEY_INIT = "initiatives_custom_v1";
 
-/* ================= المنصات (مُحدّثة حسب طلبك) ================= */
+/* ================= المنصات (كما زودتني + محسّنة) ================= */
 const PLATFORMS_DEFAULT = [
   {name:"الدعم الموحّد (IAM)", desc:"نظام النفاذ الموحّد لبوابات وزارة التعليم", url:"https://iam.moe.gov.sa/", tags:["وزارة","دخول"]},
   {name:"مدرستي", desc:"منصة المدرسة للتعليم الإلكتروني", url:"https://schools.madrasati.sa/", tags:["تعلم"]},
@@ -215,13 +308,12 @@ const PLATFORMS_DEFAULT = [
   {name:"المتحدث الرسمي — X", desc:"الحساب الرسمي للمتحدث باسم وزارة التعليم", url:"https://x.com/spokesp_moe", tags:["وزارة"]},
   {name:"هيئة تقويم التعليم — X", desc:"الحساب الرسمي لهيئة تقويم التعليم والتدريب", url:"https://x.com/EtecKsa", tags:["وزارة"]},
 
-  /* إدارات التعليم على X (روابط مُحدّثة) */
   {name:"تعليم الشرقية — X", desc:"الحساب الرسمي لإدارة تعليم الشرقية", url:"https://x.com/MOE_EPR", tags:["وزارة"]},
   {name:"تعليم الرياض — X", desc:"الحساب الرسمي لإدارة تعليم الرياض", url:"https://x.com/MOE_RYH", tags:["وزارة"]},
   {name:"تعليم مكة — X", desc:"الحساب الرسمي لإدارة تعليم مكة", url:"https://x.com/MOE_MHC", tags:["وزارة"]}
 ];
 
-/* ================= الأدلّة والأنظمة (آخر نسخة صحيحة) ================= */
+/* ================= الأدلّة والأنظمة ================= */
 const DOCS_DEFAULT = [
   {title:"الدليل التنظيمي لمدارس التعليم العام", kind:"دليل",
    url:"https://drive.google.com/file/d/1E604s0Wni9ht-UnfaB4ywlN55YyjW9Wj/view?usp=sharing",
@@ -267,7 +359,7 @@ const DOCS_DEFAULT = [
    desc:"نموذج توثيق الزيارة: معايير، مؤشرات، وتوصيات."}
 ];
 
-/* ===== المبادرات (ثابتة كما هي) ===== */
+/* ===== المبادرات (كما هي) ===== */
 const INITIATIVES_DEFAULT = [
   {title:"استمارة دعم وتطوير الهيئة التعليمية", url:"https://fhz545-hub.github.io/teachervisit/", note:"توثيق الزيارات الصفّية ونقاط التحسين."},
   {title:"الشؤون الإدارية والمتابعة", url:"https://fhz545-hub.github.io/teacher-eval-1447/", note:"متابعة الانضباط والزيارات الإشرافية."},
@@ -281,14 +373,27 @@ let PLATFORMS = JSON.parse(localStorage.getItem(KEY_PLAT) || 'null') || PLATFORM
 let DOCS = JSON.parse(localStorage.getItem(KEY_DOCS) || 'null') || DOCS_DEFAULT;
 let INITIATIVES = JSON.parse(localStorage.getItem(KEY_INIT) || 'null') || INITIATIVES_DEFAULT;
 
+/* ===== تبويب الأقسام والتنقل السريع ===== */
+const tabs = [...document.querySelectorAll('.tab')];
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  tabs.forEach(x=>x.classList.remove('active')); t.classList.add('active');
+  const target = document.querySelector(t.dataset.target);
+  if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+}));
+
+/* ===== بحث عام (يؤثر على المنصات والأدلّة والمبادرات) مع Debounce ===== */
+const globalSearch = document.getElementById('globalSearch');
+let debounceT;
+function debounce(fn,ms){return (...a)=>{clearTimeout(debounceT);debounceT=setTimeout(()=>fn(...a),ms)}}
+
 /* ============ توليد واجهة المنصات ============ */
 const grid = document.getElementById('platformGrid');
 const countP = document.getElementById('countP');
-const search = document.getElementById('platformSearch');
+const searchPlat = document.getElementById('platformSearch');
 const filterChips = [...document.querySelectorAll('.chip')];
 
 function renderPlatforms(){
-  const q=(search.value||"").trim().toLowerCase();
+  const q= (searchPlat.value || globalSearch.value || "").trim().toLowerCase();
   const active=filterChips.find(c=>c.classList.contains('active'))?.dataset.filter||'all';
   grid.innerHTML=''; let shown=0;
   PLATFORMS.forEach(p=>{
@@ -305,17 +410,22 @@ function renderPlatforms(){
       `);
     }
   });
-  countP.textContent="";
+  countP.textContent = shown? `${shown}`: '';
 }
 filterChips.forEach(c=>c.addEventListener('click',()=>{filterChips.forEach(x=>x.classList.remove('active'));c.classList.add('active');renderPlatforms();}));
-search.addEventListener('input',renderPlatforms);
+searchPlat.addEventListener('input',debounce(renderPlatforms,160));
+globalSearch.addEventListener('input',debounce(()=>{renderPlatforms(); renderDocs(); renderInitiatives();},180));
 renderPlatforms();
 
 /* ============ المبادرات ============ */
 const initList=document.getElementById('initList');
+const countI=document.getElementById('countI');
 function renderInitiatives(){
-  initList.innerHTML='';
+  const q=(globalSearch.value||"").trim().toLowerCase();
+  initList.innerHTML=''; let shown=0;
   INITIATIVES.forEach(it=>{
+    const ok=!q || it.title.toLowerCase().includes(q) || (it.note||'').toLowerCase().includes(q);
+    if(!ok) return; shown++;
     initList.insertAdjacentHTML('beforeend',`
       <a class="card linkcard" href="${it.url}" target="_blank" rel="noopener">
         <div class="title">${it.title}</div>
@@ -323,21 +433,25 @@ function renderInitiatives(){
       </a>
     `);
   });
+  countI.textContent = shown? `${shown}`: '';
 }
 renderInitiatives();
 
 /* ============ الأدلّة: عرض + تحميل مباشر ============ */
 const docsCols=document.getElementById('docsCols');
+const countD=document.getElementById('countD');
 function linkFor(d){return d.fileDataUrl?d.fileDataUrl:(d.url||"#");}
 function driveDirectDownload(u){try{const m=u.match(/drive\.google\.com\/file\/d\/([^/]+)\//i);return(m&&m[1])?`https://drive.google.com/uc?export=download&id=${m[1]}`:u;}catch{return u;}}
 function safeName(t){return (t||'document').replace(/[\\/:*?"<>|]+/g,' ').trim()+'.pdf';}
 
 function renderDocs(){
+  const q=(globalSearch.value||"").trim().toLowerCase();
   docsCols.innerHTML='';
-  const colA=document.createElement('div');
-  const colB=document.createElement('div');
-  const colC=document.createElement('div');
-  DOCS.forEach((d,i)=>{
+  const cols=[document.createElement('div'),document.createElement('div'),document.createElement('div')];
+  let shown=0; let i=0;
+  DOCS.forEach(d=>{
+    const ok=!q || (d.title||'').toLowerCase().includes(q) || (d.desc||'').toLowerCase().includes(q) || (d.kind||'').toLowerCase().includes(q);
+    if(!ok) return; shown++;
     const openHref=linkFor(d);
     const dlHref=d.fileDataUrl?d.fileDataUrl:driveDirectDownload(d.url||'#');
     const card=`
@@ -348,21 +462,14 @@ function renderDocs(){
           <div class="badges"><span class="badge">${d.kind||"دليل"}</span></div>
         </div>
         <div class="actions">
-          <a class="btn open" href="${openHref}" target="_blank" rel="noopener" title="فتح في تبويب جديد">
-            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3l-1.42-1.42l9.3-9.29H14V3ZM5 5h7v2H7v10h10v-5h2v7H5V5Z"/></svg>
-            فتح
-          </a>
-          <a class="btn download" href="${dlHref}" download="${safeName(d.title)}" title="تنزيل الملف">
-            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293l1.414 1.414L12 16.414l-4.707-4.707l1.414-1.414L11 12.586V4a1 1 0 0 1 1-1ZM5 20a1 1 0 0 1-1-1v-2h2v1h12v-1h2v2a1 1 0 0 1-1 1H5Z"/></svg>
-            تحميل
-          </a>
+          <a class="btn open" href="${openHref}" target="_blank" rel="noopener" title="فتح في تبويب جديد">🔗 فتح</a>
+          <a class="btn download" href="${dlHref}" download="${safeName(d.title)}" title="تنزيل الملف">⬇️ تحميل</a>
         </div>
       </article>`;
-    if(i%3===0) colA.insertAdjacentHTML('beforeend',card);
-    else if(i%3===1) colB.insertAdjacentHTML('beforeend',card);
-    else colC.insertAdjacentHTML('beforeend',card);
+    cols[i%3].insertAdjacentHTML('beforeend',card); i++;
   });
-  docsCols.appendChild(colA);docsCols.appendChild(colB);docsCols.appendChild(colC);
+  cols.forEach(c=>docsCols.appendChild(c));
+  countD.textContent = shown? `${shown}`: '';
 }
 renderDocs();
 
@@ -420,7 +527,7 @@ btnSave.addEventListener('click',async()=>{
     item.fileDataUrl=await fileToDataUrl(file);
   }
   if(editIndex>=0){DOCS[editIndex]={...DOCS[editIndex],...item};}
-  else{DOCS.push(item);}
+  else{DOCS.push(item);}  
   localStorage.setItem(KEY_DOCS,JSON.stringify(DOCS));
   renderDocs();adminList();
   fTitle.value=fKind.value=fUrl.value=fDesc.value='';fFile.value='';
@@ -463,7 +570,7 @@ btnSavePlat.addEventListener('click',()=>{
     if(!Array.isArray(parsed)) throw new Error('يجب أن تكون مصفوفة عناصر');
     PLATFORMS=parsed; localStorage.setItem(KEY_PLAT,JSON.stringify(PLATFORMS));
     renderPlatforms(); Pback.style.display='none';
-  }catch(e){alert('JSON غير صالح:\\n'+e.message);}
+  }catch(e){alert('JSON غير صالح:\n'+e.message);}
 });
 
 /* ============ إدارة المبادرات (PIN) ============ */
@@ -496,14 +603,20 @@ btnSaveInit.addEventListener('click',()=>{
     parsed.forEach((it,i)=>{if(!it.title||!it.url) throw new Error(`عنصر #${i+1}: title و url مطلوبة`);});
     INITIATIVES=parsed; localStorage.setItem(KEY_INIT,JSON.stringify(INITIATIVES));
     renderInitiatives(); Iback.style.display='none';
-  }catch(e){alert('JSON غير صالح:\\n'+e.message);}
+  }catch(e){alert('JSON غير صالح:\n'+e.message);}  
 });
 
-/* إغلاق المودالات */
+/* إغلاق المودالات بالنقر خارجها أو Esc */
 document.querySelectorAll('.modal-back').forEach(back=>{
   back.addEventListener('click',(e)=>{if(e.target===back) back.style.display='none';});
 });
 document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){document.querySelectorAll('.modal-back').forEach(back=>back.style.display='none');}});
+
+/* أزرار الشريط الجانبي */
+document.getElementById('goTop').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+document.getElementById('goPlat').onclick=()=>document.getElementById('btnEditPlatforms').click();
+document.getElementById('goInit').onclick=()=>document.getElementById('btnEditInit').click();
+document.getElementById('goDocs').onclick=()=>document.getElementById('btnManageDocs').click();
 </script>
 </body>
 </html>
