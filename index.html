@@ -20,10 +20,16 @@ button{font-family:inherit;cursor:pointer}
 .masthead{display:flex;justify-content:center;align-items:center;padding:8px 0 0}
 .masthead img{display:block;width:100%;max-width:var(--maxW);height:auto;object-fit:contain;margin-inline:auto;border-bottom:1px solid var(--line);border-radius:0}
 
+/* شريط الإشعار بالعناصر الجديدة */
+.announce{max-width:var(--maxW);margin:10px auto 0;background:linear-gradient(90deg,#0e6462,#2f7f79);color:#eafffb;border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:8px 12px;display:none;align-items:center;gap:8px}
+.announce .dot{width:8px;height:8px;border-radius:50%;background:#fff}
+.announce .txt{font-size:13px}
+.announce .close{margin-inline-start:auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:10px;padding:4px 10px;font-weight:700;font-size:12px}
+
 .note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;color:#4b6166}
 .note b{color:#0a6e5f}
 
-.container{max-width:var(--maxW);margin-inline:auto;padding:14px 16px 96px}
+.container{max-width:var(--maxW);margin-inline:auto;padding:10px 16px 96px}
 .section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 10px 22px rgba(0,0,0,.04)}
 .section h2{margin:0 0 10px;font-size:18px;color:#0a4a46;display:flex;align-items:center;gap:10px}
 
@@ -55,7 +61,7 @@ button{font-family:inherit;cursor:pointer}
 .group[data-i="17"] summary{background:linear-gradient(90deg,#6d4c41,#a1887f)}
 .group[data-i="18"] summary{background:linear-gradient(90deg,#1e88e5,#90caf9)}
 
-.row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:8px;margin:6px 0;background:#ffffffcc}
+.row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:8px;margin:6px 0;background:#ffffffcc;position:relative}
 .title{font-weight:800;color:#064a45;font-size:14px}
 .desc{font-size:12.5px;color:#5d737a}
 .src{font-size:11.5px;color:#6a7;margin-top:2px}
@@ -80,6 +86,7 @@ button{font-family:inherit;cursor:pointer}
 .card .desc{font-size:13px;color:#5d737a}
 .card.locked{cursor:not-allowed;opacity:.95}
 .card .ico{font-size:28px}
+/* شارة جديد موجودة مسبقًا وتُستخدم هنا أيضًا */
 .badge.new{background:#b41d3a;border-color:#b41d3a;color:#fff}
 
 .bottom-bar{position:fixed;inset-inline:0;bottom:0;background:#0b3f43;color:#fff;z-index:90;border-top:1px solid rgba(255,255,255,.12)}
@@ -95,6 +102,13 @@ button{font-family:inherit;cursor:pointer}
 <body>
 
 <div class="masthead"><img src="logo2.png" alt="هوية"></div>
+
+<!-- شريط إشعار بالعناصر الجديدة (يظهر تلقائيًا إن وُجد جديد خلال ٧ أيام) -->
+<div id="announce" class="announce" role="status" aria-live="polite">
+  <span class="dot" aria-hidden="true"></span>
+  <span class="txt">تمت إضافة عناصر جديدة مؤخرًا.</span>
+  <button class="close" type="button" aria-label="إخفاء">إخفاء</button>
+</div>
 
 <div class="container">
   <div class="note">ℹ️ <b>تنويه:</b> هذه المنصة مرجع تنظيمي وتعليمي لتجميع الأدلة واللوائح والخدمات من مصادرها الرسمية.</div>
@@ -168,6 +182,7 @@ button{font-family:inherit;cursor:pointer}
 </nav>
 
 <script>
+/* جميع العناوين عربية */
 const GROUP_TITLES={
   grading:"التقويم والدرجات",
   exams:"الاختبارات",
@@ -193,6 +208,15 @@ const ORDER=[
   "platformsOps","uniform","forms","inclusive","safety","elearn","counseling","kg",
   "interactive","guides"
 ];
+
+/* تاريخ اليوم (حسب منطقة الرياض +03:00) لإبراز الجديد لمدة ٧ أيام */
+const TODAY = new Date(); // يعتمد على جهاز المستخدم؛ يكفي للغرض
+function خلالأيام(dateStr, days=7){
+  if(!dateStr) return false;
+  const d = new Date(dateStr);
+  const diff = (TODAY - d) / (1000*60*60*24);
+  return diff >= 0 && diff <= days;
+}
 
 const DOCS_DATA=[
   {group:"grading",title:"لائحة تقويم الطالب 2025م",desc:"سياسة التقييم وأدوات القياس.",kind:"لائحة",url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view",src:"وزارة التعليم"},
@@ -226,8 +250,9 @@ const DOCS_DATA=[
   {group:"staff",title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم",desc:"تخطيط الموارد البشرية التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view",src:"وزارة التعليم"},
   {group:"staff",title:"إسناد تدريس المواد التي ليس لها تخصص",desc:"تنظيم الإسناد وضوابطه.",kind:"ضوابط",url:"https://drive.google.com/file/d/153qd1HGE5B3N7bxYGxG9mUCYKqwh_Srd/view",src:"وزارة التعليم"},
 
-  /* ▼ تم تحديث رابط نور بدل تركه فارغًا */
+  /* تم تحديث رابط نور بدل تركه فارغًا */
   {group:"platformsOps",title:"الدليل المبسّط لنظام نور",desc:"خطوات سريعة في نور.",kind:"دليل",url:"https://noor.moe.gov.sa/userguides/",src:"وزارة التعليم"},
+
   {group:"platformsOps",title:"عمليات القبول في المدارس",desc:"إجراءات القبول والتسجيل.",kind:"دليل",url:"https://drive.google.com/file/d/1F_avKmTOrN9SfCB7J3BJUF_q9NCJQBHP/view?usp=sharing",src:"وزارة التعليم"},
   {group:"platformsOps",title:"خدمة متابعة حالات الطلبة في نظام نور",desc:"متابعة تحصيلية وسلوكية.",kind:"دليل",url:"https://drive.google.com/file/d/15t7S2de_uzWuQvjQAIl60C1_Nkf_DhHS/view",src:"وزارة التعليم"},
   {group:"platformsOps",title:"دليل الخطط الدراسية",desc:"بناء وتخطيط الخطط الدراسية.",kind:"دليل",url:"https://drive.google.com/file/d/1jLtxUE_wF9-as7GhUEFmCTBcNTBQ2Kue/view?usp=sharing",src:"وزارة التعليم"},
@@ -250,51 +275,50 @@ const DOCS_DATA=[
 
   {group:"kg",title:"الدليل التنظيمي للحضانة ورياض الأطفال (1438-1439)",desc:"تنظيم العمل في رياض الأطفال.",kind:"دليل",url:"https://drive.google.com/file/d/1BzZtwzOQtO45A5A3SCq5j6XqbwEZOkDT/view",src:"وزارة التعليم"},
 
-  /* ▼ الإضافات الجديدة حسب طلبكم (دون ترتيب إضافي) ▼ */
-
-  /* الأمن والسلامة المدرسية */
-  {group:"safety",title:"دليل الإسعافات الأولية",desc:"مرشد للإسعافات الأولية في المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1_Gx1fXlb6whQ_g9yr_q6b-07v6GrIIWP/view?usp=sharing",src:"وزارة التعليم"},
-
-  /* رياض الأطفال */
-  {group:"kg",title:"الضوابط التنظيمية لمرحلة الحضانة",desc:"ضوابط تنظيمية لمرحلة الحضانة.",kind:"ضوابط",url:"https://drive.google.com/file/d/1Sn5IBMcre8pvDrduvXLYsbSEF37mi4Dw/view?usp=sharing",src:"وزارة التعليم"},
-  {group:"kg",title:"الضوابط التنظيمية لمرحلة رياض الأطفال",desc:"ضوابط تنظيمية لرياض الأطفال.",kind:"ضوابط",url:"https://drive.google.com/file/d/1nGK7AoQKlHZasAmKwPv3OTRzSUU-V24h/view?usp=sharing",src:"وزارة التعليم"},
-
-  /* السياسات والأنظمة العامة */
-  {group:"policies",title:"أطر العمل التنظيمية للائحة التنفيذية للموارد البشرية",desc:"أطر تنظيمية للائحة التنفيذية.",kind:"أطر",url:"https://drive.google.com/file/d/1StNX-WFOAAd03qd1pEqKsST0oKEh4qQ5/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية"},
-  {group:"policies",title:"لائحة الوظائف التعليمية 1446",desc:"اللائحة المنظمة لشاغلي الوظائف التعليمية.",kind:"لائحة",url:"https://drive.google.com/file/d/1RnBsFXcZEuIXzdBW-rcSgsjbrxXtTN5U/view?usp=sharing",src:"وزارة التعليم"},
-  {group:"policies",title:"نظام العمل",desc:"النظام المنظم لعلاقات العمل.",kind:"نظام",url:"https://drive.google.com/file/d/14virdwgj48hZPSqNtLhlR8Qdt_xjKgWz/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية"},
-
-  /* منصات التشغيل والمعاملات */
-  {group:"platformsOps",title:"دليل المجال الاختياري",desc:"إرشادات رصد وتقويم المجال الاختياري.",kind:"دليل",url:"https://drive.google.com/file/d/1-hDzrrpMvQirRzZj342fghp0KKfFrzf4/view?usp=sharing",src:"وزارة التعليم"},
-
-  /* السلوك والمواظبة والمهني */
-  {group:"conduct",title:"دليل استخدام الهواتف والأجهزة المحمولة",desc:"سياسات وضوابط استخدام الأجهزة.",kind:"دليل",url:"https://drive.google.com/file/d/1lIlgSYa-iGNNjNXlKoPHHecAUL5znDsD/view?usp=sharing",src:"وزارة التعليم"},
-
-  /* التعلّم الإلكتروني والمحتوى الرقمي */
-  {group:"elearn",title:"دليل الانتقال من التعليم الحضوري إلى التعليم عن بعد",desc:"آليات التحول للتعلم عن بعد.",kind:"دليل",url:"https://drive.google.com/file/d/1s-rEuHph2XmZxm1sfy7en6ZD7HDRYXyO/view?usp=sharing",src:"وزارة التعليم"},
-  {group:"elearn",title:"سياسة الاستخدام والخصوصية لمنصة مدرستي",desc:"سياسة الاستخدام والخصوصية.",kind:"سياسة",url:"https://drive.google.com/file/d/1wF_m9vtZkBTAxbsHgoIm_rnjSQhNNvo0/view?usp=sharing",src:"وزارة التعليم"},
-
-  /* الاختبارات */
-  {group:"exams",title:"إطار الاختبارات المركزية في إدارات التعليم العامة 1446",desc:"تنظيم وآليات الاختبارات المركزية.",kind:"إطار",url:"https://drive.google.com/file/d/1tHeew76-antAa3jRdJx2gjKE9OSbSyER/view?usp=sharing",src:"وزارة التعليم"}
+  /* الإضافات الجديدة (تاريخ الإضافة لتفعيل شارة جديد لمدة ٧ أيام) */
+  {group:"safety",title:"دليل الإسعافات الأولية",desc:"مرشد للإسعافات الأولية في المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1_Gx1fXlb6whQ_g9yr_q6b-07v6GrIIWP/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
+  {group:"kg",title:"الضوابط التنظيمية لمرحلة الحضانة",desc:"ضوابط تنظيمية لمرحلة الحضانة.",kind:"ضوابط",url:"https://drive.google.com/file/d/1Sn5IBMcre8pvDrduvXLYsbSEF37mi4Dw/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
+  {group:"kg",title:"الضوابط التنظيمية لمرحلة رياض الأطفال",desc:"ضوابط تنظيمية لرياض الأطفال.",kind:"ضوابط",url:"https://drive.google.com/file/d/1nGK7AoQKlHZasAmKwPv3OTRzSUU-V24h/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
+  {group:"policies",title:"أطر العمل التنظيمية للائحة التنفيذية للموارد البشرية",desc:"أطر تنظيمية للائحة التنفيذية.",kind:"أطر",url:"https://drive.google.com/file/d/1StNX-WFOAAd03qd1pEqKsST0oKEh4qQ5/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-10-26"},
+  {group:"policies",title:"لائحة الوظائف التعليمية 1446",desc:"اللائحة المنظمة لشاغلي الوظائف التعليمية.",kind:"لائحة",url:"https://drive.google.com/file/d/1RnBsFXcZEuIXzdBW-rcSgsjbrxXtTN5U/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
+  {group:"policies",title:"نظام العمل",desc:"النظام المنظم لعلاقات العمل.",kind:"نظام",url:"https://drive.google.com/file/d/14virdwgj48hZPSqNtLhlR8Qdt_xjKgWz/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-10-26"},
+  {group:"platformsOps",title:"دليل المجال الاختياري",desc:"إرشادات رصد وتقويم المجال الاختياري.",kind:"دليل",url:"https://drive.google.com/file/d/1-hDzrrpMvQirRzZj342fghp0KKfFrzf4/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
+  {group:"conduct",title:"دليل استخدام الهواتف والأجهزة المحمولة",desc:"سياسات وضوابط استخدام الأجهزة.",kind:"دليل",url:"https://drive.google.com/file/d/1lIlgSYa-iGNNjNXlKoPHHecAUL5znDsD/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
+  {group:"elearn",title:"دليل الانتقال من التعليم الحضوري إلى التعليم عن بعد",desc:"آليات التحول للتعلم عن بعد.",kind:"دليل",url:"https://drive.google.com/file/d/1s-rEuHph2XmZxm1sfy7en6ZD7HDRYXyO/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
+  {group:"elearn",title:"سياسة الاستخدام والخصوصية لمنصة مدرستي",desc:"سياسة الاستخدام والخصوصية.",kind:"سياسة",url:"https://drive.google.com/file/d/1wF_m9vtZkBTAxbsHgoIm_rnjSQhNNvo0/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
+  {group:"exams",title:"إطار الاختبارات المركزية في إدارات التعليم العامة 1446",desc:"تنظيم وآليات الاختبارات المركزية.",kind:"إطار",url:"https://drive.google.com/file/d/1tHeew76-antAa3jRdJx2gjKE9OSbSyER/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"}
 ];
 
+/* أدوات مساعدة للروابط والعرض */
 function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m?m[1]:""}
 function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?export=download&id=${id}`:u}
 function isValidUrl(u){return /^https:\/\/.+/i.test(u||"")}
-function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]||c))}
+function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;","&gt;":"&gt;"}[c]||c))}
 
+/* الرسم */
 function renderDocs(){
   const byId=new Set(),byTitle=new Set();const perGroup=new Map(ORDER.map(k=>[k,[]]));
+  let newCount=0;
+
   DOCS_DATA.forEach(d=>{
     const id=driveId(d.url);const t=(d.title||"").trim().toLowerCase().replace(/\s+/g,'');
     if(id&&byId.has(id)) return;
     if(t&&byTitle.has(t)) return;
     if(id) byId.add(id);
     if(t) byTitle.add(t);
+    if(خلالأيام(d.addedAt,7)) newCount++;
     perGroup.get(d.group)?.push(d);
   });
+
+  const announce=document.getElementById('announce');
+  if(newCount>0){
+    announce.style.display='flex';
+    announce.querySelector('.txt').textContent = `تمت إضافة ${newCount} عنصر${newCount>1?'': ''} جديد خلال الأيام السبعة الماضية.`;
+  }
+
   const host=document.getElementById('docsCols');host.innerHTML='';
   const cols=[document.createElement('div'),document.createElement('div'),document.createElement('div')];
+
   ORDER.forEach((key,i)=>{
     const items=perGroup.get(key)||[];
     const det=document.createElement('details');det.className='group';det.setAttribute('data-i',String(i+1));
@@ -305,13 +329,18 @@ function renderDocs(){
     }else{
       items.forEach(d=>{
         const ok=isValidUrl(d.url);const dl=toDirect(d.url);
+        const isNew = خلالأيام(d.addedAt,7);
         wrap.insertAdjacentHTML('beforeend',
           `<div class="row">
             <div>
               <div class="title">${esc(d.title)}</div>
               <div class="desc">${esc(d.desc||'')}</div>
               ${d.src?`<div class="src">المصدر: ${esc(d.src)}</div>`:''}
-              <div class="badges"><span class="badge">${esc(d.kind||'دليل')}</span>${ok?"":'<span class="badge warn">⚠️ بحاجة لتحديث الرابط</span>'}</div>
+              <div class="badges">
+                <span class="badge">${esc(d.kind||'دليل')}</span>
+                ${ok?"":'<span class="badge warn">⚠️ بحاجة لتحديث الرابط</span>'}
+                ${isNew?'<span class="badge new">جديد</span>':''}
+              </div>
             </div>
             <div class="actions">
               <a class="btn open" ${ok?'target="_blank" rel="noopener" href="'+esc(d.url)+'"':'disabled'}>فتح</a>
@@ -323,9 +352,14 @@ function renderDocs(){
     cols[i%3].appendChild(det);
   });
   cols.forEach(c=>host.appendChild(c));
+
+  /* زر إخفاء شريط الإشعار */
+  announce.querySelector('.close').addEventListener('click',()=>{announce.style.display='none'});
 }
+
 renderDocs();
 
+/* تنقل سفلي */
 document.querySelectorAll('.bottom-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     if(btn.dataset.action==='top'){window.scrollTo({top:0,behavior:'smooth'});return}
