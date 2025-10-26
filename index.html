@@ -8,13 +8,24 @@
 <style>
 :root{
   --ink:#0b3f43; --muted:#5d737a; --bg:#f5f8f8; --paper:#ffffff; --line:#e3ecec;
-  --brand:#0b7e88; --accent:#0a6e5f; --shadow:0 14px 28px rgba(0,0,0,.07);
+  --shadow:0 14px 28px rgba(0,0,0,.07);
 
-  /* ألوان جذابة لعناوين مجموعات الأدلة */
-  --grp1:#0aa694; --grp2:#2c7be5; --grp3:#7c4dff;
-  --grp4:#ff7a59; --grp5:#17a2b8; --grp6:#ffa000;
-  --grp7:#5cb85c; --grp8:#9c27b0; --grp9:#795548;
-  --grp10:#607d8b; --grp11:#26a69a;
+  /* خيار (ب): تدرّجات رسمية قوية قريبة من الهوية */
+  --grp1:#00796B;   /* التقويم والدرجات */
+  --grp2:#00695C;   /* الاختبارات */
+  --grp3:#00897B;   /* الحضور والدوام */
+  --grp4:#009688;   /* المرافق والتشغيل */
+  --grp5:#00A69A;   /* التميز والجودة */
+  --grp6:#2E7D32;   /* السلوك والمواظبة والمهني */
+  --grp7:#1F6F7A;   /* السياسات والأنظمة العامة */
+  --grp8:#2C7BE5;   /* شاغلو الوظائف التعليمية (أزرق رسمي) */
+  --grp9:#0277BD;   /* منصات التشغيل والمعاملات */
+  --grp10:#0E6E7A;  /* المظهر والزي */
+  --grp11:#0A5E66;  /* نماذج وزيارات */
+  --grp12:#6A1B9A;  /* التعليم الشامل والدعم الطلابي */
+  --grp13:#BF360C;  /* الأمن والسلامة المدرسية */
+  --grp14:#1565C0;  /* التعلم الإلكتروني والمحتوى الرقمي */
+  --grp15:#512DA8;  /* الإرشاد الطلابي والرعاية النفسية */
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
@@ -37,33 +48,39 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 @media (max-width:1200px){.columns{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:720px){.columns{grid-template-columns:1fr}}
 
-/* accordion */
+/* accordion (مغلقة افتراضيًا – تُفتح عند الضغط) */
 .group{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;transition:box-shadow .2s}
 .group:hover{box-shadow:0 10px 24px rgba(0,0,0,.06)}
-.group summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);position:relative}
+.group summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);position:relative;color:#fff}
 .group summary::-webkit-details-marker{display:none}
-.group .gtitle{font-weight:800;color:#0a4a46}
-.group .gcount{margin-inline-start:auto;background:#fff;border:1px solid rgba(255,255,255,.6);color:#fff;border-radius:999px;padding:2px 8px;font-size:12px;opacity:.9}
+.group .gtitle{font-weight:800}
+.group .gcount{margin-inline-start:auto;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:2px 8px;font-size:12px}
 .group .wrap{padding:10px;background:#fff}
 .group .empty{padding:12px;border:1px dashed var(--line);border-radius:10px;background:#f9fcfc;color:#6b7;font-size:12.5px}
-/* رؤوس ملونة جذابة لكل مجموعة */
-.group[data-i="1"] summary{background:linear-gradient(90deg,var(--grp1),#55d6c2);color:#fff}
-.group[data-i="2"] summary{background:linear-gradient(90deg,var(--grp2),#66a8ff);color:#fff}
-.group[data-i="3"] summary{background:linear-gradient(90deg,var(--grp3),#b39bff);color:#fff}
-.group[data-i="4"] summary{background:linear-gradient(90deg,var(--grp4),#ffb199);color:#fff}
-.group[data-i="5"] summary{background:linear-gradient(90deg,var(--grp5),#6bd5e1);color:#fff}
-.group[data-i="6"] summary{background:linear-gradient(90deg,var(--grp6),#ffcc66);color:#fff}
-.group[data-i="7"] summary{background:linear-gradient(90deg,var(--grp7),#9be1a1);color:#fff}
-.group[data-i="8"] summary{background:linear-gradient(90deg,var(--grp8),#d1a1e4);color:#fff}
-.group[data-i="9"] summary{background:linear-gradient(90deg,var(--grp9),#b59a8c);color:#fff}
-.group[data-i="10"] summary{background:linear-gradient(90deg,var(--grp10),#b0c8d0);color:#fff}
-.group[data-i="11"] summary{background:linear-gradient(90deg,var(--grp11),#7de1d7);color:#fff}
+
+/* رؤوس ملونة قوية لكل مجموعة */
+.group[data-i="1"] summary{background:linear-gradient(90deg,var(--grp1),#3FB6A8)}
+.group[data-i="2"] summary{background:linear-gradient(90deg,var(--grp2),#39A292)}
+.group[data-i="3"] summary{background:linear-gradient(90deg,var(--grp3),#50CBBF)}
+.group[data-i="4"] summary{background:linear-gradient(90deg,var(--grp4),#58D9CD)}
+.group[data-i="5"] summary{background:linear-gradient(90deg,var(--grp5),#76E5DB)}
+.group[data-i="6"] summary{background:linear-gradient(90deg,var(--grp6),#66BB6A)}
+.group[data-i="7"] summary{background:linear-gradient(90deg,var(--grp7),#5CC3CE)}
+.group[data-i="8"] summary{background:linear-gradient(90deg,var(--grp8),#79AAF4)}
+.group[data-i="9"] summary{background:linear-gradient(90deg,var(--grp9),#4FC3F7)}
+.group[data-i="10"] summary{background:linear-gradient(90deg,var(--grp10),#4AA5B2)}
+.group[data-i="11"] summary{background:linear-gradient(90deg,var(--grp11),#46A7B0)}
+.group[data-i="12"] summary{background:linear-gradient(90deg,var(--grp12),#9C27B0)}
+.group[data-i="13"] summary{background:linear-gradient(90deg,var(--grp13),#FF7043)}
+.group[data-i="14"] summary{background:linear-gradient(90deg,var(--grp14),#64B5F6)}
+.group[data-i="15"] summary{background:linear-gradient(90deg,var(--grp15),#9575CD)}
 
 /* doc row */
 .row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:8px;margin:6px 0;background:#ffffffc7;transition:transform .12s, box-shadow .12s}
 .row:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.05)}
 .title{font-weight:800;color:#064a45;font-size:14px}
 .desc{font-size:12.5px;color:#5d737a}
+.src{font-size:11.5px;color:#6a7; margin-top:2px}
 .badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
 .badge{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:#f5fbfb;color:#0a5a56}
 .badge.warn{background:#fff3f3;border-color:#ffd1d1;color:#b60000}
@@ -144,7 +161,7 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
       *ملاحظة: يتم حاليًّا تجميع جميع السجلات والملفات التي تخدم قائد المدرسة، وسيُتاح الوصول إليها تباعًا بإذن الله.*
     </p>
     <div class="cards">
-      <!-- خاص: منصة التحليل والتحسين المدرسي (بديل الجدول) -->
+      <!-- خاص: منصة التحليل والتحسين المدرسي -->
       <a class="card locked" href="https://fhz545-hub.github.io/Analysis/" target="_blank" rel="noopener" style="text-align:center">
         <div class="ico" style="font-size:28px">📈</div>
         <div class="title" style="margin-top:6px">منصة التحليل والتحسين المدرسي</div>
@@ -210,60 +227,99 @@ const GROUP_TITLES = {
   staff:"شاغلو الوظائف التعليمية",
   platformsOps:"منصات التشغيل والمعاملات",
   uniform:"المظهر والزي",
-  forms:"نماذج وزيارات"
+  forms:"نماذج وزيارات",
+  inclusive:"التعليم الشامل والدعم الطلابي",
+  safety:"الأمن والسلامة المدرسية",
+  elearn:"التعلّم الإلكتروني والمحتوى الرقمي",
+  counseling:"الإرشاد الطلابي والرعاية النفسية"
 };
 
-/* البيانات */
+/* البيانات — محدثة وموزّعة بلا تكرار */
 const DOCS_DATA = [
-  {group:"grading", title:"لائحة تقويم الطالب 2025م", desc:"سياسة التقييم وأدوات القياس.", kind:"لائحة", url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view"},
-  {group:"grading", title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م", desc:"آليات تطبيق اللائحة داخل المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view"},
-  {group:"grading", title:"توزيع درجات الطلاب 2025م", desc:"نِسَب عناصر التقويم.", kind:"دليل", url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view"},
+  /* التقويم */
+  {group:"grading", title:"لائحة تقويم الطالب 2025م", desc:"سياسة التقييم وأدوات القياس.", kind:"لائحة", url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view", src:"وزارة التعليم"},
+  {group:"grading", title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م", desc:"آليات تطبيق اللائحة داخل المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view", src:"وزارة التعليم"},
+  {group:"grading", title:"توزيع درجات الطلاب 2025م", desc:"نِسَب عناصر التقويم.", kind:"دليل", url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view", src:"وزارة التعليم"},
 
-  {group:"exams", title:"دليل الاختبارات 2025م", desc:"أسس تنفيذ الاختبارات وتنظيمها.", kind:"دليل", url:"https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view"},
+  /* الاختبارات */
+  {group:"exams", title:"دليل الاختبارات 2025م", desc:"أسس تنفيذ الاختبارات وتنظيمها.", kind:"دليل", url:"https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view", src:"وزارة التعليم"},
 
-  {group:"attendance", title:"دليل المستخدم لتطبيق حضوري (الموظفين)", desc:"تسجيل الحضور والانصراف.", kind:"دليل", url:"https://www.moe.gov.sa/ar/aboutus/hr/Documents/huduri-user-manual.pdf"},
-  {group:"attendance", title:"لوحة تحكم حضوري (مدير)", desc:"إدارة حضور منسوبي المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1BC6s9RyFiImAWYcELrwZyb9-WvhOmFPa/view"},
+  /* الحضور والدوام */
+  {group:"attendance", title:"دليل المستخدم لتطبيق حضوري (الموظفين)", desc:"تسجيل الحضور والانصراف.", kind:"دليل", url:"https://www.moe.gov.sa/ar/aboutus/hr/Documents/huduri-user-manual.pdf", src:"وزارة التعليم"},
+  {group:"attendance", title:"لوحة تحكم حضوري (مدير)", desc:"إدارة حضور منسوبي المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1BC6s9RyFiImAWYcELrwZyb9-WvhOmFPa/view", src:"وزارة التعليم"},
 
-  {group:"facilities", title:"الدليل الإرشادي لإدارة وتشغيل المرافق", desc:"تشغيل مرافق المدرسة بكفاءة.", kind:"دليل", url:"https://drive.google.com/file/d/1uuz81m2i23EBpmmSuWUnqHhySKv_5Rpn/view"},
-  {group:"facilities", title:"دليل خدمة الجدول المدرسي 2025م", desc:"إعداد وإدارة الجداول إلكترونيًا.", kind:"دليل", url:"https://drive.google.com/file/d/1XAMG04koxiH2pd8jfVwgFTYKvGX_JqHf/view"},
-  {group:"facilities", title:"دليل إجراءات عمل مدارس التعليم العام", desc:"أطر الإجراءات التشغيلية اليومية.", kind:"دليل", url:"https://drive.google.com/file/d/15OFadSAX9fxHcYknN2pb0RDSOu4EBOM8/view"},
+  /* المرافق والتشغيل */
+  {group:"facilities", title:"الدليل الإرشادي لإدارة وتشغيل المرافق", desc:"تشغيل مرافق المدرسة بكفاءة.", kind:"دليل", url:"https://drive.google.com/file/d/1uuz81m2i23EBpmmSuWUnqHhySKv_5Rpn/view", src:"وزارة التعليم"},
+  {group:"facilities", title:"دليل خدمة الجدول المدرسي 2025م", desc:"إعداد وإدارة الجداول إلكترونيًا.", kind:"دليل", url:"https://drive.google.com/file/d/1XAMG04koxiH2pd8jfVwgFTYKvGX_JqHf/view", src:"وزارة التعليم"},
+  {group:"facilities", title:"الدليل الإجرائي لمدارس التعليم العام", desc:"خطوات العمل والإجراءات التفصيلية للمهام المدرسية.", kind:"دليل", url:"https://drive.google.com/file/d/18rVycmGYJ3vNrUq2hsAbZiDGv9WaZULR/view?usp=sharing", src:"وزارة التعليم"},
 
-  {group:"quality", title:"الدليل الاسترشادي لمشرف دعم التميز", desc:"تمكين المشرف من دعم التميز والجودة.", kind:"دليل", url:"https://drive.google.com/file/d/17l_qlhdWdUBRWEbDcFKT0iCkUh2gifu4/view"},
-  {group:"quality", title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا)", desc:"إطار التحسين المستمر.", kind:"دليل", url:"https://drive.google.com/file/d/1DXr6D6B57noKsxmb35WPcqd9rQK9IVfk/view"},
-  {group:"quality", title:"خطة التحسين المدرسية", desc:"نمذجة خطة التحسين ومتابعتها.", kind:"خطة", url:"https://drive.google.com/file/d/1Aes1VOyU8Vkzf94JgC0o7mmxqWUw-e5W/view"},
+  /* التميز والجودة */
+  {group:"quality", title:"الدليل الاسترشادي لمشرف دعم التميز", desc:"تمكين المشرف من دعم التميز والجودة.", kind:"دليل", url:"https://drive.google.com/file/d/17l_qlhdWdUBRWEbDcFKT0iCkUh2gifu4/view", src:"وزارة التعليم"},
+  {group:"quality", title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا)", desc:"إطار التحسين المستمر.", kind:"دليل", url:"https://drive.google.com/file/d/1DXr6D6B57noKsxmb35WPcqd9rQK9IVfk/view", src:"وزارة التعليم"},
+  {group:"quality", title:"خطة التحسين المدرسية", desc:"نمذجة خطة التحسين ومتابعتها.", kind:"خطة", url:"https://drive.google.com/file/d/1Aes1VOyU8Vkzf94JgC0o7mmxqWUw-e5W/view", src:"وزارة التعليم"},
+  {group:"quality", title:"إضاءات حول آلية تنفيذ خطط الأنشطة الطلابية", desc:"تيسير تنفيذ الخطط والأنشطة.", kind:"إضاءات", url:"https://drive.google.com/file/d/1sfjuD1oWpum1_5UsRrjNSLg63tH6q7eT/view", src:"وزارة التعليم"},
 
-  {group:"conduct", title:"قواعد السلوك والمواظبة 1447هـ", desc:"حقوق الطالب وإجراءات الانضباط.", kind:"قواعد", url:"https://drive.google.com/file/d/1RYIYPFlAcT9Ya-RnPw3bnpQASVQIz0FX/view"},
-  {group:"conduct", title:"دليل السلوك المهني لموظفي وزارة التعليم 2025", desc:"معايير السلوك المهني.", kind:"دليل", url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view"},
-  {group:"conduct", title:"مدونة السلوك الوظيفي وأخلاقيات الوظيفة العامة", desc:"قواعد السلوك الوظيفي في القطاع الحكومي.", kind:"مدونة", url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view?usp=sharing"},
+  /* السلوك والمواظبة والمهني */
+  {group:"conduct", title:"قواعد السلوك والمواظبة 1447هـ", desc:"حقوق الطالب وإجراءات الانضباط.", kind:"قواعد", url:"https://drive.google.com/file/d/1RYIYPFlAcT9Ya-RnPw3bnpQASVQIz0FX/view", src:"وزارة التعليم"},
+  {group:"conduct", title:"دليل السلوك المهني لموظفي وزارة التعليم 2025", desc:"معايير السلوك المهني.", kind:"دليل", url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view", src:"وزارة التعليم"},
+  {group:"conduct", title:"مدونة السلوك الوظيفي وأخلاقيات الوظيفة العامة", desc:"قواعد السلوك الوظيفي بالقطاع الحكومي.", kind:"مدونة", url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view?usp=sharing", src:"وزارة التعليم / HRSD"},
 
-  {group:"policies", title:"القواعد التنظيمية لفصول ومدارس الموهوبين", desc:"تنظيم البرامج والمسارات.", kind:"قواعد", url:"https://drive.google.com/file/d/15g8C3aVaStWcftLa4toBJQtP-2wP113O/view"},
-  {group:"policies", title:"ضوابط تسريع انتقال الطلبة الموهوبين 1447هـ", desc:"آليات وإجراءات التسريع الأكاديمي.", kind:"ضوابط", url:"https://drive.google.com/file/d/15ekZaGwDQY2PJSk7yyAbctOvx0gZghsw/view"},
-  {group:"policies", title:"نظام الانضباط الوظيفي", desc:"أحكام الانضباط في بيئة العمل.", kind:"نظام", url:"https://www.hrsd.gov.sa/sites/default/files/2022-10/08102022.pdf"},
-  {group:"policies", title:"دليل إرشادي للحفاظ على الوثائق والاتصالات", desc:"حفظ الملفات والمراسلات وفق الضوابط.", kind:"دليل", url:"https://drive.google.com/file/d/1T4DbU8mJDQyC1c9yvvjeKoC8MKZBr420/view"},
+  /* السياسات والأنظمة العامة */
+  {group:"policies", title:"الدليل التنظيمي لمدارس التعليم العام", desc:"مهام وصلاحيات المدرسة وهيكلها.", kind:"دليل", url:"https://drive.google.com/file/d/1E604s0Wni9ht-UnfaB4ywlN55YyjW9Wj/view?usp=sharing", src:"وزارة التعليم"},
+  {group:"policies", title:"نظام الانضباط الوظيفي", desc:"أحكام الانضباط في بيئة العمل.", kind:"نظام", url:"https://www.hrsd.gov.sa/sites/default/files/2022-10/08102022.pdf", src:"HRSD"},
+  {group:"policies", title:"دليل إرشادي للحفاظ على الوثائق والاتصالات", desc:"حفظ الملفات والمراسلات وفق الضوابط.", kind:"دليل", url:"https://drive.google.com/file/d/1T4DbU8mJDQyC1c9yvvjeKoC8MKZBr420/view", src:"وزارة التعليم"},
 
-  {group:"staff", title:"القواعد التنظيمية لشاغلي الوظائف التعليمية", desc:"الصلاحيات والواجبات المهنية.", kind:"قواعد", url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view"},
-  {group:"staff", title:"صلاحيات قائد المدرسة", desc:"حدود ومسؤوليات قائد المدرسة.", kind:"صلاحيات", url:"https://drive.google.com/file/d/17LYzCksGBqvzgS_8iedKaF1zYBBxeqGy/view"},
-  {group:"staff", title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية", desc:"خطوات عملية لتقويم الأداء.", kind:"دليل", url:"https://drive.google.com/file/d/16KRyOlQUTD0TS4449L-T-rBluiYJ5-FO/view"},
-  {group:"staff", title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم", desc:"منهجية التخطيط والتمكين الوظيفي.", kind:"دليل", url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view"},
+  /* شاغلو الوظائف التعليمية */
+  {group:"staff", title:"القواعد التنظيمية لشاغلي الوظائف التعليمية", desc:"الصلاحيات والواجبات المهنية.", kind:"قواعد", url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view", src:"وزارة التعليم"},
+  {group:"staff", title:"صلاحيات قائد المدرسة", desc:"حدود ومسؤوليات قائد المدرسة.", kind:"صلاحيات", url:"https://drive.google.com/file/d/17LYzCksGBqvzgS_8iedKaF1zYBBxeqGy/view", src:"وزارة التعليم"},
+  {group:"staff", title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية", desc:"خطوات عملية لتقويم الأداء.", kind:"دليل", url:"https://drive.google.com/file/d/16KRyOlQUTD0TS4449L-T-rBluiYJ5-FO/view", src:"وزارة التعليم"},
+  {group:"staff", title:"نماذج تقييم أداء شاغلي الوظائف التعليمية", desc:"نماذج معتمدة لتوثيق الأداء.", kind:"نماذج", url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdkT0H5vMJvSzYn7/view", src:"وزارة التعليم"},
+  {group:"staff", title:"تهيئة الموظف الجديد على نظام فارس (دليل مستخدم)", desc:"خطوات التهيئة واستخدام فارس.", kind:"دليل", url:"https://drive.google.com/file/d/15idPnrerHN3eJT7Pu_xePZduYjZKL7hd/view", src:"وزارة التعليم"},
 
-  {group:"platformsOps", title:"الدليل المبسّط لنظام نور", desc:"خطوات سريعة في نور.", kind:"دليل", url:"https://drive.google.com/file/d/16rTZA76BkmvPeYL__3coIObOzSCmbXVH/view"},
-  {group:"platformsOps", title:"عمليات القبول في المدارس", desc:"إجراءات القبول والتسجيل.", kind:"دليل", url:"https://drive.google.com/file/d/1648GyxMfLWqBQSWRsS8uW-9QubH6KgvH/view"},
-  {group:"platformsOps", title:"دليل الخطط الدراسية", desc:"بناء الجداول وفق الخطط.", kind:"دليل", url:"https://drive.google.com/file/d/16C8NyJLqFqbfZdDdRBNSX6cn_EDZ6d4q/view"},
-  {group:"platformsOps", title:"خدمة متابعة حالات الطلبة (التحصيلية/السلوكية) في نظام نور", desc:"متابعة الحالات عبر النظام.", kind:"دليل", url:"https://drive.google.com/file/d/15t7S2de_uzWuQvjQAIl60C1_Nkf_DhHS/view"},
+  /* منصات التشغيل والمعاملات */
+  {group:"platformsOps", title:"الدليل المبسّط لنظام نور", desc:"خطوات سريعة في نور.", kind:"دليل", url:"https://drive.google.com/file/d/16rTZA76BkmvPeYL__3coIObOzSCmbXVH/view", src:"وزارة التعليم"},
+  {group:"platformsOps", title:"عمليات القبول في المدارس", desc:"إجراءات القبول والتسجيل.", kind:"دليل", url:"https://drive.google.com/file/d/1648GyxMfLWqBQSWRsS8uW-9QubH6KgvH/view", src:"وزارة التعليم"},
+  {group:"platformsOps", title:"خدمة متابعة حالات الطلبة (التحصيلية/السلوكية) في نظام نور", desc:"متابعة الحالات عبر النظام.", kind:"دليل", url:"https://drive.google.com/file/d/15t7S2de_uzWuQvjQAIl60C1_Nkf_DhHS/view", src:"وزارة التعليم"},
+  {group:"platformsOps", title:"دليل الخطط الدراسية", desc:"بناء الجداول وفق الخطط.", kind:"دليل", url:"https://drive.google.com/file/d/16C8NyJLqFqbfZdDdRBNSX6cn_EDZ6d4q/view", src:"وزارة التعليم"},
 
-  {group:"uniform", title:"دليل الزي المدرسي والرياضي لطلبة التعليم العام", desc:"المواصفات المعتمدة للزي.", kind:"دليل", url:"https://drive.google.com/file/d/1dJaj5cH6sUOpUh2shay36xH7FctVxZXh/view"},
+  /* المظهر والزي */
+  {group:"uniform", title:"دليل الزي المدرسي والرياضي لطلبة التعليم العام", desc:"المواصفات المعتمدة للزي.", kind:"دليل", url:"https://drive.google.com/file/d/1dJaj5cH6sUOpUh2shay36xH7FctVxZXh/view", src:"وزارة التعليم"},
 
-  {group:"forms", title:"استمارة الزيارة الفني لمشرف الإدارة المدرسية", desc:"معايير ومؤشرات وتوصيات.", kind:"نموذج", url:"https://drive.google.com/file/d/1Q2SnbnnteJCIgyz8WZCESV01Jk_3rPMh/view"}
+  /* نماذج وزيارات */
+  {group:"forms", title:"استمارة الزيارة الفني لمشرف الإدارة المدرسية", desc:"معايير ومؤشرات وتوصيات.", kind:"نموذج", url:"https://drive.google.com/file/d/1Q2SnbnnteJCIgyz8WZCESV01Jk_3rPMh/view", src:"وزارة التعليم"},
+  {group:"forms", title:"نموذج الحصص الأسبوعية في الفصلين", desc:"توزيع الحصص للأسبوع الدراسي.", kind:"نموذج", url:"https://drive.google.com/file/d/157rFurVpjSpxV6o7pRfMTZInLGMv5rjx/view", src:"وزارة التعليم"},
+
+  /* التعليم الشامل والدعم الطلابي (نقلت إليه أدلة الموهوبين بدل تكرارها في السياسات) */
+  {group:"inclusive", title:"القواعد التنظيمية لفصول ومدارس الموهوبين", desc:"تنظيم البرامج والمسارات.", kind:"قواعد", url:"https://drive.google.com/file/d/15g8C3aVaStWcftLa4toBJQtP-2wP113O/view", src:"وزارة التعليم"},
+  {group:"inclusive", title:"ضوابط تسريع انتقال الطلبة الموهوبين 1447هـ", desc:"آليات وإجراءات التسريع الأكاديمي.", kind:"ضوابط", url:"https://drive.google.com/file/d/15ekZaGwDQY2PJSk7yyAbctOvx0gZghsw/view", src:"وزارة التعليم"},
+
+  /* الأمن والسلامة المدرسية (بانتظار تزويدك بروابط رسمية إن رغبت) */
+
+  /* التعلم الإلكتروني والمحتوى الرقمي */
+  {group:"elearn", title:"دليل السلوك الرقمي لمنصة مدرستي", desc:"ضوابط الاستخدام الآمن والمسؤول.", kind:"دليل", url:"https://drive.google.com/file/d/19ym1Uih9GbXyXhDRcpP1qlk-kbgGfjQ_/view", src:"وزارة التعليم"},
+
+  /* الإرشاد الطلابي والرعاية النفسية */
+  {group:"counseling", title:"تعزيز السلوك الإيجابي", desc:"برامج تعزيز السلوك في المدرسة.", kind:"دليل", url:"https://drive.google.com/file/d/1EA5oYQ4PtSxM_rLjbgm9c4iQJATDTEKq/view", src:"وزارة التعليم"},
+  {group:"counseling", title:"دليل التوجيه وقت الأزمات", desc:"أدوار وتدخلات أثناء الأزمات.", kind:"دليل", url:"https://drive.google.com/file/d/1Cr4LULa-HDsIo49UrFvMq80hZO1YLs9Q/view", src:"وزارة التعليم"},
+  {group:"counseling", title:"خطة برامج وخدمات التوجيه الطلابي", desc:"حزمة برامج وخدمات إرشادية.", kind:"خطة", url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view", src:"وزارة التعليم"}
 ];
 
-const ORDER = ["grading","exams","attendance","facilities","quality","conduct","policies","staff","platformsOps","uniform","forms"];
+/* ترتيب الأعمدة + إضافة الأقسام الجديدة */
+const ORDER = [
+  "grading","exams","attendance",
+  "facilities","quality","conduct",
+  "policies","staff","platformsOps",
+  "uniform","forms","inclusive",
+  "safety","elearn","counseling"
+];
 
 function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m?m[1]:"";}
 function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?export=download&id=${id}`:u;}
 function isValidUrl(u){return /^https:\/\/.+/i.test(u||"");}
-function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&gt;"}[c]));}
 
 function renderDocs(){
+  // إزالة التكرار تلقائيًا حسب Google Drive ID أو العنوان
   const byId=new Set(), byTitle=new Set();
   const perGroup=new Map(ORDER.map(k=>[k,[]]));
   DOCS_DATA.forEach(d=>{
@@ -279,9 +335,8 @@ function renderDocs(){
 
   ORDER.forEach((key,i)=>{
     const items=perGroup.get(key)||[];
-    const det=document.createElement('details'); det.className='group'; 
+    const det=document.createElement('details'); det.className='group';
     det.setAttribute('data-i', String(i+1)); // لون العنوان
-    // لا نفتح أي قسم افتراضيًا
     det.innerHTML=`<summary><span>📁</span><span class="gtitle">${GROUP_TITLES[key]||'قسم'}</span><span class="gcount">${items.length}</span></summary><div class="wrap"></div>`;
     const wrap=det.querySelector('.wrap');
 
@@ -296,6 +351,7 @@ function renderDocs(){
             <div>
               <div class="title">${esc(d.title)}</div>
               <div class="desc">${esc(d.desc||'')}</div>
+              ${d.src?`<div class="src">المصدر: ${esc(d.src)}</div>`:''}
               <div class="badges">
                 <span class="badge">${esc(d.kind||'دليل')}</span>
                 ${ok?"" : '<span class="badge warn">⚠️ بحاجة لتحديث الرابط</span>'}
