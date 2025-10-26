@@ -138,7 +138,7 @@ button{font-family:inherit;cursor:pointer}
       <div class="card locked" style="text-align:center">
         <div class="ico">🗂️</div>
         <div class="title" style="margin-top:6px">سجلات المدرسة</div>
-        <div class="desc">مجلدات تتبع وتشغيل — وصول خاص</div>
+        <div class="desc">مجلدات تتبع وتشغيل — وصول محدود</div>
         <div class="badge new" style="position:absolute;top:10px;inset-inline-end:10px">جديد</div>
       </div>
       <a class="card" href="https://fhz545-hub.github.io/taqyeem/" target="_blank" rel="noopener" style="text-align:center">
@@ -206,7 +206,7 @@ const DOCS_DATA=[
 
   {group:"facilities",title:"الدليل الإرشادي لإدارة وتشغيل المرافق",desc:"تشغيل مرافق المدرسة بكفاءة.",kind:"دليل",url:"https://drive.google.com/file/d/1uuz81m2i23EBpmmSuWUnqHhySKv_5Rpn/view",src:"وزارة التعليم"},
   {group:"facilities",title:"الدليل الإجرائي لمدارس التعليم العام",desc:"خطوات العمل والإجراءات التفصيلية للمهام المدرسية.",kind:"دليل",url:"https://drive.google.com/file/d/18rVycmGYJ3vNrUq2hsAbZiDGv9WaZULR/view?usp=sharing",src:"وزارة التعليم"},
-  {group:"facilities",title:"دليل خدمة الجدول المدرسي 2025م",desc:"إعداد وإدارة الجداول إلكترونيًا.",kind:"دليل",url:"",src:"وزارة التعليم"},
+  {group:"facilities",title:"دليل الجدول المدرسي",desc:"إعداد وإدارة الجداول المدرسية إلكترونيًا.",kind:"دليل",url:"https://drive.google.com/file/d/1hNbB4ckJylnknHWPtQeKJit1t_MM-9DV/view?usp=sharing",src:"وزارة التعليم"},
 
   {group:"quality",title:"الدليل الاسترشادي لمشرف دعم التميز",desc:"تمكين المشرف من دعم التميز والجودة.",kind:"دليل",url:"https://drive.google.com/file/d/17l_qlhdWdUBRWEbDcFKT0iCkUh2gifu4/view",src:"وزارة التعليم"},
   {group:"quality",title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا)",desc:"إطار التحسين المستمر.",kind:"دليل",url:"https://drive.google.com/file/d/1DXr6D6B57noKsxmb35WPcqd9rQK9IVfk/view",src:"وزارة التعليم"},
@@ -220,17 +220,16 @@ const DOCS_DATA=[
   {group:"policies",title:"دليل إرشادي للحفاظ على الوثائق والاتصالات",desc:"حفظ الملفات والمراسلات وفق الضوابط.",kind:"دليل",url:"https://drive.google.com/file/d/1T4DbU8mJDQyC1c9yvvjeKoC8MKZBr420/view",src:"وزارة التعليم"},
 
   {group:"staff",title:"القواعد التنظيمية لشاغلي الوظائف التعليمية",desc:"الصلاحيات والواجبات المهنية.",kind:"قواعد",url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view",src:"وزارة التعليم"},
-  {group:"staff",title:"صلاحيات قائد المدرسة",desc:"حدود ومسؤوليات قائد المدرسة.",kind:"صلاحيات",url:"",src:"وزارة التعليم"},
-  {group:"staff",title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية",desc:"خطوات عملية لتقويم الأداء.",kind:"دليل",url:"https://drive.google.com/file/d/16KRyOlQUTD0TS4449L-T-rBluiYJ5-FO/view",src:"وزارة التعليم"},
+  {group:"staff",title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية",desc:"خطوات عملية لتقويم الأداء.",kind:"دليل",url:"https://drive.google.com/file/d/1nI-G3DRY1MhK0t9PLu-P8PcouAY22G5f/view?usp=sharing",src:"وزارة التعليم"},
   {group:"staff",title:"نماذج تقييم أداء شاغلي الوظائف التعليمية",desc:"نماذج معتمدة لتوثيق الأداء.",kind:"نماذج",url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdkT0H5vMJvSzYn7/view",src:"وزارة التعليم"},
   {group:"staff",title:"تهيئة الموظف الجديد على نظام فارس (دليل مستخدم)",desc:"خطوات التهيئة واستخدام فارس.",kind:"دليل",url:"https://drive.google.com/file/d/15idPnrerHN3eJT7Pu_xePZduYjZKL7hd/view",src:"وزارة التعليم"},
   {group:"staff",title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم",desc:"تخطيط الموارد البشرية التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view",src:"وزارة التعليم"},
   {group:"staff",title:"إسناد تدريس المواد التي ليس لها تخصص",desc:"تنظيم الإسناد وضوابطه.",kind:"ضوابط",url:"https://drive.google.com/file/d/153qd1HGE5B3N7bxYGxG9mUCYKqwh_Srd/view",src:"وزارة التعليم"},
 
   {group:"platformsOps",title:"الدليل المبسّط لنظام نور",desc:"خطوات سريعة في نور.",kind:"دليل",url:"",src:"وزارة التعليم"},
-  {group:"platformsOps",title:"عمليات القبول في المدارس",desc:"إجراءات القبول والتسجيل.",kind:"دليل",url:"",src:"وزارة التعليم"},
+  {group:"platformsOps",title:"عمليات القبول في المدارس",desc:"إجراءات القبول والتسجيل.",kind:"دليل",url:"https://drive.google.com/file/d/1F_avKmTOrN9SfCB7J3BJUF_q9NCJQBHP/view?usp=sharing",src:"وزارة التعليم"},
   {group:"platformsOps",title:"خدمة متابعة حالات الطلبة في نظام نور",desc:"متابعة تحصيلية وسلوكية.",kind:"دليل",url:"https://drive.google.com/file/d/15t7S2de_uzWuQvjQAIl60C1_Nkf_DhHS/view",src:"وزارة التعليم"},
-  {group:"platformsOps",title:"دليل الخطط الدراسية",desc:"بناء الجداول وفق الخطط.",kind:"دليل",url:"",src:"وزارة التعليم"},
+  {group:"platformsOps",title:"دليل الخطط الدراسية",desc:"بناء وتخطيط الخطط الدراسية.",kind:"دليل",url:"https://drive.google.com/file/d/1jLtxUE_wF9-as7GhUEFmCTBcNTBQ2Kue/view?usp=sharing",src:"وزارة التعليم"},
 
   {group:"uniform",title:"دليل الزي المدرسي والرياضي لطلبة التعليم العام",desc:"المواصفات المعتمدة للزي.",kind:"دليل",url:"https://drive.google.com/file/d/1dJaj5cH6sUOpUh2shay36xH7FctVxZXh/view",src:"وزارة التعليم"},
 
