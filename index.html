@@ -10,16 +10,19 @@
   --ink:#0b3f43; --muted:#5d737a; --line:#e6eeee;
   --bg1:#f7fafb; --bg2:#f3f7f8;
   --card:#ffffff; --accent:#0a7f79; --accent2:#3db2aa;
-  --heroH:clamp(180px, 32vh, 300px);
+  --heroH:clamp(160px,28vh,300px);
   --maxW:1200px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer}
+@media (max-width:1024px){:root{--heroH:clamp(150px,26vh,280px)}}
+@media (max-width:768px){:root{--heroH:clamp(130px,22vh,240px)}}
+@media (max-width:560px){:root{--heroH:clamp(120px,20vh,200px)}}
 
 .masthead{position:sticky;top:0;z-index:100;background:#fff;display:grid;place-items:center;height:var(--heroH);border-bottom:1px solid var(--line)}
-.masthead img{max-height:calc(var(--heroH) - 24px);width:auto;height:auto;object-fit:contain}
+.masthead img{max-height:calc(var(--heroH) - 18px);width:auto;height:auto;object-fit:contain}
 
 .note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;color:#4b6166}
 .note b{color:#0a6e5f}
@@ -53,6 +56,7 @@ button{font-family:inherit;cursor:pointer}
 .group[data-i="13"] summary{background:linear-gradient(90deg,#455a64,#90a4ae)}
 .group[data-i="14"] summary{background:linear-gradient(90deg,#009688,#4dd0c5)}
 .group[data-i="15"] summary{background:linear-gradient(90deg,#ad1457,#f48fb1)}
+.group[data-i="16"] summary{background:linear-gradient(90deg,#7b1fa2,#c792ea)}
 
 .row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:8px;margin:6px 0;background:#ffffffcc}
 .title{font-weight:800;color:#064a45;font-size:14px}
@@ -145,8 +149,26 @@ button{font-family:inherit;cursor:pointer}
 </nav>
 
 <script>
-const GROUP_TITLES={grading:"التقويم والدرجات",exams:"الاختبارات",attendance:"الحضور والدوام",facilities:"المرافق والتشغيل",quality:"التميز والجودة",conduct:"السلوك والمواظبة والمهني",policies:"السياسات والأنظمة العامة",staff:"شاغلو الوظائف التعليمية",platformsOps:"منصات التشغيل والمعاملات",uniform:"المظهر والزي",forms:"نماذج وزيارات",inclusive:"التعليم الشامل والدعم الطلابي",safety:"الأمن والسلامة المدرسية",elearn:"التعلّم الإلكتروني والمحتوى الرقمي",counseling:"الإرشاد الطلابي والرعاية النفسية"};
-const ORDER=["grading","exams","attendance","facilities","quality","conduct","policies","staff","platformsOps","uniform","forms","inclusive","safety","elearn","counseling"];
+const GROUP_TITLES={
+  grading:"التقويم والدرجات",
+  exams:"الاختبارات",
+  attendance:"الحضور والدوام",
+  facilities:"المرافق والتشغيل",
+  quality:"التميز والجودة",
+  conduct:"السلوك والمواظبة والمهني",
+  policies:"السياسات والأنظمة العامة",
+  staff:"شاغلو الوظائف التعليمية",
+  platformsOps:"منصات التشغيل والمعاملات",
+  uniform:"المظهر والزي",
+  forms:"نماذج وزيارات",
+  inclusive:"التعليم الشامل والدعم الطلابي",
+  safety:"الأمن والسلامة المدرسية",
+  elearn:"التعلّم الإلكتروني والمحتوى الرقمي",
+  counseling:"الإرشاد الطلابي والرعاية النفسية",
+  kg:"رياض الأطفال"
+};
+const ORDER=["grading","exams","attendance","facilities","quality","conduct","policies","staff","platformsOps","uniform","forms","inclusive","safety","elearn","counseling","kg"];
+
 const DOCS_DATA=[
   {group:"grading",title:"لائحة تقويم الطالب 2025م",desc:"سياسة التقييم وأدوات القياس.",kind:"لائحة",url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view",src:"وزارة التعليم"},
   {group:"grading",title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م",desc:"آليات تطبيق اللائحة داخل المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view",src:"وزارة التعليم"},
@@ -179,6 +201,8 @@ const DOCS_DATA=[
   {group:"staff",title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية",desc:"خطوات عملية لتقويم الأداء.",kind:"دليل",url:"https://drive.google.com/file/d/16KRyOlQUTD0TS4449L-T-rBluiYJ5-FO/view",src:"وزارة التعليم"},
   {group:"staff",title:"نماذج تقييم أداء شاغلي الوظائف التعليمية",desc:"نماذج معتمدة لتوثيق الأداء.",kind:"نماذج",url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdkT0H5vMJvSzYn7/view",src:"وزارة التعليم"},
   {group:"staff",title:"تهيئة الموظف الجديد على نظام فارس (دليل مستخدم)",desc:"خطوات التهيئة واستخدام فارس.",kind:"دليل",url:"https://drive.google.com/file/d/15idPnrerHN3eJT7Pu_xePZduYjZKL7hd/view",src:"وزارة التعليم"},
+  {group:"staff",title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم",desc:"تخطيط الموارد البشرية التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view",src:"وزارة التعليم"},
+  {group:"staff",title:"إسناد تدريس المواد التي ليس لها تخصص",desc:"تنظيم الإسناد وضوابطه.",kind:"ضوابط",url:"https://drive.google.com/file/d/153qd1HGE5B3N7bxYGxG9mUCYKqwh_Srd/view",src:"وزارة التعليم"},
 
   {group:"platformsOps",title:"الدليل المبسّط لنظام نور",desc:"خطوات سريعة في نور.",kind:"دليل",url:"https://drive.google.com/file/d/16rTZA76BkmvPeYL__3coIObOzSCmbXVH/view",src:"وزارة التعليم"},
   {group:"platformsOps",title:"عمليات القبول في المدارس",desc:"إجراءات القبول والتسجيل.",kind:"دليل",url:"https://drive.google.com/file/d/1648GyxMfLWqBQSWRsS8uW-9QubH6KgvH/view",src:"وزارة التعليم"},
@@ -197,7 +221,9 @@ const DOCS_DATA=[
 
   {group:"counseling",title:"تعزيز السلوك الإيجابي",desc:"برامج تعزيز السلوك.",kind:"دليل",url:"https://drive.google.com/file/d/1EA5oYQ4PtSxM_rLjbgm9c4iQJATDTEKq/view",src:"وزارة التعليم"},
   {group:"counseling",title:"دليل التوجيه وقت الأزمات",desc:"أدوار وتدخلات أثناء الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/1Cr4LULa-HDsIo49UrFvMq80hZO1YLs9Q/view",src:"وزارة التعليم"},
-  {group:"counseling",title:"خطة برامج وخدمات التوجيه الطلابي",desc:"حزمة برامج وخدمات إرشادية.",kind:"خطة",url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view",src:"وزارة التعليم"}
+  {group:"counseling",title:"خطة برامج وخدمات التوجيه الطلابي",desc:"حزمة برامج وخدمات إرشادية.",kind:"خطة",url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view",src:"وزارة التعليم"},
+
+  {group:"kg",title:"الدليل التنظيمي للحضانة ورياض الأطفال (1438-1439)",desc:"تنظيم العمل في رياض الأطفال.",kind:"دليل",url:"https://drive.google.com/file/d/1BzZtwzOQtO45A5A3SCq5j6XqbwEZOkDT/view",src:"وزارة التعليم"}
 ];
 
 function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m?m[1]:""}
@@ -207,12 +233,54 @@ function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt
 
 function renderDocs(){
   const byId=new Set(),byTitle=new Set();const perGroup=new Map(ORDER.map(k=>[k,[]]));
-  DOCS_DATA.forEach(d=>{const id=driveId(d.url);const t=(d.title||"").trim().toLowerCase();if(id&&byId.has(id))return;if(t&&byTitle.has(t))return;if(id)byId.add(id);if(t)byTitle.add(t);perGroup.get(d.group)?.push(d)});
+  DOCS_DATA.forEach(d=>{
+    const id=driveId(d.url);const t=(d.title||"").trim().toLowerCase().replace(/\s+/g,'');
+    if(id&&byId.has(id)) return;
+    if(t&&byTitle.has(t)) return;
+    if(id) byId.add(id);
+    if(t) byTitle.add(t);
+    perGroup.get(d.group)?.push(d);
+  });
   const host=document.getElementById('docsCols');host.innerHTML='';const cols=[document.createElement('div'),document.createElement('div'),document.createElement('div')];
-  ORDER.forEach((key,i)=>{const items=perGroup.get(key)||[];const det=document.createElement('details');det.className='group';det.setAttribute('data-i',String(i+1));det.innerHTML=`<summary><span>📁</span><span class="gtitle">${GROUP_TITLES[key]||'قسم'}</span><span class="gcount">${items.length}</span></summary><div class="wrap"></div>`;const wrap=det.querySelector('.wrap');if(items.length===0){wrap.innerHTML=`<div style="padding:10px;color:#6b7;font-size:12.5px">لا توجد روابط مضافة هنا بعد.</div>`}else{items.forEach(d=>{const ok=isValidUrl(d.url);const dl=toDirect(d.url);wrap.insertAdjacentHTML('beforeend',`<div class="row"><div><div class="title">${esc(d.title)}</div><div class="desc">${esc(d.desc||'')}</div>${d.src?`<div class="src">المصدر: ${esc(d.src)}</div>`:''}<div class="badges"><span class="badge">${esc(d.kind||'دليل')}</span>${ok?"":'<span class="badge warn">⚠️ بحاجة لتحديث الرابط</span>'}</div></div><div class="actions"><a class="btn open" ${ok?'target="_blank" rel="noopener" href="'+d.url+'"' : 'disabled'}>فتح</a><a class="btn download" ${ok?'href="'+dl+'"' : 'disabled'}>تحميل</a></div></div>`)});}cols[i%3].appendChild(det)});cols.forEach(c=>{host.appendChild(c)})}
+  ORDER.forEach((key,i)=>{
+    const items=perGroup.get(key)||[];
+    const det=document.createElement('details');det.className='group';det.setAttribute('data-i',String(i+1));
+    det.innerHTML=`<summary><span>📁</span><span class="gtitle">${GROUP_TITLES[key]||'قسم'}</span><span class="gcount">${items.length}</span></summary><div class="wrap"></div>`;
+    const wrap=det.querySelector('.wrap');
+    if(items.length===0){
+      wrap.innerHTML=`<div style="padding:10px;color:#6b7;font-size:12.5px">لا توجد روابط مضافة هنا بعد.</div>`;
+    }else{
+      items.forEach(d=>{
+        const ok=isValidUrl(d.url);const dl=toDirect(d.url);
+        wrap.insertAdjacentHTML('beforeend',
+          `<div class="row">
+             <div>
+               <div class="title">${esc(d.title)}</div>
+               <div class="desc">${esc(d.desc||'')}</div>
+               ${d.src?`<div class="src">المصدر: ${esc(d.src)}</div>`:''}
+               <div class="badges"><span class="badge">${esc(d.kind||'دليل')}</span>${ok?"":'<span class="badge warn">⚠️ بحاجة لتحديث الرابط</span>'}</div>
+             </div>
+             <div class="actions">
+               <a class="btn open" ${ok?'target="_blank" rel="noopener" href="'+d.url+'"' : 'disabled'}>فتح</a>
+               <a class="btn download" ${ok?'href="'+dl+'"' : 'disabled'}>تحميل</a>
+             </div>
+           </div>`);
+      });
+    }
+    cols[i%3].appendChild(det);
+  });
+  cols.forEach(c=>host.appendChild(c));
+}
 renderDocs();
 
-document.querySelectorAll('.bottom-btn').forEach(btn=>{btn.addEventListener('click',()=>{if(btn.dataset.action==='top'){window.scrollTo({top:0,behavior:'smooth'});return}const sel=btn.dataset.target;if(sel==='body'){document.body.scrollIntoView({behavior:'smooth'});return}document.querySelector(sel)?.scrollIntoView({behavior:'smooth',block:'start'})})});
+document.querySelectorAll('.bottom-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(btn.dataset.action==='top'){window.scrollTo({top:0,behavior:'smooth'});return}
+    const sel=btn.dataset.target;
+    if(sel==='body'){document.body.scrollIntoView({behavior:'smooth'});return}
+    document.querySelector(sel)?.scrollIntoView({behavior:'smooth',block:'start'})
+  });
+});
 </script>
 </body>
 </html>
