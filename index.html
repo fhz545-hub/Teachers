@@ -10,23 +10,27 @@
   --ink:#0b3f43; --muted:#5d737a; --bg:#f5f8f8; --paper:#ffffff; --line:#e3ecec;
   --shadow:0 14px 28px rgba(0,0,0,.07);
 
-  /* خيار (ب): تدرّجات رسمية قوية قريبة من الهوية */
-  --grp1:#00796B;   /* التقويم والدرجات */
-  --grp2:#00695C;   /* الاختبارات */
-  --grp3:#00897B;   /* الحضور والدوام */
-  --grp4:#009688;   /* المرافق والتشغيل */
-  --grp5:#00A69A;   /* التميز والجودة */
-  --grp6:#2E7D32;   /* السلوك والمواظبة والمهني */
-  --grp7:#1F6F7A;   /* السياسات والأنظمة العامة */
-  --grp8:#2C7BE5;   /* شاغلو الوظائف التعليمية (أزرق رسمي) */
-  --grp9:#0277BD;   /* منصات التشغيل والمعاملات */
-  --grp10:#0E6E7A;  /* المظهر والزي */
-  --grp11:#0A5E66;  /* نماذج وزيارات */
-  --grp12:#6A1B9A;  /* التعليم الشامل والدعم الطلابي */
-  --grp13:#BF360C;  /* الأمن والسلامة المدرسية */
-  --grp14:#1565C0;  /* التعلم الإلكتروني والمحتوى الرقمي */
-  --grp15:#512DA8;  /* الإرشاد الطلابي والرعاية النفسية */
+  /* تدرّجات رسمية قوية قريبة من الهوية */
+  --grp1:#00796B; --grp2:#00695C; --grp3:#00897B; --grp4:#009688; --grp5:#00A69A;
+  --grp6:#2E7D32; --grp7:#1F6F7A; --grp8:#2C7BE5; --grp9:#0277BD; --grp10:#0E6E7A;
+  --grp11:#0A5E66; --grp12:#6A1B9A; --grp13:#BF360C; --grp14:#1565C0; --grp15:#512DA8;
+
+  /* ارتفاعات الهيدر حسب النمط */
+  --heroH-compact: 220px;
+  --heroH-balanced: 330px;  /* المقترح B */
+  --heroH-grand: 420px;
+
+  /* حدود عرض الشعار */
+  --heroMaxW: 1200px; /* أقصى عرض مرئي للشعار */
 }
+
+/* سويتش النمط عبر data-hero على <body> */
+body[data-hero="compact"] { --heroH: var(--heroH-compact); }
+body[data-hero="balanced"] { --heroH: var(--heroH-balanced); }
+body[data-hero="grand"] { --heroH: var(--heroH-grand); }
+/* افتراضي */
+body:not([data-hero]){ --heroH: var(--heroH-balanced); }
+
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
 a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
@@ -35,9 +39,37 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 .container{max-width:1160px;margin-inline:auto;padding:0 14px 92px}
 .container::before{content:"";display:block;height:8px;margin:12px 0;background:linear-gradient(90deg,#dff5f1,#f0fbff,#dff5f1);border-radius:999px}
 
-/* masthead image */
-.masthead{display:flex;justify-content:center;align-items:center;padding:20px 0 8px}
-.masthead img{width:clamp(420px,60vw,980px);height:auto;display:block;object-fit:contain;filter:drop-shadow(0 8px 22px rgba(0,0,0,.06));border-radius:10px}
+/* الهيدر المحسّن */
+.masthead{
+  height:var(--heroH);
+  display:grid; place-items:center;
+  padding:16px;
+  background:
+    radial-gradient(1200px 180px at 50% 0%, rgba(0,150,136,.10), transparent 60%),
+    linear-gradient(180deg,#ffffff,rgba(255,255,255,.96));
+  border-bottom:1px solid var(--line);
+  box-shadow:0 10px 24px rgba(0,0,0,.04) inset;
+}
+.masthead-inner{
+  width:min(95vw,var(--heroMaxW));
+  height:100%;
+  display:grid; place-items:center;
+  /* إطار خفيف للشعار يعطي توازن */
+  border-radius:16px;
+  background:linear-gradient(180deg,#fff,rgba(255,255,255,.98));
+  border:1px solid #eef5f5;
+  box-shadow:0 10px 28px rgba(0,0,0,.05);
+  padding: clamp(10px, 2.5vw, 24px);
+}
+.masthead img{
+  /* نضمن أن العرض الكبير 2222px يُعرض بدون تشويه وبشكل متزن */
+  max-width:min(92vw,var(--heroMaxW));
+  max-height:calc(var(--heroH) - clamp(60px, 10vh, 120px));
+  width:auto; height:auto; object-fit:contain;
+  filter:drop-shadow(0 10px 22px rgba(0,0,0,.06));
+  transition:transform .25s ease;
+}
+.masthead:hover img{ transform: translateY(-1px); }
 
 /* sections */
 .section{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 10px 24px rgba(0,0,0,.05)}
@@ -48,7 +80,7 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 @media (max-width:1200px){.columns{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:720px){.columns{grid-template-columns:1fr}}
 
-/* accordion (مغلقة افتراضيًا – تُفتح عند الضغط) */
+/* accordion مغلقة افتراضيًا */
 .group{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;transition:box-shadow .2s}
 .group:hover{box-shadow:0 10px 24px rgba(0,0,0,.06)}
 .group summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);position:relative;color:#fff}
@@ -58,7 +90,7 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 .group .wrap{padding:10px;background:#fff}
 .group .empty{padding:12px;border:1px dashed var(--line);border-radius:10px;background:#f9fcfc;color:#6b7;font-size:12.5px}
 
-/* رؤوس ملونة قوية لكل مجموعة */
+/* رؤوس ملونة قوية */
 .group[data-i="1"] summary{background:linear-gradient(90deg,var(--grp1),#3FB6A8)}
 .group[data-i="2"] summary{background:linear-gradient(90deg,var(--grp2),#39A292)}
 .group[data-i="3"] summary{background:linear-gradient(90deg,var(--grp3),#50CBBF)}
@@ -98,7 +130,7 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 .card .title{font-size:15px;font-weight:800;color:#064a45}
 .card .desc{font-size:13px;color:#5d737a}
 
-/* locked ribbon "خاص" */
+/* شارة "خاص" */
 .card.locked::after{
   content:"خاص";
   position:absolute; top:10px; inset-inline-start:10px;
@@ -117,22 +149,26 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
 .bottom-btn:hover::after,.bottom-btn:focus::after{opacity:1}
 </style>
 </head>
-<body>
 
-<!-- الهيدر بالصورة -->
-<div class="masthead" aria-label="هوية الجهة">
-  <img src="logo2.png" alt="هوية وزارة التعليم">
-</div>
+<!-- غيّر data-hero إلى compact / balanced / grand -->
+<body data-hero="balanced">
+
+<!-- الهيدر بالصورة (محسّن) -->
+<header class="masthead" aria-label="هوية الجهة">
+  <div class="masthead-inner">
+    <img src="logo2.png" alt="هوية وزارة التعليم">
+  </div>
+</header>
 
 <div class="container">
   <!-- الأدلّة والأنظمة -->
-  <div class="section" id="docs">
+  <section class="section" id="docs" aria-label="الأدلّة والأنظمة">
     <h2>الأدلّة والأنظمة</h2>
-    <div class="columns" id="docsCols"><!-- يُولّد تلقائيًا --></div>
-  </div>
+    <div class="columns" id="docsCols"></div>
+  </section>
 
   <!-- المنصات التعليمية -->
-  <div class="section" id="platforms">
+  <section class="section" id="platforms" aria-label="المنصات التعليمية">
     <h2>المنصات التعليمية</h2>
     <div class="cards">
       <a class="card" href="https://iam.moe.gov.sa/" target="_blank" rel="noopener"><div class="title">الدعم الموحّد (IAM)</div><div class="desc">نفاذ موحّد لبوابات الوزارة.</div></a>
@@ -152,16 +188,15 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
       <a class="card" href="https://x.com/MOE_RYH" target="_blank" rel="noopener"><div class="title">تعليم الرياض — X</div><div class="desc">حساب الإدارة.</div></a>
       <a class="card" href="https://x.com/MOE_MHC" target="_blank" rel="noopener"><div class="title">تعليم مكة — X</div><div class="desc">حساب الإدارة.</div></a>
     </div>
-  </div>
+  </section>
 
   <!-- ركن الدعم المدرسي -->
-  <div class="section" id="support">
+  <section class="section" id="support" aria-label="ركن الدعم المدرسي">
     <h2>ركن الدعم المدرسي</h2>
     <p style="margin:4px 0 10px;color:#6b7;font-size:12.5px">
       *ملاحظة: يتم حاليًّا تجميع جميع السجلات والملفات التي تخدم قائد المدرسة، وسيُتاح الوصول إليها تباعًا بإذن الله.*
     </p>
     <div class="cards">
-      <!-- خاص: منصة التحليل والتحسين المدرسي -->
       <a class="card locked" href="https://fhz545-hub.github.io/Analysis/" target="_blank" rel="noopener" style="text-align:center">
         <div class="ico" style="font-size:28px">📈</div>
         <div class="title" style="margin-top:6px">منصة التحليل والتحسين المدرسي</div>
@@ -174,7 +209,6 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
         <div class="desc">تخطيط ومراجعة وتقييم.</div>
       </a>
 
-      <!-- خاص: الشؤون الإدارية والمتابعة -->
       <div class="card locked" style="text-align:center">
         <div class="ico" style="font-size:28px">🔒</div>
         <div class="title" style="margin-top:6px">الشؤون الإدارية والمتابعة</div>
@@ -187,12 +221,12 @@ a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
         <div class="desc">توثيق الزيارات ومعالجة الفجوات.</div>
       </a>
     </div>
-  </div>
+  </section>
 
   <!-- تذييل -->
-  <div class="section" style="text-align:center;background:linear-gradient(90deg,#0e6462,#2f7f79);color:#e8fffb">
+  <section class="section" style="text-align:center;background:linear-gradient(90deg,#0e6462,#2f7f79);color:#e8fffb">
     <b>تجميع وتنفيذ:</b> فهد حامد الزهراني
-  </div>
+  </section>
 </div>
 
 <!-- شريط الأيقونات السفلي -->
@@ -234,7 +268,7 @@ const GROUP_TITLES = {
   counseling:"الإرشاد الطلابي والرعاية النفسية"
 };
 
-/* البيانات — محدثة وموزّعة بلا تكرار */
+/* البيانات — كما اعتمدناها سابقًا (بلا تكرار) */
 const DOCS_DATA = [
   /* التقويم */
   {group:"grading", title:"لائحة تقويم الطالب 2025م", desc:"سياسة التقييم وأدوات القياس.", kind:"لائحة", url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view", src:"وزارة التعليم"},
@@ -289,11 +323,9 @@ const DOCS_DATA = [
   {group:"forms", title:"استمارة الزيارة الفني لمشرف الإدارة المدرسية", desc:"معايير ومؤشرات وتوصيات.", kind:"نموذج", url:"https://drive.google.com/file/d/1Q2SnbnnteJCIgyz8WZCESV01Jk_3rPMh/view", src:"وزارة التعليم"},
   {group:"forms", title:"نموذج الحصص الأسبوعية في الفصلين", desc:"توزيع الحصص للأسبوع الدراسي.", kind:"نموذج", url:"https://drive.google.com/file/d/157rFurVpjSpxV6o7pRfMTZInLGMv5rjx/view", src:"وزارة التعليم"},
 
-  /* التعليم الشامل والدعم الطلابي (نقلت إليه أدلة الموهوبين بدل تكرارها في السياسات) */
+  /* التعليم الشامل والدعم الطلابي */
   {group:"inclusive", title:"القواعد التنظيمية لفصول ومدارس الموهوبين", desc:"تنظيم البرامج والمسارات.", kind:"قواعد", url:"https://drive.google.com/file/d/15g8C3aVaStWcftLa4toBJQtP-2wP113O/view", src:"وزارة التعليم"},
   {group:"inclusive", title:"ضوابط تسريع انتقال الطلبة الموهوبين 1447هـ", desc:"آليات وإجراءات التسريع الأكاديمي.", kind:"ضوابط", url:"https://drive.google.com/file/d/15ekZaGwDQY2PJSk7yyAbctOvx0gZghsw/view", src:"وزارة التعليم"},
-
-  /* الأمن والسلامة المدرسية (بانتظار تزويدك بروابط رسمية إن رغبت) */
 
   /* التعلم الإلكتروني والمحتوى الرقمي */
   {group:"elearn", title:"دليل السلوك الرقمي لمنصة مدرستي", desc:"ضوابط الاستخدام الآمن والمسؤول.", kind:"دليل", url:"https://drive.google.com/file/d/19ym1Uih9GbXyXhDRcpP1qlk-kbgGfjQ_/view", src:"وزارة التعليم"},
@@ -304,7 +336,7 @@ const DOCS_DATA = [
   {group:"counseling", title:"خطة برامج وخدمات التوجيه الطلابي", desc:"حزمة برامج وخدمات إرشادية.", kind:"خطة", url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view", src:"وزارة التعليم"}
 ];
 
-/* ترتيب الأعمدة + إضافة الأقسام الجديدة */
+/* ترتيب عرض المجموعات */
 const ORDER = [
   "grading","exams","attendance",
   "facilities","quality","conduct",
@@ -319,7 +351,7 @@ function isValidUrl(u){return /^https:\/\/.+/i.test(u||"");}
 function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&gt;"}[c]));}
 
 function renderDocs(){
-  // إزالة التكرار تلقائيًا حسب Google Drive ID أو العنوان
+  // إزالة التكرار حسب ID أو العنوان
   const byId=new Set(), byTitle=new Set();
   const perGroup=new Map(ORDER.map(k=>[k,[]]));
   DOCS_DATA.forEach(d=>{
@@ -336,7 +368,7 @@ function renderDocs(){
   ORDER.forEach((key,i)=>{
     const items=perGroup.get(key)||[];
     const det=document.createElement('details'); det.className='group';
-    det.setAttribute('data-i', String(i+1)); // لون العنوان
+    det.setAttribute('data-i', String(i+1));
     det.innerHTML=`<summary><span>📁</span><span class="gtitle">${GROUP_TITLES[key]||'قسم'}</span><span class="gcount">${items.length}</span></summary><div class="wrap"></div>`;
     const wrap=det.querySelector('.wrap');
 
