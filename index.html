@@ -13,7 +13,7 @@
   --maxW:1200px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--ink);font-family:"Tajawal",system-ui,sans-serif}
+html,body{margin:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#0b3f43;font-family:"Tajawal",system-ui,sans-serif}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer}
 
@@ -86,7 +86,6 @@ button{font-family:inherit;cursor:pointer}
 .card .desc{font-size:13px;color:#5d737a}
 .card.locked{cursor:not-allowed;opacity:.95}
 .card .ico{font-size:28px}
-/* شارة جديد موجودة مسبقًا وتُستخدم هنا أيضًا */
 .badge.new{background:#b41d3a;border-color:#b41d3a;color:#fff}
 
 .bottom-bar{position:fixed;inset-inline:0;bottom:0;background:#0b3f43;color:#fff;z-index:90;border-top:1px solid rgba(255,255,255,.12)}
@@ -103,7 +102,7 @@ button{font-family:inherit;cursor:pointer}
 
 <div class="masthead"><img src="logo2.png" alt="هوية"></div>
 
-<!-- شريط إشعار بالعناصر الجديدة (يظهر تلقائيًا إن وُجد جديد خلال ٧ أيام) -->
+<!-- شريط إشعار بالعناصر الجديدة (يظهر تلقائيًا إن وُجد جديد خلال آخر يومين) -->
 <div id="announce" class="announce" role="status" aria-live="polite">
   <span class="dot" aria-hidden="true"></span>
   <span class="txt">تمت إضافة عناصر جديدة مؤخرًا.</span>
@@ -120,7 +119,7 @@ button{font-family:inherit;cursor:pointer}
 
   <section class="section" id="platforms">
     <h2>المنصات التعليمية</h2>
-    <div class="cards">
+    <div class="cards" id="platformCards">
       <a class="card" href="https://iam.moe.gov.sa/" target="_blank" rel="noopener"><div class="title">الدعم الموحّد (IAM)</div><div class="desc">نفاذ موحّد لبوابات الوزارة.</div></a>
       <a class="card" href="https://schools.madrasati.sa/" target="_blank" rel="noopener"><div class="title">مدرستي</div><div class="desc">التعليم الإلكتروني وإدارة الفصول.</div></a>
       <a class="card" href="https://noor.moe.gov.sa/Noor/login.aspx" target="_blank" rel="noopener"><div class="title">نور</div><div class="desc">معلومات الطالب والقبول.</div></a>
@@ -129,6 +128,13 @@ button{font-family:inherit;cursor:pointer}
       <a class="card" href="https://sshr.moe.gov.sa/" target="_blank" rel="noopener"><div class="title">فارس</div><div class="desc">الخدمة الذاتية لمنسوبي التعليم.</div></a>
       <a class="card" href="https://sncc.gov.sa/index_ar.html" target="_blank" rel="noopener"><div class="title">المركز الوطني للمناهج</div><div class="desc">منصة المناهج الوطنية.</div></a>
       <a class="card" href="https://nelc.gov.sa/" target="_blank" rel="noopener"><div class="title">المركز الوطني للتعليم الإلكتروني</div><div class="desc">تشريعات ومعايير التعليم الإلكتروني.</div></a>
+
+      <!-- الإضافة الجديدة (تظهر شارة جديد ليومين) -->
+      <a class="card" href="https://niepd.futurex.sa/" target="_blank" rel="noopener" data-added-at="2025-10-26">
+        <div class="title">المعهد الوطني للتطوير المهني التعليمي</div>
+        <div class="desc">دورات وبرامج للتطوير المهني التعليمي.</div>
+      </a>
+
       <a class="card" href="https://forms.office.com/" target="_blank" rel="noopener"><div class="title">Microsoft Forms</div><div class="desc">نماذج واستبانات وأنشطة.</div></a>
       <a class="card" href="https://teams.microsoft.com/" target="_blank" rel="noopener"><div class="title">Microsoft Teams</div><div class="desc">اجتماعات ودروس افتراضية.</div></a>
       <a class="card" href="https://x.com/moe_gov_sa" target="_blank" rel="noopener"><div class="title">وزارة التعليم — X</div><div class="desc">الحساب الرسمي.</div></a>
@@ -147,14 +153,16 @@ button{font-family:inherit;cursor:pointer}
         <div class="ico">📁</div>
         <div class="title" style="margin-top:6px">ملفات وسجلات المدير</div>
         <div class="desc">ملفات تشغيلية حساسة — وصول محدود</div>
-        <div class="badge new" style="position:absolute;top:10px;inset-inline-end:10px">جديد</div>
       </div>
-      <div class="card locked" style="text-align:center">
+
+      <!-- تم ربط سجلات المدرسة بالمجلد المطلوب + شارة جديد -->
+      <a class="card" href="https://drive.google.com/drive/folders/1fCM6lNV_i4l_LuCHl5BX0Vy2-H3lWx2E?usp=sharing" target="_blank" rel="noopener" style="text-align:center;position:relative">
         <div class="ico">🗂️</div>
         <div class="title" style="margin-top:6px">سجلات المدرسة</div>
         <div class="desc">مجلدات تتبع وتشغيل — وصول محدود</div>
         <div class="badge new" style="position:absolute;top:10px;inset-inline-end:10px">جديد</div>
-      </div>
+      </a>
+
       <a class="card" href="https://fhz545-hub.github.io/taqyeem/" target="_blank" rel="noopener" style="text-align:center">
         <div class="ico">📊</div>
         <div class="title" style="margin-top:6px">تقييم الأداء الوظيفي</div>
@@ -209,9 +217,9 @@ const ORDER=[
   "interactive","guides"
 ];
 
-/* تاريخ اليوم (حسب منطقة الرياض +03:00) لإبراز الجديد لمدة ٧ أيام */
-const TODAY = new Date(); // يعتمد على جهاز المستخدم؛ يكفي للغرض
-function خلالأيام(dateStr, days=7){
+/* نافذة إبراز الجديد: يومان فقط */
+const TODAY = new Date(); // توقيت متصفح المستخدم
+function خلالأيام(dateStr, days=2){
   if(!dateStr) return false;
   const d = new Date(dateStr);
   const diff = (TODAY - d) / (1000*60*60*24);
@@ -246,7 +254,7 @@ const DOCS_DATA=[
   {group:"staff",title:"القواعد التنظيمية لشاغلي الوظائف التعليمية",desc:"الصلاحيات والواجبات المهنية.",kind:"قواعد",url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view",src:"وزارة التعليم"},
   {group:"staff",title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية",desc:"خطوات عملية لتقويم الأداء.",kind:"دليل",url:"https://drive.google.com/file/d/1nI-G3DRY1MhK0t9PLu-P8PcouAY22G5f/view?usp=sharing",src:"وزارة التعليم"},
   {group:"staff",title:"نماذج تقييم أداء شاغلي الوظائف التعليمية",desc:"نماذج معتمدة لتوثيق الأداء.",kind:"نماذج",url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdkT0H5vMJvSzYn7/view",src:"وزارة التعليم"},
-  {group:"staff",title:"تهيئة الموظف الجديد على نظام فارس (دليل مستخدم)",desc:"خطوات التهيئة واستخدام فارس.",kind:"دليل",url:"https://drive.google.com/file/d/15idPnrerHN3eJT7Pu_xePZduYjZKL7hd/view",src:"وزارة التعليم"},
+  {group:"staff",title:"تهيئة الموظف الجديد على نظام فارس (دليل مستخدم)",desc:"خطوات التهيئة واستخدام فارس.",kind:"دليل",url:"https://drive.google.com/file/d/15idPnrerHN3eJT7Pu_xePZduJZKL7hd/view",src:"وزارة التعليم"},
   {group:"staff",title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم",desc:"تخطيط الموارد البشرية التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view",src:"وزارة التعليم"},
   {group:"staff",title:"إسناد تدريس المواد التي ليس لها تخصص",desc:"تنظيم الإسناد وضوابطه.",kind:"ضوابط",url:"https://drive.google.com/file/d/153qd1HGE5B3N7bxYGxG9mUCYKqwh_Srd/view",src:"وزارة التعليم"},
 
@@ -275,7 +283,7 @@ const DOCS_DATA=[
 
   {group:"kg",title:"الدليل التنظيمي للحضانة ورياض الأطفال (1438-1439)",desc:"تنظيم العمل في رياض الأطفال.",kind:"دليل",url:"https://drive.google.com/file/d/1BzZtwzOQtO45A5A3SCq5j6XqbwEZOkDT/view",src:"وزارة التعليم"},
 
-  /* الإضافات الجديدة (تاريخ الإضافة لتفعيل شارة جديد لمدة ٧ أيام) */
+  /* الإضافات الجديدة بتاريخ اليوم (تظهر شارة جديد لمدة يومين فقط) */
   {group:"safety",title:"دليل الإسعافات الأولية",desc:"مرشد للإسعافات الأولية في المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1_Gx1fXlb6whQ_g9yr_q6b-07v6GrIIWP/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
   {group:"kg",title:"الضوابط التنظيمية لمرحلة الحضانة",desc:"ضوابط تنظيمية لمرحلة الحضانة.",kind:"ضوابط",url:"https://drive.google.com/file/d/1Sn5IBMcre8pvDrduvXLYsbSEF37mi4Dw/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
   {group:"kg",title:"الضوابط التنظيمية لمرحلة رياض الأطفال",desc:"ضوابط تنظيمية لرياض الأطفال.",kind:"ضوابط",url:"https://drive.google.com/file/d/1nGK7AoQKlHZasAmKwPv3OTRzSUU-V24h/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
@@ -293,9 +301,9 @@ const DOCS_DATA=[
 function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m?m[1]:""}
 function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?export=download&id=${id}`:u}
 function isValidUrl(u){return /^https:\/\/.+/i.test(u||"")}
-function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;","&gt;":"&gt;"}[c]||c))}
+function esc(s){return String(s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
-/* الرسم */
+/* الرسم للأدلّة */
 function renderDocs(){
   const byId=new Set(),byTitle=new Set();const perGroup=new Map(ORDER.map(k=>[k,[]]));
   let newCount=0;
@@ -306,14 +314,14 @@ function renderDocs(){
     if(t&&byTitle.has(t)) return;
     if(id) byId.add(id);
     if(t) byTitle.add(t);
-    if(خلالأيام(d.addedAt,7)) newCount++;
+    if(خلالأيام(d.addedAt,2)) newCount++;
     perGroup.get(d.group)?.push(d);
   });
 
   const announce=document.getElementById('announce');
   if(newCount>0){
     announce.style.display='flex';
-    announce.querySelector('.txt').textContent = `تمت إضافة ${newCount} عنصر${newCount>1?'': ''} جديد خلال الأيام السبعة الماضية.`;
+    announce.querySelector('.txt').textContent = `تمت إضافة ${newCount} عنصر${newCount>1?'':' '} جديد خلال اليومين الماضيين.`;
   }
 
   const host=document.getElementById('docsCols');host.innerHTML='';
@@ -329,7 +337,7 @@ function renderDocs(){
     }else{
       items.forEach(d=>{
         const ok=isValidUrl(d.url);const dl=toDirect(d.url);
-        const isNew = خلالأيام(d.addedAt,7);
+        const isNew = خلالأيام(d.addedAt,2);
         wrap.insertAdjacentHTML('beforeend',
           `<div class="row">
             <div>
@@ -352,12 +360,39 @@ function renderDocs(){
     cols[i%3].appendChild(det);
   });
   cols.forEach(c=>host.appendChild(c));
+}
 
-  /* زر إخفاء شريط الإشعار */
-  announce.querySelector('.close').addEventListener('click',()=>{announce.style.display='none'});
+/* إبراز الجديد في المنصات التعليمية لليومين فقط */
+function renderPlatformNewBadge(){
+  const cont = document.getElementById('platformCards');
+  if(!cont) return;
+  const cards = cont.querySelectorAll('a.card[data-added-at]');
+  let anyNew = false;
+  cards.forEach(card=>{
+    const addedAt = card.getAttribute('data-added-at');
+    if(خلالأيام(addedAt,2)){
+      anyNew = true;
+      const badge = document.createElement('div');
+      badge.className = 'badge new';
+      badge.textContent = 'جديد';
+      badge.style.position = 'absolute';
+      badge.style.top = '10px';
+      badge.style.insetInlineEnd = '10px';
+      card.appendChild(badge);
+    }
+  });
+  const announce=document.getElementById('announce');
+  if(anyNew && announce.style.display!=='flex'){
+    announce.style.display='flex';
+    announce.querySelector('.txt').textContent = 'تمت إضافة عناصر جديدة خلال اليومين الماضيين.';
+  }
 }
 
 renderDocs();
+renderPlatformNewBadge();
+
+/* زر إخفاء شريط الإشعار */
+document.getElementById('announce').querySelector('.close').addEventListener('click',()=>{document.getElementById('announce').style.display='none'});
 
 /* تنقل سفلي */
 document.querySelectorAll('.bottom-btn').forEach(btn=>{
