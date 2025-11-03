@@ -126,7 +126,7 @@ button{font-family:inherit;cursor:pointer}
 <div class="container">
   <div class="note">ℹ️ <b>تنويه:</b> هذه المنصة مرجع تنظيمي وتعليمي لتجميع الأدلة واللوائح والخدمات من مصادرها الرسمية.</div>
 
-  <!-- قسم الأدلّة والأنظمة مع عدّاد وميض -->
+  <!-- قسم الأدلّة والأنظمة مع عدّاد وميض ديناميكي -->
   <section class="section" id="docs">
     <h2>الأدلّة والأنظمة <span id="docsCount" class="count-glow"></span></h2>
     <div class="columns" id="docsCols"></div>
@@ -145,7 +145,7 @@ button{font-family:inherit;cursor:pointer}
       <a class="card" href="https://sncc.gov.sa/index_ar.html" target="_blank" rel="noopener"><div class="title">المركز الوطني للمناهج</div><div class="desc">منصة المناهج الوطنية.</div></a>
       <a class="card" href="https://nelc.gov.sa/" target="_blank" rel="noopener"><div class="title">المركز الوطني للتعليم الإلكتروني</div><div class="desc">تشريعات ومعايير التعليم الإلكتروني.</div></a>
 
-      <!-- الإضافة الجديدة (تظهر شارة جديد لشريط الإشعار فقط عند آخر يومين) -->
+      <!-- بطاقة مضافة مؤخراً (لإظهار شارة جديد خلال يومين فقط) -->
       <a class="card" href="https://niepd.futurex.sa/" target="_blank" rel="noopener" data-added-at="2025-10-26">
         <div class="title">المعهد الوطني للتطوير المهني التعليمي</div>
         <div class="desc">دورات وبرامج للتطوير المهني التعليمي.</div>
@@ -209,7 +209,7 @@ button{font-family:inherit;cursor:pointer}
 </nav>
 
 <script>
-/* عناوين الأقسام وترتيبها */
+/* عناوين الأقسام وترتيبها (دون تغيير الهوية) */
 const GROUP_TITLES={
   grading:"التقويم والدرجات",
   exams:"الاختبارات",
@@ -250,13 +250,9 @@ function esc(s){return String(s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'
 function isValidUrl(u){return /^https:\/\/.+/i.test(u||"")}
 function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m?m[1]:""}
 function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?export=download&id=${id}`:u}
+function isLatest(item){ return item?.isLatest === true || !!item?.addedAt; }
 
-/* تعريف "عنصر حديث/أحدث إصدار": وجود addedAt أو isLatest:true */
-function isLatest(item){
-  return item?.isLatest === true || !!item?.addedAt;
-}
-
-/* الكتالوج المصنّف */
+/* الكتالوج المصنّف — تمت استعادة كل الملفات + إدراج الإضافات الجديدة في أقسامها الصحيحة */
 const CATALOG = {
   grading: [
     {title:"لائحة تقويم الطالب 2025م",desc:"سياسة التقييم وأدوات القياس.",kind:"لائحة",url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view",src:"وزارة التعليم"},
@@ -295,6 +291,40 @@ const CATALOG = {
     {title:"نظام العمل",desc:"النظام المنظم لعلاقات العمل.",kind:"نظام",url:"https://drive.google.com/file/d/14virdwgj48hZPSqNtLhlR8Qdt_xjKgWz/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-10-26"}
   ],
   staff: [
+    /* إضافات حديثة تظهر أولاً */
+    {
+      title:"آلية تنفيذ مرحلة التهيئة لبرنامج تطوير القيادات المدرسية 2026م",
+      desc:"خطوات تهيئة قادة المدارس ضمن برنامج التطوير المهني 2026.",
+      kind:"دليل",
+      url:"https://drive.google.com/file/d/14mPpdnqQdvNj5ipa4AS-lTjz309o1Gpl/view?usp=sharing",
+      src:"وزارة التعليم",
+      isLatest:true
+    },
+    {
+      title:"القواعد التنظيمية لنقل وتكليف شاغلي الوظائف التعليمية ذوي الظروف الخاصة",
+      desc:"ضوابط وإجراءات النقل والتكليف للحالات ذات الظروف الخاصة.",
+      kind:"قواعد",
+      url:"https://drive.google.com/file/d/1z968r5Psl7-TO4gIG1ZbBwDAi0AQrGTd/view?usp=sharing",
+      src:"وزارة التعليم",
+      isLatest:true
+    },
+    {
+      title:"الأسئلة الشائعة للقواعد التنظيمية لنقل وتكليف ذوي الظروف الخاصة",
+      desc:"توضيحات وإجابات لأبرز الاستفسارات حول القواعد التنظيمية.",
+      kind:"أسئلة شائعة",
+      url:"https://drive.google.com/file/d/1U9YsPQFjwtzFc7UY1AffT6B1kXna2mZy/view?usp=sharing",
+      src:"وزارة التعليم",
+      isLatest:true
+    },
+    {
+      title:"الأسئلة الشائعة: تسكين الموظفين في الهيكل التنظيمي بنظام فارس",
+      desc:"توضيحات حول آلية تسكين الموظفين ضمن الهيكل التنظيمي عبر نظام فارس.",
+      kind:"أسئلة شائعة",
+      url:"https://drive.google.com/file/d/1OXlh4F_HOZMhaCsVlXLsnkavv2HqHZ52/view?usp=sharing",
+      src:"وزارة التعليم — نظام فارس",
+      isLatest:true
+    },
+
     {title:"القواعد التنظيمية لشاغلي الوظائف التعليمية",desc:"الصلاحيات والواجبات المهنية.",kind:"قواعد",url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view",src:"وزارة التعليم"},
     {title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية",desc:"خطوات عملية لتقويم الأداء.",kind:"دليل",url:"https://drive.google.com/file/d/1nI-G3DRY1MhK0t9PLu-P8PcouAY22G5f/view?usp=sharing",src:"وزارة التعليم"},
     {title:"نماذج تقييم أداء شاغلي الوظائف التعليمية",desc:"نماذج معتمدة لتوثيق الأداء.",kind:"نماذج",url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdkT0H5vMJvSzYn7/view",src:"وزارة التعليم"},
@@ -360,13 +390,13 @@ function renderDocs(){
 
   let newCount=0;
   ORDER.forEach((key,i)=>{
-    // ترتيب: الأحدث (isLatest) أولًا، ثم أحدث تاريخ addedAt تنازليًا، ثم أبجدي عربي
+    // ترتيب: الأحدث (isLatest) أولًا، ثم أحدث addedAt تنازليًا، ثم أبجدي عربي
     const items=(CATALOG[key]||[]).slice().sort((a,b)=>{
       const aL=isLatest(a), bL=isLatest(b);
-      if(aL!==bL) return bL - aL; // الحديث قبل غير الحديث
+      if(aL!==bL) return bL - aL;
       const aD=a.addedAt?new Date(a.addedAt).getTime():0;
       const bD=b.addedAt?new Date(b.addedAt).getTime():0;
-      if(aD!==bD) return bD - aD; // الأحدث زمنًا أولًا
+      if(aD!==bD) return bD - aD;
       return a.title.localeCompare(b.title,'ar',{numeric:true});
     });
 
@@ -383,7 +413,7 @@ function renderDocs(){
       items.forEach(d=>{
         const ok=isValidUrl(d.url);
         const dl=toDirect(d.url);
-        const latest=isLatest(d);          // ← شارة جديد دائمة للعناصر الحديثة
+        const latest=isLatest(d);
 
         wrap.insertAdjacentHTML('beforeend',
           `<div class="row">
@@ -421,10 +451,10 @@ function renderDocs(){
     }
   }
 
-  // ✅ حساب العدد الإجمالي وإظهاره بجوار العنوان بوميض صغير
+  // ✅ العداد الديناميكي: إجمالي (ملف/دليل) عبر كل الأقسام
   const total = Object.values(CATALOG).reduce((a, arr) => a + (arr?.length || 0), 0);
   const countEl = document.getElementById('docsCount');
-  if(countEl) countEl.textContent = `(${total})`;
+  if(countEl) countEl.textContent = `(${total} ملف/دليل)`;
 }
 
 /* إبراز جديد في بطاقات المنصات (اختياري للإشعار فقط) */
