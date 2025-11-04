@@ -146,7 +146,7 @@ button{font-family:inherit;cursor:pointer}
       <a class="card" href="https://nelc.gov.sa/" target="_blank" rel="noopener"><div class="title">المركز الوطني للتعليم الإلكتروني</div><div class="desc">تشريعات ومعايير التعليم الإلكتروني.</div></a>
 
       <!-- بطاقة مضافة مؤخراً (لإظهار شارة جديد خلال يومين فقط) -->
-      <a class="card" href="https://niepd.futurex.sa/" target="_blank" rel="noopener" data-added-at="2025-10-26">
+      <a class="card" href="https://niepd.futurex.sa/" target="_blank" rel="noopener" data-added-at="2025-11-04">
         <div class="title">المعهد الوطني للتطوير المهني التعليمي</div>
         <div class="desc">دورات وبرامج للتطوير المهني التعليمي.</div>
       </a>
@@ -217,7 +217,7 @@ const GROUP_TITLES={
   facilities:"المرافق والتشغيل",
   quality:"التميز والجودة",
   conduct:"السلوك والمواظبة والمهني",
-  policies:"السياسات والأنظمة العامة",
+  policies:"الأدلّة والتنظيمات التربوية والإدارية",   // ← تغيير المسمى
   staff:"شاغلو الوظائف التعليمية",
   platformsOps:"منصات التشغيل والمعاملات",
   uniform:"المظهر والزي",
@@ -228,7 +228,7 @@ const GROUP_TITLES={
   counseling:"الإرشاد الطلابي والرعاية النفسية",
   kg:"رياض الأطفال",
   interactive:"التقويم المدرسي",
-  guides:"غير مصنف"
+  guides:"المسؤولية المجتمعية والعمل التطوعي"       // ← تغيير المسمى
 };
 const ORDER=[
   "grading","exams","attendance","facilities","quality","conduct","policies","staff",
@@ -237,7 +237,7 @@ const ORDER=[
 ];
 
 /* حساب "جديد" للإشعار خلال يومين */
-const TODAY = new Date(); // 2025-11-04 بتوقيت جهاز المستخدم
+const TODAY = new Date(); // مثال: 2025-11-04
 function خلالأيام(dateStr, days=2){
   if(!dateStr) return false;
   const d = new Date(dateStr);
@@ -252,7 +252,7 @@ function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m
 function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?export=download&id=${id}`:u}
 function isLatest(item){ return item?.isLatest === true || !!item?.addedAt; }
 
-/* الكتالوج المصنّف — تمت استعادة كل الملفات + إدراج الإضافات الجديدة في أقسامها الصحيحة */
+/* الكتالوج المصنّف — مع الإضافات الجديدة حسب طلبكم */
 const CATALOG = {
   grading: [
     {title:"لائحة تقويم الطالب 2025م",desc:"سياسة التقييم وأدوات القياس.",kind:"لائحة",url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view",src:"وزارة التعليم"},
@@ -277,7 +277,7 @@ const CATALOG = {
     {title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا)",desc:"إطار التحسين المستمر.",kind:"دليل",url:"https://drive.google.com/file/d/1DXr6D6B57noKsxmb35WPcqd9rQK9IVfk/view",src:"وزارة التعليم"},
     {title:"إضاءات حول آلية تنفيذ خطط الأنشطة الطلابية",desc:"تيسير تنفيذ الخطط والأنشطة.",kind:"إضاءات",url:"https://drive.google.com/file/d/1sfjuD1oWpum1_5UsRrjNSLg63tH6q7eT/view",src:"وزارة التعليم"},
 
-    /* الإضافات الجديدة التي طلبتها */
+    /* إضافات تحسين التدريس وتمكين المدرسة */
     {title:"النموذج الإشرافي في ضوء تمكين المدرسة 1446",desc:"إطار إشرافي داعم لتمكين المدرسة.",kind:"وثيقة",url:"https://drive.google.com/file/d/1h7dle7BDjH8T8GC0Pf5EurGE1C9OJCMm/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
     {title:"أدوات دعم تطبيق النموذج الإشرافي في ضوء تمكين المدرسة",desc:"حزمة أدوات تنفيذية لدعم النموذج الإشرافي.",kind:"أدوات",url:"https://drive.google.com/file/d/1RPomx_X-2Beg2hYa8YBZqCVR68FhTQH1/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
     {title:"تحسين التدريس: مبادئ ومفاهيم ومهارات أساسية",desc:"مرتكزات أساسية لتحسين التدريس.",kind:"دليل",url:"https://drive.google.com/file/d/1D2Phzqd8wJ-pIjGA5433v_-T9xzu9Vly/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
@@ -293,55 +293,31 @@ const CATALOG = {
     {title:"مدونة السلوك الوظيفي وأخلاقيات الوظيفة العامة",desc:"قواعد السلوك الوظيفي بالقطاع الحكومي.",kind:"مدونة",url:"https://www.hrsd.gov.sa/sites/default/files/2022-10/08102022.pdf",src:"الموارد البشرية والتنمية الاجتماعية"},
     {title:"دليل استخدام الهواتف والأجهزة المحمولة",desc:"سياسات وضوابط استخدام الأجهزة.",kind:"دليل",url:"https://drive.google.com/file/d/1lIlgSYa-iGNNjNXlKoPHHecAUL5znDsD/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"}
   ],
+  /* السياسات والأنظمة العامة ← الأدلّة والتنظيمات التربوية والإدارية */
   policies: [
     {title:"الدليل التنظيمي لمدارس التعليم العام",desc:"مهام وصلاحيات المدرسة وهيكلها.",kind:"دليل",url:"https://drive.google.com/file/d/1E604s0Wni9ht-UnfaB4ywlN55YyjW9Wj/view?usp=sharing",src:"وزارة التعليم"},
     {title:"دليل إرشادي للحفاظ على الوثائق والاتصالات",desc:"حفظ الملفات والمراسلات وفق الضوابط.",kind:"دليل",url:"https://drive.google.com/file/d/1T4DbU8mJDQyC1c9yvvjeKoC8MKZBr420/view",src:"وزارة التعليم"},
     {title:"أطر العمل التنظيمية للائحة التنفيذية للموارد البشرية",desc:"أطر تنظيمية للائحة التنفيذية.",kind:"أطر",url:"https://drive.google.com/file/d/1StNX-WFOAAd03qd1pEqKsST0oKEh4qQ5/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-10-26"},
     {title:"لائحة الوظائف التعليمية 1446",desc:"اللائحة المنظمة لشاغلي الوظائف التعليمية.",kind:"لائحة",url:"https://drive.google.com/file/d/1RnBsFXcZEuIXzdBW-rcSgsjbrxXtTN5U/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
-    {title:"نظام العمل",desc:"النظام المنظم لعلاقات العمل.",kind:"نظام",url:"https://drive.google.com/file/d/14virdwgj48hZPSqNtLhlR8Qdt_xjKgWz/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-10-26"}
+    {title:"نظام العمل",desc:"النظام المنظم لعلاقات العمل.",kind:"نظام",url:"https://drive.google.com/file/d/14virdwgj48hZPSqNtLhlR8Qdt_xjKgWz/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-10-26"},
+
+    /* الإضافة المطلوبة */
+    {title:"الدليل الإرشادي لإدارة الأداء الوظيفي لشاغلي الوظائف التعليمية (الإصدار الثاني) 1447هـ–2025م",desc:"منهجية إدارة الأداء لشاغلي الوظائف التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/11jh2Bm5oEMiiSHy-prjZ0CxxMMeCJC2s/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"}
   ],
   staff: [
     /* إضافات حديثة */
-    {title:"وثيقة التشكيلات الإشرافية والمدرسية لشاغلي الوظائف التعليمية (وكالة الموارد البشرية) 1445هـ–2024م",desc:"تنظيم الهياكل والتشكيلات الإشرافية والمدرسية.",kind:"وثيقة",url:"https://drive.google.com/file/d/1aXEQ1jJRA_Sa-w-Cv436nB2DTY1PNpnn/view?usp=sharing",src:"وكالة الموارد البشرية — وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"وثيقة التشكيلات الإشرافية والمدرسية لشاغلي الوظائف التعليمية (وكالة الموارد البشرية) 1445هـ–2024م",desc:"تنظيم الهياكل والتشكيلات الإشرافية والمدرسية.",kind:"وثيقة",url:"https://drive.google.com/file/d/1aXEQ1jJRA_Sa-w-Cv436نB2DTY1PNpnn/view?usp=sharing".replace('ن',''),src:"وكالة الموارد البشرية — وزارة التعليم",addedAt:"2025-11-04"},
     {title:"دليل الاستثمار الأمثل لشاغلي الوظائف التعليمية",desc:"تعظيم الاستفادة من الكفاءات التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/1MlINioNLhRXmIzhRQzt-eSMpuRkXhPVh/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
 
     /* موجود سابقًا */
-    {
-      title:"آلية تنفيذ مرحلة التهيئة لبرنامج تطوير القيادات المدرسية 2026م",
-      desc:"خطوات تهيئة قادة المدارس ضمن برنامج التطوير المهني 2026.",
-      kind:"دليل",
-      url:"https://drive.google.com/file/d/14mPpdnqQdvNj5ipa4AS-lTjz309o1Gpl/view?usp=sharing",
-      src:"وزارة التعليم",
-      isLatest:true
-    },
-    {
-      title:"القواعد التنظيمية لنقل وتكليف شاغلي الوظائف التعليمية ذوي الظروف الخاصة",
-      desc:"ضوابط وإجراءات النقل والتكليف للحالات ذات الظروف الخاصة.",
-      kind:"قواعد",
-      url:"https://drive.google.com/file/d/1z968r5Psl7-TO4gIG1ZbBwDAi0AQrGTd/view?usp=sharing",
-      src:"وزارة التعليم",
-      isLatest:true
-    },
-    {
-      title:"الأسئلة الشائعة للقواعد التنظيمية لنقل وتكليف ذوي الظروف الخاصة",
-      desc:"توضيحات وإجابات لأبرز الاستفسارات حول القواعد التنظيمية.",
-      kind:"أسئلة شائعة",
-      url:"https://drive.google.com/file/d/1U9YsPQFjwtzFc7UY1AffT6B1kXna2mZy/view?usp=sharing",
-      src:"وزارة التعليم",
-      isLatest:true
-    },
-    {
-      title:"الأسئلة الشائعة: تسكين الموظفين في الهيكل التنظيمي بنظام فارس",
-      desc:"توضيحات حول آلية تسكين الموظفين ضمن الهيكل التنظيمي عبر نظام فارس.",
-      kind:"أسئلة شائعة",
-      url:"https://drive.google.com/file/d/1OXlh4F_HOZMhaCsVlXLsnkavv2HqHZ52/view?usp=sharing",
-      src:"وزارة التعليم — نظام فارس",
-      isLatest:true
-    },
+    {title:"آلية تنفيذ مرحلة التهيئة لبرنامج تطوير القيادات المدرسية 2026م",desc:"خطوات تهيئة قادة المدارس ضمن برنامج التطوير المهني 2026.",kind:"دليل",url:"https://drive.google.com/file/d/14mPpdnqQdvNj5ipa4AS-lTjz309o1Gpl/view?usp=sharing",src:"وزارة التعليم",isLatest:true},
+    {title:"القواعد التنظيمية لنقل وتكليف شاغلي الوظائف التعليمية ذوي الظروف الخاصة",desc:"ضوابط وإجراءات النقل والتكليف للحالات ذات الظروف الخاصة.",kind:"قواعد",url:"https://drive.google.com/file/d/1z968r5Psl7-TO4gIG1ZbBwDAi0AQrGTd/view?usp=sharing",src:"وزارة التعليم",isLatest:true},
+    {title:"الأسئلة الشائعة للقواعد التنظيمية لنقل وتكليف ذوي الظروف الخاصة",desc:"توضيحات وإجابات لأبرز الاستفسارات حول القواعد التنظيمية.",kind:"أسئلة شائعة",url:"https://drive.google.com/file/d/1U9YsPQFjwtzFc7UY1AffT6B1kXna2mZy/view?usp=sharing",src:"وزارة التعليم",isLatest:true},
+    {title:"الأسئلة الشائعة: تسكين الموظفين في الهيكل التنظيمي بنظام فارس",desc:"توضيحات حول آلية تسكين الموظفين ضمن الهيكل التنظيمي عبر نظام فارس.",kind:"أسئلة شائعة",url:"https://drive.google.com/file/d/1OXlh4F_HOZMhaCsVlXLsnkavv2HqHZ52/view?usp=sharing",src:"وزارة التعليم — نظام فارس",isLatest:true},
 
     {title:"القواعد التنظيمية لشاغلي الوظائف التعليمية",desc:"الصلاحيات والواجبات المهنية.",kind:"قواعد",url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view",src:"وزارة التعليم"},
     {title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية",desc:"خطوات عملية لتقويم الأداء.",kind:"دليل",url:"https://drive.google.com/file/d/1nI-G3DRY1MhK0t9PLu-P8PcouAY22G5f/view?usp=sharing",src:"وزارة التعليم"},
-    {title:"نماذج تقييم أداء شاغلي الوظائف التعليمية",desc:"نماذج معتمدة لتوثيق الأداء.",kind:"نماذج",url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdkT0H5vMJvSzYn7/view",src:"وزارة التعليم"},
+    {title:"نماذج تقييم أداء شاغلي الوظائف التعليمية",desc:"نماذج معتمدة لتوثيق الأداء.",kind:"نماذج",url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdكT0H5vMJvSzYn7/view".replace('ك',''),src:"وزارة التعليم"},
     {title:"تهيئة الموظف الجديد على نظام فارس (دليل مستخدم)",desc:"خطوات التهيئة واستخدام فارس.",kind:"دليل",url:"https://drive.google.com/file/d/15idPnrerHN3eJT7Pu_xePZduJZKL7hd/view",src:"وزارة التعليم"},
     {title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم",desc:"تخطيط الموارد البشرية التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view",src:"وزارة التعليم"},
     {title:"إسناد تدريس المواد التي ليس لها تخصص",desc:"تنظيم الإسناد وضوابطه.",kind:"ضوابط",url:"https://drive.google.com/file/d/153qd1HGE5B3N7bxYGxG9mUCYKqwh_Srd/view",src:"وزارة التعليم"},
@@ -354,7 +330,7 @@ const CATALOG = {
     {title:"خدمة متابعة حالات الطلبة في نظام نور",desc:"متابعة تحصيلية وسلوكية.",kind:"دليل",url:"https://drive.google.com/file/d/15t7S2de_uzWuQvjQAIl60C1_Nkf_DhHS/view",src:"وزارة التعليم"},
     {title:"دليل الخطط الدراسية",desc:"بناء وتخطيط الخطط الدراسية.",kind:"دليل",url:"https://drive.google.com/file/d/1jLtxUE_wF9-as7GhUEFmCTBcNTBQ2Kue/view?usp=sharing",src:"وزارة التعليم"},
     {title:"دليل الخطط الدراسية (نسخة)",desc:"نسخة إضافية للدليل المعتمد.",kind:"دليل",url:"https://drive.google.com/file/d/1lU6gJxY13GfrIHK7Md6T5xELZqSjEMx8/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
-    {title:"دليل المجال الاختياري",desc:"إرشادات رصد وتقويم المجال الاختياري.",kind:"دليل",url:"https://drive.google.com/file/d/1-hDzrrpMvQirRzZj342fghp0KKfFrzf4/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"}
+    {title:"دليل المجال الاختياري",desc:"إرشادات رصد وتقويم المجال الاختياري.",kind:"دليل",url:"https://drive.google.com/file/d/1-hDzrrpMvQirRzZj342فghp0KKfFrzf4/view".replace('ف',''),src:"وزارة التعليم",addedAt:"2025-10-26"}
   ],
   uniform: [
     {title:"دليل الزي المدرسي والرياضي لطلبة التعليم العام",desc:"المواصفات المعتمدة للزي.",kind:"دليل",url:"https://drive.google.com/file/d/1dJaj5cH6sUOpUh2shay36xH7FctVxZXh/view",src:"وزارة التعليم"}
@@ -383,7 +359,7 @@ const CATALOG = {
     {title:"دليل التوجيه وقت الأزمات",desc:"أدوار وتدخلات أثناء الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/1Cr4LULa-HDsIo49UrFvMq80hZO1YLs9Q/view",src:"وزارة التعليم"},
     {title:"خطة برامج وخدمات التوجيه الطلابي",desc:"حزمة برامج وخدمات إرشادية.",kind:"خطة",url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view",src:"وزارة التعليم"},
 
-    /* الإضافات التي طلبتها للتوجيه الطلابي */
+    /* إضافات رقمية للتوجيه */
     {title:"الدليل الاسترشادي لأبرز الخدمات التقنية للتوجيه الطلابي في نظام نور",desc:"شرح الخدمات الرقمية الداعمة للتوجيه عبر نور.",kind:"دليل",url:"https://drive.google.com/file/d/1CSM9tTP6b5RrvmuajOOEFLJNKHzejfTW/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
     {title:"الدليل الاسترشادي لبرامج وخدمات التوجيه الطلابي — نسخة",desc:"نسخة إضافية للدليل المعتمد.",kind:"دليل",url:"https://drive.google.com/file/d/1ERsDW7c_ReFF0Sa2KhzZKB8wkDKKNjhU/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
     {title:"التوجيه وقت الأزمات — دليل (نسخة)",desc:"نسخة أخرى من دليل التوجيه وقت الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/16-YjeHhz0d4Z8FnG6a88ipz30majKOWO/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"}
@@ -400,8 +376,14 @@ const CATALOG = {
     {title:"دليل الخدمات الإلكترونية للتقويم والاعتماد المدرسي (الإصدار الأول 2023)",desc:"منظومة الخدمات الإلكترونية للتقويم والاعتماد المدرسي.",kind:"دليل",url:"https://drive.google.com/file/d/11ZkLI5dxsivSW8KC-FX734As1jBfk3U_/view?usp=sharing",src:"وزارة التعليم"},
     {title:"قائمة الملفات والسجلات الأساسية",desc:"حصر السجلات والملفات الأساسية لعمل التقويم المدرسي.",kind:"قائمة",url:"https://drive.google.com/file/d/11ZkLI5dxsivSW8KC-FX734As1jBfk3U_/view?usp=sharing",src:"وزارة التعليم"}
   ],
-  /* غير مصنف */
-  guides: []
+  /* المسؤولية المجتمعية والعمل التطوعي (كان: غير مصنف) */
+  guides: [
+    {title:"الدليل العام لمنصة العمل التطوعي",desc:"مرجع استخدام المنصة الوطنية للعمل التطوعي.",kind:"دليل",url:"https://drive.google.com/file/d/1K8YJKNgVFSsQXOMisTTHiUydE6qQOGF8/view?usp=sharing",src:"وزارة الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-11-04"},
+    {title:"أدلة ونماذج العمل التطوعي والمسؤولية المجتمعية",desc:"حزمة أدلة ونماذج للتطوع والمسؤولية المجتمعية.",kind:"أدلة ونماذج",url:"https://drive.google.com/file/d/1NuA1Wsaq_yrmFyyN1kIg_SE8wE8SD4t2/view?usp=sharing",src:"جهات رسمية وتعليمية",addedAt:"2025-11-04"},
+    {title:"طريقة التسجيل في منصة التطوع",desc:"شرح خطوات التسجيل في المنصة الوطنية للتطوع.",kind:"إرشادات",url:"https://drive.google.com/file/d/1Rzlq0XJIZRvvrz7PsbxGS4Kt27iyum0C/view?usp=sharing",src:"وزارة الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-11-04"},
+    {title:"حوكمة تصميم الفرص التطوعية",desc:"منهجية وضوابط تصميم فرص تطوعية ذات أثر.",kind:"حوكمة",url:"https://drive.google.com/file/d/1AoMuzLJrGY0u08l-35nQfYSmbZCYv-v1/view?usp=sharing",src:"جهات تنظيمية",addedAt:"2025-11-04"},
+    {title:"دليل إجراءات تفعيل الفرص التطوعية",desc:"خطوات عملية لتفعيل وتنفيذ الفرص.",kind:"دليل إجراءات",url:"https://drive.google.com/file/d/18TXQsp7uvAHCFF2RsPWka_AXRH7z-HLB/view?usp=sharing",src:"جهات تنظيمية",addedAt:"2025-11-04"}
+  ]
 };
 
 /* الرسم للأدلّة */
