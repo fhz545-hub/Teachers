@@ -237,7 +237,7 @@ const ORDER=[
 ];
 
 /* حساب "جديد" للإشعار خلال يومين */
-const TODAY = new Date();
+const TODAY = new Date(); // 2025-11-04 بتوقيت جهاز المستخدم
 function خلالأيام(dateStr, days=2){
   if(!dateStr) return false;
   const d = new Date(dateStr);
@@ -275,7 +275,17 @@ const CATALOG = {
   quality: [
     {title:"الدليل الاسترشادي لمشرف دعم التميز",desc:"تمكين المشرف من دعم التميز والجودة.",kind:"دليل",url:"https://drive.google.com/file/d/17l_qlhdWdUBRWEbDcFKT0iCkUh2gifu4/view",src:"وزارة التعليم"},
     {title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا)",desc:"إطار التحسين المستمر.",kind:"دليل",url:"https://drive.google.com/file/d/1DXr6D6B57noKsxmb35WPcqd9rQK9IVfk/view",src:"وزارة التعليم"},
-    {title:"إضاءات حول آلية تنفيذ خطط الأنشطة الطلابية",desc:"تيسير تنفيذ الخطط والأنشطة.",kind:"إضاءات",url:"https://drive.google.com/file/d/1sfjuD1oWpum1_5UsRrjNSLg63tH6q7eT/view",src:"وزارة التعليم"}
+    {title:"إضاءات حول آلية تنفيذ خطط الأنشطة الطلابية",desc:"تيسير تنفيذ الخطط والأنشطة.",kind:"إضاءات",url:"https://drive.google.com/file/d/1sfjuD1oWpum1_5UsRrjNSLg63tH6q7eT/view",src:"وزارة التعليم"},
+
+    /* الإضافات الجديدة التي طلبتها */
+    {title:"النموذج الإشرافي في ضوء تمكين المدرسة 1446",desc:"إطار إشرافي داعم لتمكين المدرسة.",kind:"وثيقة",url:"https://drive.google.com/file/d/1h7dle7BDjH8T8GC0Pf5EurGE1C9OJCMm/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"أدوات دعم تطبيق النموذج الإشرافي في ضوء تمكين المدرسة",desc:"حزمة أدوات تنفيذية لدعم النموذج الإشرافي.",kind:"أدوات",url:"https://drive.google.com/file/d/1RPomx_X-2Beg2hYa8YBZqCVR68FhTQH1/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"تحسين التدريس: مبادئ ومفاهيم ومهارات أساسية",desc:"مرتكزات أساسية لتحسين التدريس.",kind:"دليل",url:"https://drive.google.com/file/d/1D2Phzqd8wJ-pIjGA5433v_-T9xzu9Vly/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"إجراءات تطبيق إطار تحسين التدريس (بإدارات التعليم)",desc:"إجراءات عملية للتطبيق على مستوى الإدارة.",kind:"إجراءات",url:"https://drive.google.com/file/d/1yEDdr66qvPNtl8C0nz7gyKgloS9_34fh/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"إطار تحسين التدريس — نموذج تطبيقي",desc:"نموذج تطبيقي لإطار تحسين التدريس.",kind:"نموذج",url:"https://drive.google.com/file/d/1aAzw1XUo7ZAkUeM5dSUkZ9av2rkU_XU7/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"أدوات دعم تطبيق إطار تحسين مجال التدريس",desc:"أدوات مساندة لتفعيل إطار تحسين التدريس.",kind:"أدوات",url:"https://drive.google.com/file/d/1aWElL4f0-KhDcHH4nfGP9e3REviu2XuI/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"الخطط الدراسية للأنشطة الطلابية",desc:"أطر وخطط أنشطة طلابية معتمدة.",kind:"خطط",url:"https://drive.google.com/file/d/18BSL4doQo6Z72Ih8-HEN1KD9inPOZrvp/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا) — نسخة",desc:"مرجع داعم للتطوير الذاتي على مستوى المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1FyCJXw_RJDc-X-qSzWz94boyo3NnONYm/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"}
   ],
   conduct: [
     {title:"قواعد السلوك والمواظبة 1447هـ",desc:"حقوق الطالب وإجراءات الانضباط.",kind:"قواعد",url:"https://drive.google.com/file/d/1RYIYPFlAcT9Ya-RnPw3bnpQASVQIz0FX/view",src:"وزارة التعليم"},
@@ -291,7 +301,11 @@ const CATALOG = {
     {title:"نظام العمل",desc:"النظام المنظم لعلاقات العمل.",kind:"نظام",url:"https://drive.google.com/file/d/14virdwgj48hZPSqNtLhlR8Qdt_xjKgWz/view?usp=sharing",src:"الموارد البشرية والتنمية الاجتماعية",addedAt:"2025-10-26"}
   ],
   staff: [
-    /* إضافات حديثة تظهر أولاً */
+    /* إضافات حديثة */
+    {title:"وثيقة التشكيلات الإشرافية والمدرسية لشاغلي الوظائف التعليمية (وكالة الموارد البشرية) 1445هـ–2024م",desc:"تنظيم الهياكل والتشكيلات الإشرافية والمدرسية.",kind:"وثيقة",url:"https://drive.google.com/file/d/1aXEQ1jJRA_Sa-w-Cv436nB2DTY1PNpnn/view?usp=sharing",src:"وكالة الموارد البشرية — وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"دليل الاستثمار الأمثل لشاغلي الوظائف التعليمية",desc:"تعظيم الاستفادة من الكفاءات التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/1MlINioNLhRXmIzhRQzt-eSMpuRkXhPVh/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+
+    /* موجود سابقًا */
     {
       title:"آلية تنفيذ مرحلة التهيئة لبرنامج تطوير القيادات المدرسية 2026م",
       desc:"خطوات تهيئة قادة المدارس ضمن برنامج التطوير المهني 2026.",
@@ -339,6 +353,7 @@ const CATALOG = {
     {title:"عمليات القبول في المدارس",desc:"إجراءات القبول والتسجيل.",kind:"دليل",url:"https://drive.google.com/file/d/1F_avKmTOrN9SfCB7J3BJUF_q9NCJQBHP/view?usp=sharing",src:"وزارة التعليم"},
     {title:"خدمة متابعة حالات الطلبة في نظام نور",desc:"متابعة تحصيلية وسلوكية.",kind:"دليل",url:"https://drive.google.com/file/d/15t7S2de_uzWuQvjQAIl60C1_Nkf_DhHS/view",src:"وزارة التعليم"},
     {title:"دليل الخطط الدراسية",desc:"بناء وتخطيط الخطط الدراسية.",kind:"دليل",url:"https://drive.google.com/file/d/1jLtxUE_wF9-as7GhUEFmCTBcNTBQ2Kue/view?usp=sharing",src:"وزارة التعليم"},
+    {title:"دليل الخطط الدراسية (نسخة)",desc:"نسخة إضافية للدليل المعتمد.",kind:"دليل",url:"https://drive.google.com/file/d/1lU6gJxY13GfrIHK7Md6T5xELZqSjEMx8/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
     {title:"دليل المجال الاختياري",desc:"إرشادات رصد وتقويم المجال الاختياري.",kind:"دليل",url:"https://drive.google.com/file/d/1-hDzrrpMvQirRzZj342fghp0KKfFrzf4/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"}
   ],
   uniform: [
@@ -346,7 +361,9 @@ const CATALOG = {
   ],
   forms: [
     {title:"استمارة الزيارة الفني لمشرف الإدارة المدرسية",desc:"معايير ومؤشرات وتوصيات.",kind:"نموذج",url:"https://drive.google.com/file/d/1Q2SnbnnteJCIgyz8WZCESV01Jk_3rPMh/view",src:"وزارة التعليم"},
-    {title:"نموذج الحصص الأسبوعية في الفصلين",desc:"توزيع الحصص للأسبوع الدراسي.",kind:"نموذج",url:"https://drive.google.com/file/d/157rFurVpjSpxV6o7pRfMTZInLGMv5rjx/view",src:"وزارة التعليم"}
+    {title:"نموذج الحصص الأسبوعية في الفصلين",desc:"توزيع الحصص للأسبوع الدراسي.",kind:"نموذج",url:"https://drive.google.com/file/d/157rFurVpjSpxV6o7pRfMTZInLGMv5rjx/view",src:"وزارة التعليم"},
+    {title:"نموذج الحصص الأسبوعية في الفصلين — نسخة",desc:"نسخة إضافية للنموذج المعتمد.",kind:"نموذج",url:"https://drive.google.com/file/d/198fELpFFSTf2DC08w0T44SUrAO4ZhOX9/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"نموذج استرشادي للحصص الدراسية خلال 36 أسبوعًا",desc:"تخطيط زمني للحصص على مدار العام.",kind:"نموذج",url:"https://drive.google.com/file/d/1zFVc-Qod32G-Q3eGwBDlfg7elOP-SNWY/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"}
   ],
   inclusive: [
     {title:"القواعد التنظيمية لفصول ومدارس الموهوبين",desc:"تنظيم البرامج والمسارات.",kind:"قواعد",url:"https://drive.google.com/file/d/15g8C3aVaStWcftLa4toBJQtP-2wP113O/view",src:"وزارة التعليم"},
@@ -357,14 +374,19 @@ const CATALOG = {
     {title:"دليل الإسعافات الأولية",desc:"مرشد للإسعافات الأولية في المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1_Gx1fXlb6whQ_g9yr_q6b-07v6GrIIWP/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"}
   ],
   elearn: [
-    {title:"دليل السلوك الرقمي لمنصة مدرستي",desc:"استخدام آمن ومسؤول.",kind:"دليل",url:"https://drive.google.com/file/d/19ym1Uih9GbXyXhDRcpP1qlk-kbgGfjQ_/view",src:"وزارة التعليم"},
+    {title:"دليل السلوك الرقمي لمنصة مدرستي",desc:"استخدام آمن ومسؤول.",kind:"دليل",url:"https://drive.google.com/file/d/19ym1Uih9GbXyHhDRcpP1qlk-kbgGfjQ_/view",src:"وزارة التعليم"},
     {title:"دليل الانتقال من التعليم الحضوري إلى التعليم عن بعد",desc:"آليات التحول للتعلم عن بعد.",kind:"دليل",url:"https://drive.google.com/file/d/1s-rEuHph2XmZxm1sfy7en6ZD7HDRYXyO/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"},
     {title:"سياسة الاستخدام والخصوصية لمنصة مدرستي",desc:"سياسة الاستخدام والخصوصية.",kind:"سياسة",url:"https://drive.google.com/file/d/1wF_m9vtZkBTAxbsHgoIm_rnjSQhNNvo0/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-10-26"}
   ],
   counseling: [
     {title:"تعزيز السلوك الإيجابي",desc:"برامج تعزيز السلوك.",kind:"دليل",url:"https://drive.google.com/file/d/1EA5oYQ4PtSxM_rLjbgm9c4iQJATDTEKq/view",src:"وزارة التعليم"},
     {title:"دليل التوجيه وقت الأزمات",desc:"أدوار وتدخلات أثناء الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/1Cr4LULa-HDsIo49UrFvMq80hZO1YLs9Q/view",src:"وزارة التعليم"},
-    {title:"خطة برامج وخدمات التوجيه الطلابي",desc:"حزمة برامج وخدمات إرشادية.",kind:"خطة",url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view",src:"وزارة التعليم"}
+    {title:"خطة برامج وخدمات التوجيه الطلابي",desc:"حزمة برامج وخدمات إرشادية.",kind:"خطة",url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view",src:"وزارة التعليم"},
+
+    /* الإضافات التي طلبتها للتوجيه الطلابي */
+    {title:"الدليل الاسترشادي لأبرز الخدمات التقنية للتوجيه الطلابي في نظام نور",desc:"شرح الخدمات الرقمية الداعمة للتوجيه عبر نور.",kind:"دليل",url:"https://drive.google.com/file/d/1CSM9tTP6b5RrvmuajOOEFLJNKHzejfTW/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"الدليل الاسترشادي لبرامج وخدمات التوجيه الطلابي — نسخة",desc:"نسخة إضافية للدليل المعتمد.",kind:"دليل",url:"https://drive.google.com/file/d/1ERsDW7c_ReFF0Sa2KhzZKB8wkDKKNjhU/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"},
+    {title:"التوجيه وقت الأزمات — دليل (نسخة)",desc:"نسخة أخرى من دليل التوجيه وقت الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/16-YjeHhz0d4Z8FnG6a88ipz30majKOWO/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-04"}
   ],
   kg: [
     {title:"الدليل التنظيمي للحضانة ورياض الأطفال (1438-1439)",desc:"تنظيم العمل في رياض الأطفال.",kind:"دليل",url:"https://drive.google.com/file/d/1BzZtwzOQtO45A5A3SCq5j6XqbwEZOkDT/view",src:"وزارة التعليم"},
