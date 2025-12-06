@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بوابة أعمال الاختبارات – 1447هـ / 2025م</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#0b3f43;
+  --muted:#60747a;
+  --accent:#0b7e88;
+  --accent2:#0c594e;
+  --bg:#f4f7f8;
+  --card:#ffffff;
+  --line:#dde6ea;
+  --danger:#b91c1c;
+  --shadow:0 14px 32px rgba(15,23,42,0.12);
+  --rad-lg:22px;
+  --rad-md:16px;
+  --maxW:1120px;
+}
+
+/* reset بسيط */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:radial-gradient(circle at top,#e0f3f2 0,#f5f8fb 48%,#e7edf3 100%);
+  color:var(--ink);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* الشريط العلوي الأساسي */
+.top-bar{
+  position:sticky;
+  top:0;
+  z-index:70;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  padding:10px 16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.18);
+}
+.top-bar-inner{
+  max-width:var(--maxW);
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.top-icon{
+  width:34px;height:34px;
+  border-radius:999px;
+  border:2px solid rgba(255,255,255,.85);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  background:rgba(15,23,42,0.18);
+}
+.top-text{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.top-title{
+  font-size:1.15rem;
+  font-weight:800;
+}
+.top-sub{
+  font-size:.8rem;
+  opacity:.95;
+}
+
+/* شريط الروابط العائم (الأدلة + المنصة) */
+.floating-guides{
+  position:sticky;
+  top:64px;
+  z-index:60;
+  display:flex;
+  gap:10px;
+  padding:10px 14px;
+  justify-content:center;
+  flex-wrap:wrap;
+  background:rgba(255,255,255,0.35);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(0,0,0,0.08);
+}
+.guide-btn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  color:#fff;
+  text-decoration:none;
+  font-size:.82rem;
+  font-weight:600;
+  box-shadow:0 10px 22px rgba(0,0,0,0.18);
+  transition:all .25s ease;
+  white-space:nowrap;
+}
+.guide-btn span{font-size:1rem;}
+.guide-btn:hover{
+  transform:translateY(-2px) scale(1.04);
+  box-shadow:0 14px 30px rgba(0,0,0,0.25);
+}
+.guide-exam{background:linear-gradient(135deg,#0b7e88,#09606a);}
+.guide-assess{background:linear-gradient(135deg,#2f6da8,#1e4e75);}
+.guide-proc{background:linear-gradient(135deg,#5b8f4e,#3f6b38);}
+.guide-grades{background:linear-gradient(135deg,#8b5cf6,#5b21b6);}
+.guide-org{background:linear-gradient(135deg,#f97316,#ea580c);}
+@media(max-width:720px){
+  .floating-guides{top:60px;}
+}
+
+/* المحتوى الرئيس */
+main{
+  flex:1;
+  padding:20px 12px 32px;
+  display:flex;
+  justify-content:center;
+}
+.shell{
+  width:100%;
+  max-width:var(--maxW);
+}
+
+/* هيدر داخلي */
+.hero{
+  background:var(--card);
+  border-radius:var(--rad-lg);
+  padding:16px 16px 14px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(11,126,136,0.10);
+  margin-bottom:20px;
+}
+.hero-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:#e0f4f5;
+  color:var(--accent);
+  font-size:.8rem;
+  margin-bottom:6px;
+}
+.hero-title{
+  font-size:1.25rem;
+  font-weight:800;
+  margin-bottom:4px;
+}
+.hero-meta{
+  font-size:.85rem;
+  color:var(--muted);
+}
+
+/* مربع البحث */
+.search-wrapper{
+  margin-top:12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+.search-label{
+  font-size:.8rem;
+  color:var(--muted);
+}
+.search-input{
+  flex:1 1 220px;
+  position:relative;
+}
+.search-input input{
+  width:100%;
+  padding:7px 30px 7px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:.82rem;
+  outline:none;
+  background:#f7fbfb;
+}
+.search-input input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 1px rgba(11,126,136,0.18);
+  background:#ffffff;
+}
+.search-input::before{
+  content:"🔍";
+  position:absolute;
+  inset-inline-end:10px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:.9rem;
+  pointer-events:none;
+}
+.search-hint{
+  font-size:.75rem;
+  color:var(--muted);
+}
+
+/* تبويبات المراحل */
+.phase-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+}
+.phase-nav a{
+  flex:1 1 0;
+  text-align:center;
+  padding:8px 8px;
+  border-radius:999px;
+  border:1px solid rgba(11,126,136,0.28);
+  background:#f6fbfb;
+  text-decoration:none;
+  color:var(--ink);
+  font-size:.86rem;
+  font-weight:600;
+  position:relative;
+  overflow:hidden;
+  transition:.22s ease;
+}
+.phase-nav a span{position:relative;z-index:2;}
+.phase-nav a::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  width:0;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  z-index:1;
+  transition:.22s ease;
+}
+.phase-nav a:hover{
+  transform:translateY(-1px);
+  box-shadow:0 10px 22px rgba(15,23,42,0.16);
+  color:#fff;
+}
+.phase-nav a:hover::before{width:100%;}
+.phase-nav a:hover span{color:#fff}
+
+/* أقسام المراحل */
+.phase-section{
+  margin-top:26px;
+}
+.phase-header{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.phase-name{
+  font-size:1.1rem;
+  font-weight:800;
+  position:relative;
+  padding-inline-start:12px;
+}
+.phase-name::before{
+  content:"";
+  position:absolute;
+  inset-inline-start:0;
+  inset-block:60%;
+  width:48px;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),rgba(11,126,136,0));
+  transform:translateY(-50%);
+}
+.phase-tagline{
+  font-size:.8rem;
+  color:var(--muted);
+}
+
+/* الشبكة للأقسام */
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:14px;
+}
+.category-card{
+  background:var(--card);
+  border-radius:var(--rad-md);
+  padding:10px 10px 8px;
+  border:1px solid var(--line);
+  box-shadow:0 12px 24px rgba(15,23,42,0.06);
+}
+.category-label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:4px;
+}
+.category-pill{
+  width:18px;height:18px;
+  border-radius:999px;
+  background:#e0f4f5;
+  color:var(--accent);
+  font-size:11px;
+  display:flex;align-items:center;justify-content:center;
+}
+.category-title{
+  font-size:.92rem;
+  font-weight:700;
+}
+.category-meta{
+  font-size:.78rem;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+
+/* قائمة البنود */
+.link-list{
+  list-style:none;
+  margin:0;
+  padding:4px 0 2px;
+  border-top:1px dashed var(--line);
+}
+.link-list li+li{
+  border-top:none;
+  margin-top:6px;
+}
+
+/* الأزرار العائمة للبنود */
+.link-row{
+  width:100%;
+  min-height:44px;
+  border:none;
+  background:linear-gradient(135deg,#f9fcfc,#f3f7f8);
+  text-align:right;
+  padding:8px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  cursor:pointer;
+  border-radius:999px;
+  border:1px solid rgba(185,199,208,0.8);
+  box-shadow:0 7px 18px rgba(15,23,42,0.08);
+  transition:all .22s ease;
+  white-space:nowrap;
+  overflow-x:auto;             /* للجوال: سحب أفقي بدون تشوه */
+  -webkit-overflow-scrolling:touch;
+}
+.link-row::-webkit-scrollbar{
+  height:3px;
+}
+.link-row::-webkit-scrollbar-thumb{
+  background:rgba(148,163,184,0.8);
+  border-radius:999px;
+}
+.link-row:hover{
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px rgba(15,23,42,0.14);
+  border-color:rgba(11,126,136,0.6);
+  background:linear-gradient(135deg,#f8ffff,#edf7f8);
+}
+.link-main{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+}
+.link-title{
+  font-size:.86rem;
+  white-space:nowrap;
+}
+.link-ref{
+  display:none;
+}
+.link-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  white-space:nowrap;
+}
+.link-chip{
+  font-size:.7rem;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#f4fafb;
+  border:1px solid rgba(11,126,136,0.35);
+  color:var(--accent2);
+}
+.link-badge{
+  width:22px;height:22px;
+  border-radius:999px;
+  border:1px solid rgba(11,126,136,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+  background:#f8fcfc;
+}
+.link-row:hover .link-chip{
+  background:#e0f4f5;
+}
+.link-row:hover .link-title{
+  color:var(--accent);
+}
+
+/* المودال */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.40);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  backdrop-filter:blur(4px);
+  z-index:80;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease;
+}
+.modal-backdrop.show{
+  opacity:1;
+  pointer-events:auto;
+}
+.modal{
+  background:var(--card);
+  border-radius:24px;
+  max-width:560px;
+  width:100%;
+  padding:18px 18px 16px;
+  box-shadow:0 18px 40px rgba(15,23,42,0.32);
+  position:relative;
+  border:1px solid var(--line);
+}
+.modal::before{
+  content:"";
+  position:absolute;
+  inset-inline:18px;
+  top:0;
+  height:4px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+.modal-close{
+  position:absolute;
+  inset-inline-start:12px;
+  top:10px;
+  border:none;
+  background:transparent;
+  font-size:20px;
+  cursor:pointer;
+  color:var(--muted);
+}
+.modal-label{
+  font-size:.8rem;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+#modalTitle{
+  font-size:1rem;
+  font-weight:700;
+  margin-bottom:4px;
+}
+#modalDesc{
+  font-size:.82rem;
+  color:var(--ink);
+}
+
+/* مصدر البند والتوجيه */
+.modal-section{
+  margin-top:8px;
+  padding:8px 10px;
+  border-radius:14px;
+  background:#f7fbfc;
+  border:1px dashed #d3e3ea;
+  font-size:.78rem;
+}
+.modal-section-title{
+  font-weight:700;
+  margin-bottom:2px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.modal-section-title span{
+  font-size:.85rem;
+}
+#modalSource,#modalNote{
+  color:var(--muted);
+}
+
+.modal-status{
+  margin-top:8px;
+  font-size:.78rem;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.modal-status-dot{
+  width:8px;height:8px;
+  border-radius:999px;
+  background:#16a34a;
+}
+.modal-status-text{
+  color:var(--muted);
+}
+
+.modal-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.btn-primary,.btn-secondary{
+  flex:1 1 0;
+  text-align:center;
+  font-size:.84rem;
+  padding:7px 10px;
+  border-radius:999px;
+  text-decoration:none;
+  cursor:pointer;
+  border:1px solid transparent;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+}
+.btn-primary:hover{
+  filter:brightness(1.05);
+}
+.btn-secondary{
+  background:#f5fafb;
+  border-color:rgba(11,126,136,0.35);
+  color:var(--accent2);
+}
+.btn-secondary:hover{
+  background:#e0f4f5;
+}
+.modal-footnote{
+  margin-top:8px;
+  font-size:.72rem;
+  color:var(--muted);
+  text-align:start;
+}
+
+/* الفوتر */
+footer{
+  background:rgba(255,255,255,0.95);
+  border-top:1px solid var(--line);
+  padding:8px 16px 8px;
+  font-size:.78rem;
+  color:var(--muted);
+  text-align:center;
+}
+.footer-credit{
+  font-size:.7rem;
+  color:#9ca3af;
+}
+
+/* تجاوبية */
+@media (max-width:640px){
+  .hero{padding:14px 12px;}
+  .top-title{font-size:1.05rem;}
+  .top-bar-inner{align-items:flex-start;}
+  .phase-header{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<!-- هيدر رئيس -->
+<header class="top-bar">
+  <div class="top-bar-inner">
+    <div class="top-icon">🎓</div>
+    <div class="top-text">
+      <div class="top-title">بوابة أعمال الاختبارات – 1447هـ / 2025م</div>
+      <div class="top-sub">مستندة إلى دليل الاختبارات، ولائحة تقويم الطالب، والإجراءات التنفيذية، وتوزيع درجات الطلاب</div>
+    </div>
+  </div>
+</header>
+
+<!-- أزرار الأدلة العائمة + منصة التنظيم المدرسي -->
+<div class="floating-guides">
+  <a class="guide-btn guide-exam" target="_blank"
+     href="https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view">
+    📘 <span>دليل الاختبارات 2025م</span>
+  </a>
+
+  <a class="guide-btn guide-assess" target="_blank"
+     href="https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view">
+    📑 <span>لائحة تقويم الطالب 2025م</span>
+  </a>
+
+  <a class="guide-btn guide-proc" target="_blank"
+     href="https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view">
+    ⚙️ <span>الإجراءات التنفيذية 2025م</span>
+  </a>
+
+  <a class="guide-btn guide-grades" target="_blank"
+     href="https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view">
+    🎯 <span>توزيع درجات الطلاب 2025م</span>
+  </a>
+
+  <a class="guide-btn guide-org" target="_blank"
+     href="https://fhz545-hub.github.io/Teachers/">
+    🧭 <span>منصة التنظيم المدرسي</span>
+  </a>
+</div>
+
+<main>
+  <div class="shell">
+
+    <!-- مقدمة الحقيبة -->
+    <section class="hero">
+      <div class="hero-chip">منصة روابط رسمية لأعمال الاختبارات في المدرسة</div>
+      <h1 class="hero-title">تنظيم أعمال الاختبارات قبلها وأثناءها وبعدها وفق أدلة وزارة التعليم</h1>
+      <p class="hero-meta">
+        التصنيف والترتيب مأخوذ من أبواب وفصول دليل الاختبارات (العمليات الإجرائية)،
+        ولائحة تقويم الطالب، والإجراءات التنفيذية، مع تحويل كل بند إلى رابط يمكن إرفاقه
+        بنماذج المدرسة وملفاتها.
+      </p>
+
+      <!-- مربع البحث -->
+      <div class="search-wrapper">
+        <div class="search-label">بحث سريع عن نموذج أو محضر أو كشف:</div>
+        <div class="search-input">
+          <input id="globalSearch" type="text" placeholder="اكتب كلمة مثل: لجنة، غياب، غش، رصد، تحليل…">
+        </div>
+        <div class="search-hint">يتم فلترة البنود مباشرة حسب النص.</div>
+      </div>
+
+      <nav class="phase-nav" aria-label="مراحل أعمال الاختبارات">
+        <a href="#before"><span>قبل الاختبارات – الإعداد والتنظيم</span></a>
+        <a href="#during"><span>أثناء الاختبارات – التطبيق والمتابعة</span></a>
+        <a href="#after"><span>بعد الاختبارات – التصحيح والنتائج والتحسين</span></a>
+      </nav>
+    </section>
+
+    <!-- =================== قبل الاختبارات =================== -->
+    <section id="before" class="phase-section">
+      <div class="phase-header">
+        <h2 class="phase-name">أولًا: أعمال قبل الاختبارات</h2>
+        <p class="phase-tagline">تنظيم العمل وتشكيل اللجان، المواعيد والتنظيمات، وأسئلة الاختبار وإنهاء المقرر.</p>
+      </div>
+
+      <div class="category-grid">
+
+        <!-- تنظيم العمل وتشكيل اللجان -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">1</div>
+            <div class="category-title">تنظيم العمل وتشكيل لجان الاختبارات</div>
+          </div>
+          <p class="category-meta">
+            مستند إلى الفصل الخامس: تنظيم العمل وتشكيل لجان الاختبارات في دليل الاختبارات 2025م.
+          </p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="تشكيل لجنة التحصيل الدراسي"
+                data-desc="قرار رسمي بتشكيل لجنة التحصيل الدراسي برئاسة قائد المدرسة، لتتولى متابعة مستوى التحصيل وبناء التقارير الدورية قبل الاختبارات."
+                data-source="دليل الاختبارات 2025م – الفصل الخامس: تنظيم العمل وتشكيل لجان الاختبارات."
+                data-note="يسهم تفعيل لجنة التحصيل الدراسي في قراءة واقع مستوى الطلاب مبكرًا، وتوجيه خطط المعالجة والدعم بما يضمن عدالة التقويم وجودة مخرجات الاختبارات."
+                data-open-url="https://docs.google.com/document/d/1PjSD-iP-EIrWxdXCXAySgoF0Khk50ZNI/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1PjSD-iP-EIrWxdXCXAySgoF0Khk50ZNI/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">تشكيل لجنة التحصيل الدراسي وفق المهام</span>
+                  <span class="link-ref">الفصل الخامس – تنظيم العمل وتشكيل لجان الاختبارات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">⬇️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="تشكيل لجنة التحكم والضبط (الكنترول)"
+                data-desc="قرار لجنة التحكم والضبط برئاسة وكيل المدرسة، تتضمن مهام إعداد الجداول، وترميز اللجان، وضبط سرية النماذج وحركة المظاريف."
+                data-source="دليل الاختبارات 2025م – الفصل الخامس: لجنة التحكم والضبط."
+                data-note="وجود لجنة تحكم وضبط فاعلة يقلل الأخطاء التنظيمية، ويحفظ سرية الاختبارات، ويمنح المعلمين والطلاب ثقة أعلى في عدالة الإجراءات."
+                data-open-url="https://docs.google.com/document/d/1Cd2QN_qeDgo5lL4-nCnpp5isAnVQECN1/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1Cd2QN_qeDgo5lL4-nCnpp5isAnVQECN1/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">تشكيل لجنة التحكم والضبط (الكنترول)</span>
+                  <span class="link-ref">الفصل الخامس – بند لجنة التحكم والضبط.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">⬇️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="تشكيل لجنة الإشراف والملاحظة"
+                data-desc="قرار تكليف المشرفين والملاحظين على اللجان، مع تحديد جدول المناوبة اليومي ومسؤوليات المتابعة داخل القاعات والممرات."
+                data-source="دليل الاختبارات 2025م – الفصل الخامس: لجنة الإشراف والملاحظة."
+                data-note="اختيار الملاحظين بعناية، وتوضيح الأدوار كتابةً، يعزّز الانضباط داخل القاعات ويحفظ حق الطالب في أداء اختبار هادئ ومنظم."
+                data-open-url="https://docs.google.com/document/d/1zZHuGe4EzdzHQ45dyaYnX3VDOGgRk0ev/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1zZHuGe4EzdzHQ45dyaYnX3VDOGgRk0ev/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">تشكيل لجنة الإشراف والملاحظة</span>
+                  <span class="link-ref">الفصل الخامس – لجنة الإشراف والملاحظة.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">⬇️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="تشكيل لجنة التصحيح والمراجعة"
+                data-desc="قرار لجنة التصحيح والمراجعة ورصد الدرجات، مع توزيع المهام بين المصححين والمدققين وضوابط مراجعة عينات من الأوراق."
+                data-source="دليل الاختبارات 2025م – الفصل الخامس: لجنة التصحيح والمراجعة والتدقيق."
+                data-note="تحديد منهجية واضحة للتصحيح والمراجعة يقلل التباين بين المعلمين، ويجعل نتائج الطلاب أكثر دقة وموضوعية."
+                data-open-url="https://docs.google.com/document/d/1PFwaVj2UDVyqRs4Ir2Gs4vw--ZWsLI8s/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1PFwaVj2UDVyqRs4Ir2Gs4vw--ZWsLI8s/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">تشكيل لجنة التصحيح والمراجعة</span>
+                  <span class="link-ref">الفصل الخامس – لجنة التصحيح والمراجعة والتدقيق.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">⬇️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="تشكيل لجنة الرصد وإخراج النتائج"
+                data-desc="قرار لجنة الرصد وإخراج النتائج وتدقيق البيانات واعتماد الكشوف النهائية في نظام نور، وفق الضوابط المعتمدة."
+                data-source="دليل الاختبارات 2025م – الفصل الخامس: لجنة الرصد وإخراج النتائج."
+                data-note="وجود لجنة رصد متخصصة يضمن سلامة إدخال الدرجات، ويقلل ملاحظات أولياء الأمور والطلاب حول الأخطاء في النتائج."
+                data-open-url="https://docs.google.com/document/d/1WutbyHEtwaFIry4mrDhUMWREMuWvkmRQ/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1WutbyHEtwaFIry4mrDhUMWREMuWvkmRQ/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">تشكيل لجنة الرصد وإخراج النتائج</span>
+                  <span class="link-ref">الفصل الخامس – لجنة الرصد وإخراج النتائج.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">⬇️</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+        <!-- مواعيد الاختبارات وتنظيماتها -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">2</div>
+            <div class="category-title">مواعيد الاختبارات وتنظيماتها</div>
+          </div>
+          <p class="category-meta">
+            مستند إلى الفصل الرابع من دليل الاختبارات، وما يتصل به في لائحة تقويم الطالب.
+          </p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="الخطة الزمنية لمتابعة أعمال التقويم في المدارس – الفصل الأول 1447هـ"
+                data-desc="خطة زمنية معتمدة لمتابعة أعمال التقويم والاختبارات في المدارس خلال الفصل الدراسي الأول 1447هـ."
+                data-source="خطة أعمال التقويم – وفق ما ورد في تعاميم وإجراءات التقويم للفصل الدراسي الأول 1447هـ."
+                data-note="إعلان الخطة الزمنية ومشاركتها مع المعلمين يسهم في توحيد الجهود ووضوح الأدوار خلال فترات التقويم المختلفة."
+                data-open-url="https://drive.google.com/file/d/1Ap0FyXJDwCFYvUZ1ron4nQxkVzZPF9Wm/view?usp=sharing"
+                data-download-url="https://drive.google.com/file/d/1Ap0FyXJDwCFYvUZ1ron4nQxkVzZPF9Wm/view?usp=sharing">
+                <div class="link-main">
+                  <span class="link-title">الخطة الزمنية لمتابعة أعمال التقويم في المدارس – الفصل الأول 1447هـ</span>
+                  <span class="link-ref">خطة أعمال التقويم في المدارس.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📅</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="خطة الاختبارات إصدار 1445هـ"
+                data-desc="خطة تنظيمية لسير الاختبارات وإجراءاتها كما وردت في إصدار 1445هـ، يمكن الاستفادة منها كمرجع تنظيمي داعم."
+                data-source="خطة الاختبارات – إصدار 1445هـ المعتمد في حينه."
+                data-note="الاستفادة من الإصدارات السابقة تساعد قائد المدرسة في تطوير خطط أكثر نضجًا ومقارنة مستوى التنظيم من عام لآخر."
+                data-open-url="https://drive.google.com/file/d/1InEc9bGAt-_cv1KvLOBwGStfmnBXEP6f/view?usp=sharing"
+                data-download-url="https://drive.google.com/file/d/1InEc9bGAt-_cv1KvLOBwGStfmnBXEP6f/view?usp=sharing">
+                <div class="link-main">
+                  <span class="link-title">خطة الاختبارات إصدار 1445هـ</span>
+                  <span class="link-ref">خطة تنظيم الاختبارات – إصدار 1445هـ.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📘</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="طلب تقديم الاختبار (تمثيل – ظروف خاصة)"
+                data-desc="نموذج طلب رسمي لتقديم الاختبار للطالب الذي تنطبق عليه الحالات الواردة في الدليل، مثل التمثيل الرسمي أو الظروف الإنسانية القاهرة."
+                data-source="دليل الاختبارات 2025م – الفصل الرابع: أحكام تقديم الاختبارات، ولائحة تقويم الطالب."
+                data-note="التعامل المرن والمنظم مع الحالات الاستثنائية يوازن بين مصلحة الطالب والمحافظة على عدالة التقويم بين جميع المتعلمين."
+                data-open-url="https://drive.google.com/file/d/1JBXlfEBdzCgBK1-r55nqoAKLp7aDBsMa/view?usp=sharing"
+                data-download-url="https://drive.google.com/file/d/1JBXlfEBdzCgBK1-r55nqoAKLp7aDBsMa/view?usp=sharing">
+                <div class="link-main">
+                  <span class="link-title">طلب تقديم الاختبار (تمثيل – ظروف خاصة)</span>
+                  <span class="link-ref">الفصل الرابع – أحكام تقديم الاختبارات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📄</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+        <!-- أسئلة الاختبار وإنهاء المقرر -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">3</div>
+            <div class="category-title">أسئلة الاختبار وإنهاء المقرر</div>
+          </div>
+          <p class="category-meta">
+            من الأسس الفنية للتقويم الختامي، ومن القاعدة الرابعة في الإجراءات التنفيذية للائحة تقويم الطالب.
+          </p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="جدول مواصفات الاختبار لكل مادة"
+                data-desc="جدول مواصفات يوزع الأسئلة على الأهداف والمحتوى ومستويات التفكير، بما يضمن شمولية التقويم وعدالته."
+                data-source="دليل الاختبارات 2025م – الأسس الفنية للتقويم الختامي."
+                data-note="الالتزام بجدول المواصفات يساعد المعلم على بناء اختبار يوازن بين المعرفة والفهم والتطبيق، ويرتبط بالأهداف التعليمية الفعلية للمقرر."
+                data-open-url="#"
+                data-download-url="#">
+                <div class="link-main">
+                  <span class="link-title">جدول مواصفات الاختبار لكل مادة</span>
+                  <span class="link-ref">الأسس الفنية للتقويم الختامي – دليل الاختبارات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">حالياً بدون ملف</span>
+                  <span class="link-badge">✏️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="إقرار المعلم بإنهاء المقرر"
+                data-desc="نموذج قرار يوقعه المعلم بإنهاء المقرر قبل بداية الاختبارات، وفق متطلبات لائحة تقويم الطالب والإجراءات التنفيذية."
+                data-source="الإجراءات التنفيذية للائحة تقويم الطالب – القاعدة الرابعة، ولائحة تقويم الطالب 2025م."
+                data-note="توثيق إنهاء المقرر يعزز حق الطالب في دراسة جميع مفردات المادة، ويجعل الاختبار امتدادًا طبيعيًا لما تم تدريسه داخل الصف."
+                data-open-url="https://docs.google.com/document/d/1Z9m_uLjntIJHEzr8O3uYm0mc4epFKxu_/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1Z9m_uLjntIJHEzr8O3uYm0mc4epFKxu_/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">قرار إنهاء المقرر</span>
+                  <span class="link-ref">الإجراءات التنفيذية – القاعدة الرابعة (التقويم في المرحلة الثانوية).</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">🖊️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="قرار تكليف معلم بإعداد أسئلة"
+                data-desc="قرار تكليف معلم أو أكثر بإعداد أسئلة الاختبار وفق جدول المواصفات المعتمد وضوابط سرية النماذج."
+                data-source="دليل الاختبارات 2025م – ضوابط إعداد الأسئلة والتكليف بها."
+                data-note="تكليف المعلّم بإعداد الأسئلة رسميًا يضمن وضوح المسؤولية، ويعزز الالتزام بالعدالة وجودة بناء الاختبار."
+                data-open-url="https://docs.google.com/document/d/1SLavQ9b-xN-3lio9eOihTT0x3PVyNGUi/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1SLavQ9b-xN-3lio9eOihTT0x3PVyNGUi/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">قرار تكليف معلم بإعداد أسئلة</span>
+                  <span class="link-ref">تكليف المعلم بإعداد أسئلة الاختبار.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📘</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =================== أثناء الاختبارات =================== -->
+    <section id="during" class="phase-section">
+      <div class="phase-header">
+        <h2 class="phase-name">ثانيًا: أعمال أثناء الاختبارات</h2>
+        <p class="phase-tagline">تطبيق الاختبار في القاعات، الحضور والغياب، والمخالفات والإخلال بسير الاختبار.</p>
+      </div>
+
+      <div class="category-grid">
+
+        <!-- تطبيق الاختبار والقاعات -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">1</div>
+            <div class="category-title">تطبيق الاختبار والقاعات</div>
+          </div>
+          <p class="category-meta">مستند إلى الفصل الثاني: تطبيق الاختبار في دليل الاختبارات.</p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="محضر فتح ظروف الأسئلة وتسليمها للملاحظين"
+                data-desc="محضر يثبت وقت فتح الظروف وعدد النماذج وتسليمها للملاحظين، وفق ما ورد في ضوابط تطبيق الاختبار."
+                data-source="دليل الاختبارات 2025م – الفصل الثاني: تطبيق الاختبار."
+                data-note="الانضباط في فتح الظروف أمام لجنة مختصة وبمحضر مكتمل الحقول يحمي سرية الأسئلة ويعزز الثقة في نزاهة الإجراءات."
+                data-open-url="https://docs.google.com/document/d/1_10Qc_kLNZbRK-NBgnA7fTmaZdktVIEl/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1_10Qc_kLNZbRK-NBgnA7fTmaZdktVIEl/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">محضر فتح ظروف الأسئلة وتسليمها للملاحظين</span>
+                  <span class="link-ref">الفصل الثاني – تطبيق الاختبار.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📦</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="كشف توزيع الملاحظين على لجان الاختبارات"
+                data-desc="كشف بأسماء الملاحظين ولجانهم في كل يوم، يوضح القاعات المكلف بها كل معلم وأوقات الملاحظة."
+                data-source="دليل الاختبارات 2025م – الفصل الثاني والفصل الخامس: مهام لجنة الإشراف والملاحظة."
+                data-note="توزيع الملاحظين بعدالة ووضوح يمنع التكرار والإجهاد على معلم دون آخر، ويرفع مستوى المتابعة داخل جميع القاعات."
+                data-open-url="https://docs.google.com/document/d/1xx7c9U_ULAT4YlxGAeCFJQ8bWyOaiw_2/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1xx7c9U_ULAT4YlxGAeCFJQ8bWyOaiw_2/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">كشف توزيع الملاحظين على لجان الاختبارات</span>
+                  <span class="link-ref">مهام لجنة الإشراف والملاحظة – دليل الاختبارات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">👁️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="قائمة ضبط قاعة الاختبار وتعليمات الطالب"
+                data-desc="قائمة تحقق لتجهيز القاعة، وضبط المقاعد، ووضع التعليمات، وإزالة جميع الوسائل غير المصرح بها قبل دخول الطلاب."
+                data-source="دليل الاختبارات 2025م – الفصل الثاني: ضوابط قاعات الاختبار."
+                data-note="الاهتمام بتجهيز القاعة رسالة ضمنية للطلاب بأن المدرسة تحترم وقتهم وجهدهم، وتوفر بيئة آمنة وعادلة لأداء الاختبار."
+                data-open-url="https://drive.google.com/file/d/1J6YPztHJibKK3DBPvXyrcWpQF7F2dUY0/view?usp=sharing"
+                data-download-url="https://drive.google.com/file/d/1J6YPztHJibKK3DBPvXyrcWpQF7F2dUY0/view?usp=sharing">
+                <div class="link-main">
+                  <span class="link-title">قائمة ضبط قاعة الاختبار وتعليمات الطالب</span>
+                  <span class="link-ref">ضوابط القاعات – فصل تطبيق الاختبار.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">✅</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+        <!-- الحضور والغياب والتأخر -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">2</div>
+            <div class="category-title">الحضور والغياب والتأخر</div>
+          </div>
+          <p class="category-meta">يرتبط بمواعيد الاختبارات وتنظيماتها، وبنود الغياب في لائحة تقويم الطالب.</p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="كشف الغياب اليومي للطلاب أيام الاختبارات"
+                data-desc="كشف معتمد لتسجيل غياب الطلاب في كل مادة، مع تمييز الغياب بعذر عن الغياب بدون عذر، ليُبنى عليه القرار المناسب."
+                data-source="لائحة تقويم الطالب 2025م – أحكام الغياب والحضور في التقويم الختامي."
+                data-note="توثيق الغياب بدقة يساعد المدرسة والوليّ على فهم أسباب التعثر، ويُسهِم في حماية حق الطالب في المعالجة النظامية العادلة."
+                data-open-url="https://docs.google.com/document/d/1qL8dGiWarkWlVMOoBtkfPaTFdnZwESi4/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1qL8dGiWarkWlVMOoBtkfPaTFdnZwESi4/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">كشف الغياب اليومي للطلاب أيام الاختبارات</span>
+                  <span class="link-ref">إجراءات الغياب في لائحة تقويم الطالب.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📄</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="محضر غياب طالب عن الاختبار"
+                data-desc="محضر يوضح بيانات الطالب والمادة وسبب الغياب، ليتم تحديد ما إذا كان الغياب بعذر يقبل أو بدون عذر يترتب عليه الحرمان."
+                data-source="لائحة تقويم الطالب 2025م – الغياب بعذر وبدون عذر في الاختبارات."
+                data-note="وضوح الإجراء منذ لحظة الغياب يمنع الاجتهادات الفردية، ويضمن أن تتم معالجة حالة الطالب وفق ما نصت عليه اللائحة نظاميًا."
+                data-open-url="https://docs.google.com/document/d/1_4FS_pVbe1Ey3gjNO9-w_cbAMdnlgvUJ/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1_4FS_pVbe1Ey3gjNO9-w_cbAMdnlgvUJ/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">محضر غياب طالب عن الاختبار</span>
+                  <span class="link-ref">لائحة تقويم الطالب – الغياب بعذر وبدون عذر.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">⚠️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="محضر تأخر طالب عن دخول قاعة الاختبار"
+                data-desc="محضر يوثق زمن التأخر وقرار اللجنة بشأن السماح بدخول الطالب أو عدمه، وفق الحدود الزمنية المعتمدة."
+                data-source="دليل الاختبارات 2025م – الفصل الثاني: ضوابط التأخر عن الاختبار."
+                data-note="إدارة مواقف التأخر بروح تربوية منضبطة تساعد الطالب على إدراك مسؤولية الالتزام بالوقت، مع المحافظة على عدالة الفرص بين زملائه."
+                data-open-url="https://docs.google.com/document/d/1fJLsDkdO8rAZEanaR2oVpTD-OThlHVHY/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1fJLsDkdO8rAZEanaR2oVpTD-OThlHVHY/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">محضر تأخر طالب عن دخول قاعة الاختبار</span>
+                  <span class="link-ref">الفصل الثاني – تطبيق الاختبار والضوابط الزمنية.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">⏰</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+        <!-- المخالفات والسلوك -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">3</div>
+            <div class="category-title">المخالفات وضبط السلوك في الاختبار</div>
+          </div>
+          <p class="category-meta">مستند إلى تعليمات تطبيق الاختبار ولوائح السلوك والمواظبة.</p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="محضر مخالفة الأنظمة والتعليمات"
+                data-desc="محضر توثيق لمخالفة التعليمات داخل قاعة الاختبار أو في ممرات اللجان، يرفع للجنة السلوك لاتخاذ الإجراء النظامي."
+                data-source="دليل الاختبارات 2025م – تعليمات تطبيق الاختبار، ولوائح السلوك والمواظبة."
+                data-note="تطبيق الأنظمة بعدل وهدوء يرسّخ لدى الطلاب أن الانضباط قيمة تربوية قبل أن يكون إجراءً نظاميًا، ويحمي البيئة الاختبارية من الفوضى."
+                data-open-url="https://docs.google.com/document/d/15H5XsUkPvdlIR3ycmtiRmsEFvAeDfxso/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/15H5XsUkPvdlIR3ycmtiRmsEFvAeDfxso/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">محضر مخالفة الأنظمة والتعليمات</span>
+                  <span class="link-ref">تعليمات السلوك والمواظبة في الاختبارات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">🚫</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="محضر حالة غش طالب"
+                data-desc="نموذج رسمي يوضح تفاصيل حالة الغش، والأدلة، وأقوال الطالب، ليُستند إليه في تطبيق العقوبة الواردة في اللائحة."
+                data-source="لوائح السلوك والمواظبة – أحكام الغش في الاختبارات، ودليل الاختبارات 2025م."
+                data-note="التعامل التربوي مع حالات الغش يجمع بين الحزم في تطبيق النظام، ومساعدة الطالب على إدراك أثر سلوكه في مستقبله وثقته بنفسه."
+                data-open-url="https://docs.google.com/document/d/1CROL7kqHDP6jfPUZfVvHvtcU7kppF1HQ/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1CROL7kqHDP6jfPUZfVvHvtcU7kppF1HQ/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">محضر حالة غش طالب</span>
+                  <span class="link-ref">لوائح السلوك والمواظبة – الغش في الاختبارات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📕</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =================== بعد الاختبارات =================== -->
+    <section id="after" class="phase-section">
+      <div class="phase-header">
+        <h2 class="phase-name">ثالثًا: أعمال بعد الاختبارات</h2>
+        <p class="phase-tagline">تصحيح الاختبار، الرصد والنتائج، حفظ المبيضات وتحليل النتائج وخطط المعالجة.</p>
+      </div>
+
+      <div class="category-grid">
+
+        <!-- التصحيح والمراجعة -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">1</div>
+            <div class="category-title">تصحيح الاختبار والمراجعة</div>
+          </div>
+          <p class="category-meta">مستند إلى الفصل الثالث: تصحيح الاختبار في دليل الاختبارات.</p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="كشف توزيع أوراق الإجابة على لجان التصحيح"
+                data-desc="كشف يوضح عدد أوراق إجابة كل معلم أو لجنة، مع تحديد المقررات والفصول؛ لتنظيم عمل لجنة التصحيح."
+                data-source="دليل الاختبارات 2025م – الفصل الثالث: تصحيح الاختبار."
+                data-note="التوزيع المتوازن لأوراق الإجابة يختصر وقت التصحيح ويقلل الأخطاء الناتجة عن الإرهاق، ويعطي المعلم فرصة لمراجعة عينة من أوراقه بهدوء."
+                data-open-url="https://docs.google.com/document/d/1Pl-Vvohj7Fu72TVLo3YjRpczjTL1Ao6f/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1Pl-Vvohj7Fu72TVLo3YjRpczjTL1Ao6f/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">كشف توزيع أوراق الإجابة على لجان التصحيح</span>
+                  <span class="link-ref">الفصل الثالث – تصحيح الاختبار.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📑</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="محضر اعتماد نموذج الإجابة قبل التصحيح"
+                data-desc="يوثق اعتماد نموذج الإجابة من لجنة المادة قبل البدء في التصحيح؛ لضمان توحيد المعايير بين جميع المصححين."
+                data-source="دليل الاختبارات 2025م – الفصل الثالث: ضوابط التصحيح والمراجعة."
+                data-note="اعتماد نموذج إجابة واضح ومتفق عليه يهيئ مناخًا عادلًا لتصحيح أوراق الطلاب، ويحد من التباين بين المعلمين في تقدير الدرجات."
+                data-open-url="#"
+                data-download-url="#">
+                <div class="link-main">
+                  <span class="link-title">محضر اعتماد نموذج الإجابة قبل التصحيح</span>
+                  <span class="link-ref">الفصل الثالث – بنود التصحيح والمراجعة.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">حالياً بدون ملف</span>
+                  <span class="link-badge">✅</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="تشكيل لجان التصحيح والمراجعة وفق التخصص"
+                data-desc="قرار تشكيل لجان متخصصة للتصحيح والمراجعة بحسب التخصصات الدراسية؛ لضمان جودة أدق في تحليل إجابات الطلاب."
+                data-source="دليل الاختبارات 2025م – تنظيم عمل لجان التصحيح المتخصصة."
+                data-note="توزيع مهام التصحيح وفق التخصص يرفع جودة القراءات التحصيلية ويجعل التغذية الراجعة التي تقدم للطلاب أكثر دقة."
+                data-open-url="https://docs.google.com/document/d/1ym4uJ28UrE56jtdssdcZoJ4c7dA0LuRd/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true"
+                data-download-url="https://docs.google.com/document/d/1ym4uJ28UrE56jtdssdcZoJ4c7dA0LuRd/edit?usp=sharing&ouid=113537845783582861888&rtpof=true&sd=true">
+                <div class="link-main">
+                  <span class="link-title">تشكيل لجان التصحيح والمراجعة وفق التخصص</span>
+                  <span class="link-ref">تنظيم لجان التصحيح المتخصصة – دليل الاختبارات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">فتح / تحميل</span>
+                  <span class="link-badge">📘</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+        <!-- الرصد والنتائج -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">2</div>
+            <div class="category-title">رصد الدرجات وإخراج النتائج</div>
+          </div>
+          <p class="category-meta">مستند إلى مهام لجنة الرصد وإخراج النتائج، وتوزيع الدرجات في لائحة تقويم الطالب.</p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="كشف الرصد الأولي للدرجات"
+                data-desc="كشف أولي يطبع من نظام نور بعد إدخال الدرجات، يُستخدم للمراجعة والمطابقة قبل الاعتماد النهائي."
+                data-source="دليل الاختبارات 2025م – الفصل الثالث والفصل الخامس: مهام لجنة الرصد."
+                data-note="الاستثمار الجيد لمرحلة الرصد الأولي يقلل طلبات التعديل بعد إعلان النتائج، ويجعل العمل أكثر اتقانًا واحترافية."
+                data-open-url="#"
+                data-download-url="#">
+                <div class="link-main">
+                  <span class="link-title">كشف الرصد الأولي للدرجات</span>
+                  <span class="link-ref">لجنة الرصد وإخراج النتائج – دليل الاختبارات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">حالياً بدون ملف</span>
+                  <span class="link-badge">💻</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="كشف المطابقة بين أوراق الإجابة وكشوف النظام"
+                data-desc="يكشف مطابقة درجات أوراق الإجابة مع الدرجات المدخلة في نظام نور، لضمان سلامة النتيجة النهائية."
+                data-source="دليل الاختبارات 2025م – الفصل الثالث: إجراءات المراجعة والتدقيق."
+                data-note="إشراك أكثر من عضو في المطابقة يرفع مستوى الدقة، ويمنح المدرسة ثقة قوية في أن نتائجها النهائية خالية من الأخطاء قدر الإمكان."
+                data-open-url="#"
+                data-download-url="#">
+                <div class="link-main">
+                  <span class="link-title">كشف المطابقة بين أوراق الإجابة وكشوف النظام</span>
+                  <span class="link-ref">دليل الاختبارات – مهام لجنة الرصد.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">حالياً بدون ملف</span>
+                  <span class="link-badge">📊</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="طلب مراجعة ورقة إجابة / تعديل درجة في نظام نور"
+                data-desc="نموذج طلب رسمي يقدمه الطالب أو ولي أمره لمراجعة ورقة الإجابة أو تعديل درجة قبل إغلاق الدرجات في النظام."
+                data-source="الإجراءات التنفيذية للائحة تقويم الطالب – القاعدة الرابعة، وتوزيع درجات الطلاب 2025م."
+                data-note="إتاحة مسار منظم لطلب المراجعة يعزز الثقة بين المدرسة والأسرة، ويجعل أي تعديل يتم وفق ضوابط واضحة وموثقة."
+                data-open-url="#"
+                data-download-url="#">
+                <div class="link-main">
+                  <span class="link-title">طلب مراجعة ورقة إجابة / تعديل درجة في نظام نور</span>
+                  <span class="link-ref">الإجراءات التنفيذية – القاعدة الرابعة، وتوزيع الدرجات.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">حالياً بدون ملف</span>
+                  <span class="link-badge">🖋️</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+        <!-- الأرشفة وتحليل النتائج -->
+        <article class="category-card">
+          <div class="category-label">
+            <div class="category-pill">3</div>
+            <div class="category-title">حفظ السجلات وتحليل النتائج</div>
+          </div>
+          <p class="category-meta">حفظ المبيضات والتقارير وتحليل النتائج لبناء خطط المعالجة.</p>
+          <ul class="link-list">
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="خطة حفظ مبيضات الدرجات وملفات النتائج"
+                data-desc="خطة توضح آلية حفظ مبيضات الدرجات وتقارير النتائج الورقية والإلكترونية والفترة الزمنية للاحتفاظ بها في المدرسة."
+                data-source="دليل الاختبارات 2025م – الفصل الثالث: حفظ المبيضات والسجلات."
+                data-note="توثيق واضح لمكان حفظ المبيضات والمسؤول عنها يسهل الرجوع لأي معلومة لاحقًا، ويحفظ حقوق الطلاب والمعلمين عند الحاجة للمراجعة."
+                data-open-url="#"
+                data-download-url="#">
+                <div class="link-main">
+                  <span class="link-title">خطة حفظ مبيضات الدرجات وملفات النتائج</span>
+                  <span class="link-ref">الفصل الثالث – حفظ المبيضات وتوثيق النتائج.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">حالياً بدون ملف</span>
+                  <span class="link-badge">🗂️</span>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="link-row link-trigger"
+                data-title="نموذج تحليل نتائج المقررات وخطة المعالجة"
+                data-desc="نموذج تحليل نتائج الطلاب في المقررات المختلفة، مع ربطها بأسباب القوة والضعف ووضع خطة معالجة زمنية ومسؤولة عن التنفيذ."
+                data-source="دليل الاختبارات 2025م – توظيف نتائج التقويم في تحسين التعلم."
+                data-note="تحليل النتائج ليس إجراءً شكليًا، بل أداة لاتخاذ قرارات تعليمية واضحة تسهم في رفع نواتج التعلم في العام الدراسي التالي."
+                data-open-url="#"
+                data-download-url="#">
+                <div class="link-main">
+                  <span class="link-title">نموذج تحليل نتائج المقررات وخطة المعالجة</span>
+                  <span class="link-ref">يوظف بيانات التقويم لتحسين نواتج التعلم.</span>
+                </div>
+                <div class="link-actions">
+                  <span class="link-chip">حالياً بدون ملف</span>
+                  <span class="link-badge">📈</span>
+                </div>
+              </button>
+            </li>
+
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-credit">جمعه ونفذه فهد حامد الزهراني</div>
+</footer>
+
+<!-- نافذة منبثقة لفتح / تحميل الملفات -->
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" type="button" onclick="closeModal()">&times;</button>
+    <div class="modal-label">عنصر من حقيبة أعمال الاختبارات</div>
+    <h3 id="modalTitle">—</h3>
+    <p id="modalDesc">—</p>
+
+    <div class="modal-section" id="modalSourceBox">
+      <div class="modal-section-title">
+        <span>📚</span><span>المصدر النظامي للبند</span>
+      </div>
+      <p id="modalSource">—</p>
+    </div>
+
+    <div class="modal-section" id="modalNoteBox">
+      <div class="modal-section-title">
+        <span>💡</span><span>توجيه تربوي</span>
+      </div>
+      <p id="modalNote">—</p>
+    </div>
+
+    <div class="modal-status">
+      <span class="modal-status-dot" id="modalStatusDot"></span>
+      <span class="modal-status-text" id="modalStatusText">حالة الملف: متاح</span>
+    </div>
+
+    <div class="modal-buttons">
+      <a id="modalOpen" href="#" target="_blank" rel="noopener" class="btn-primary">فتح الملف في تبويب جديد</a>
+      <a id="modalDownload" href="#" class="btn-secondary" download>تحميل الملف</a>
+    </div>
+
+    <div class="modal-footnote">
+      هذه النماذج والقرارات مسانِدة لعمل المدرسة في تنظيم الاختبارات، وتُطبَّق بما ينسجم مع ما يَرِد من تحديثات في أدلة وزارة التعليم.
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const backdrop   = document.getElementById('modalBackdrop');
+  const titleEl    = document.getElementById('modalTitle');
+  const descEl     = document.getElementById('modalDesc');
+  const openEl     = document.getElementById('modalOpen');
+  const downloadEl = document.getElementById('modalDownload');
+  const statusText = document.getElementById('modalStatusText');
+  const statusDot  = document.getElementById('modalStatusDot');
+  const sourceEl   = document.getElementById('modalSource');
+  const noteEl     = document.getElementById('modalNote');
+  const sourceBox  = document.getElementById('modalSourceBox');
+  const noteBox    = document.getElementById('modalNoteBox');
+
+  function setStatus(status){
+    const text = status || 'متاح';
+    statusText.textContent = 'حالة الملف: ' + text;
+
+    if (text === 'قيد الإعداد') {
+      statusDot.style.background = '#facc15';   // أصفر
+    } else if (text === 'مغلق' || text === 'غير متاح') {
+      statusDot.style.background = '#b91c1c';   // أحمر
+    } else {
+      statusDot.style.background = '#16a34a';   // أخضر
+    }
+  }
+
+  function openModal(title, desc, openUrl, downloadUrl, status, source, note){
+    titleEl.textContent = title || '';
+    descEl.textContent  = desc  || '';
+
+    if (source) {
+      sourceEl.textContent = source;
+      sourceBox.style.display = '';
+    } else {
+      sourceBox.style.display = 'none';
+    }
+
+    if (note) {
+      noteEl.textContent = note;
+      noteBox.style.display = '';
+    } else {
+      noteBox.style.display = 'none';
+    }
+
+    openEl.href     = openUrl     || '#';
+    downloadEl.href = downloadUrl || openUrl || '#';
+
+    setStatus(status);
+    backdrop.classList.add('show');
+    backdrop.setAttribute('aria-hidden','false');
+  }
+
+  window.closeModal = function(){
+    backdrop.classList.remove('show');
+    backdrop.setAttribute('aria-hidden','true');
+  };
+
+  backdrop.addEventListener('click', function(e){
+    if (e.target === backdrop){ closeModal(); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ closeModal(); }
+  });
+
+  // ربط الأزرار بكل بند + تحديد حالة الملف تلقائيًا
+  document.querySelectorAll('.link-trigger').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const title       = btn.dataset.title   || (btn.querySelector('.link-title') ? btn.querySelector('.link-title').textContent : '');
+      const desc        = btn.dataset.desc    || '';
+      const openUrl     = btn.dataset.openUrl || '#';
+      const downloadUrl = btn.dataset.downloadUrl || openUrl || '#';
+      const source      = btn.dataset.source  || '';
+      const note        = btn.dataset.note    || '';
+
+      const hasRealLink =
+        openUrl &&
+        openUrl !== '#' &&
+        openUrl.trim() !== '';
+
+      let status = btn.dataset.status;
+      if (!status || status.trim() === '') {
+        status = hasRealLink ? 'متاح' : 'غير متاح';
+      }
+
+      openModal(title, desc, openUrl, downloadUrl, status, source, note);
+    });
+  });
+
+  // البحث الذكي
+  const searchInput = document.getElementById('globalSearch');
+  if (searchInput) {
+    searchInput.addEventListener('input', function(){
+      const q = this.value.trim().toLowerCase();
+      const allLis = document.querySelectorAll('.link-list li');
+
+      if (!q) {
+        allLis.forEach(li => { li.style.display = ''; });
+        document.querySelectorAll('.category-card').forEach(card => {
+          card.style.display = '';
+        });
+        return;
+      }
+
+      allLis.forEach(li => {
+        const tEl  = li.querySelector('.link-title');
+        const rEl  = li.querySelector('.link-ref');
+        const text = ((tEl ? tEl.textContent : '') + ' ' + (rEl ? rEl.textContent : '')).toLowerCase();
+        const match = text.indexOf(q) !== -1;
+        li.style.display = match ? '' : 'none';
+      });
+
+      document.querySelectorAll('.category-card').forEach(card => {
+        const lis = Array.from(card.querySelectorAll('.link-list li'));
+        const anyVisible = lis.some(li => li.style.display !== 'none');
+        card.style.display = anyVisible ? '' : 'none';
+      });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
