@@ -37,8 +37,8 @@ button{font-family:inherit;cursor:pointer}
   color:#0a4a46;
   display:flex;
   align-items:center;
-  gap:6px;              /* تقليل المسافة */
-  justify-content:flex-start; /* تقريب البحث من العنوان */
+  gap:6px;
+  justify-content:flex-start;
   flex-wrap:wrap
 }
 
@@ -61,7 +61,7 @@ button{font-family:inherit;cursor:pointer}
   align-items:center;
   gap:8px;
   position:relative;
-  margin-inline-start:8px; /* قرب البحث من العنوان بدلاً من دفعه للأطراف */
+  margin-inline-start:8px;
 }
 .searchbar .icon{font-size:18px;opacity:.85}
 .searchbar input[type="search"]{
@@ -190,12 +190,12 @@ button{font-family:inherit;cursor:pointer}
   margin:16px 0 10px;
   font-size:12px;
   display:flex;
-  justify-content:center;   /* توسيط أفقي كامل */
-  align-items:center;       /* محاذاة وسطية رأسية */
+  justify-content:center;
+  align-items:center;
 }
 .footer small{
   opacity:.95;
-  margin:0 auto;            /* ضمان التوسيط حتى مع الاتجاه */
+  margin:0 auto;
 }
 </style>
 </head>
@@ -354,8 +354,7 @@ const ORDER=[
   "interactive","guides"
 ];
 
-/* حساب "جديد" للإشعار خلال يومين
-   ضبط التاريخ المرجعي بحيث تكون الملفات الجديدة فقط (٨) ضمن آخر يومين */
+/* حساب "جديد" للإشعار خلال يومين */
 const TODAY = new Date("2025-11-20T00:00:00");
 function خلالأيام(dateStr, days=2){
   if(!dateStr) return false;
@@ -386,7 +385,10 @@ const CATALOG = {
   exams: [
     {title:"دليل الاختبارات 2025م",desc:"أسس تنفيذ الاختبارات وتنظيمها.",kind:"دليل",url:"https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view",src:"وزارة التعليم"},
     {title:"إطار الاختبارات المركزية في إدارات التعليم العامة 1446",desc:"تنظيم وآليات الاختبارات المركزية.",kind:"إطار",url:"https://drive.google.com/file/d/1tHeew76-antAa3jRdJx2gjKE9OSbSyER/view?usp=sharing",src:"وزارة التعليم"},
-    {title:"الملف التفاعلي للاختبارات المعيارية PIRLS 2026",desc:"حزمة تفاعلية استعدادًا لـ PIRLS.",kind:"ملف تفاعلي",url:"https://drive.google.com/file/d/1QjNwCRRyh3_WJhmI2Qd7rctqyjc8MOBV/view?usp=sharing",src:"وزارة التعليم"}
+    {title:"الملف التفاعلي للاختبارات المعيارية PIRLS 2026",desc:"حزمة تفاعلية استعدادًا لـ PIRLS.",kind:"ملف تفاعلي",url:"https://drive.google.com/file/d/1QjNwCRRyh3_WJhmI2Qd7rctqyjc8MOBV/view?usp=sharing",src:"وزارة التعليم"},
+    {title:"دليل الاختبارات — الأسس الفنية والعمليات الإجرائية 2025م",desc:"مرجع تفصيلي للأسس الفنية والعمليات الإجرائية للاختبارات.",kind:"دليل",url:"https://drive.google.com/file/d/1uN5yrqVOspCGz75rcZNi-mYIq7cjz8F4/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"},
+    {title:"خطوات إعداد اللجان في نظام نور",desc:"إرشادات عملية لإعداد لجان الاختبارات في نظام نور.",kind:"خطوات",url:"https://drive.google.com/file/d/1E-cgxV72_E2mvUTCmOGoqelaDTQeaC2n/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"},
+    {title:"مذكرة زمن الاختبارات للمواد",desc:"تنظيم الأوقات الزمنية لاختبارات المواد الدراسية.",kind:"مذكرة",url:"https://drive.google.com/file/d/1vU7Wa-8-A0RM2CqWLPFp7Dbtaxb_NvOX/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   attendance: [
     {title:"دليل المستخدم لتطبيق حضوري (الموظفين)",desc:"تسجيل الحضور والانصراف.",kind:"دليل",url:"https://drive.google.com/file/d/17LYzCksGBqvzgS_8iedKaF1zYBBxeqGy/view",src:"وزارة التعليم"},
@@ -409,7 +411,6 @@ const CATALOG = {
     {title:"أدوات دعم تطبيق إطار تحسين مجال التدريس",desc:"أدوات مساندة لتفعيل إطار تحسين التدريس.",kind:"أدوات",url:"https://drive.google.com/file/d/1aWElL4f0-KhDcHH4nfGP9e3REviu2XuI/view?usp=sharing",src:"وزارة التعليم"},
     {title:"الخطط الدراسية للأنشطة الطلابية",desc:"أطر وخطط أنشطة طلابية معتمدة.",kind:"خطط",url:"https://drive.google.com/file/d/18BSL4doQo6Z72Ih8-HEN1KD9inPOZrvp/view?usp=sharing",src:"وزارة التعليم"},
     {title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا) — نسخة",desc:"مرجع داعم للتطوير الذاتي على مستوى المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1FyCJXw_RJDc-X-qSzWz94boyo3NnONYm/view",src:"وزارة التعليم"},
-    /* جديد اليوم: دليل المبادرات */
     {title:"دليل المبادرات",desc:"مرجع لتنظيم وتصميم المبادرات التعليمية والمدرسية.",kind:"دليل",url:"https://drive.google.com/file/d/1YdT4vmNrkFqXp8y3TcldiSFTo-vBXjsy/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   conduct: [
@@ -417,9 +418,7 @@ const CATALOG = {
     {title:"دليل السلوك المهني لموظفي وزارة التعليم 2025",desc:"معايير السلوك المهني.",kind:"دليل",url:"https://drive.google.com/file/d/1FP2_l_4vTqbuBK7k03YktLX92TVdqDcy/view",src:"وزارة التعليم"},
     {title:"مدونة السلوك الوظيفي وأخلاقيات الوظيفة العامة",desc:"قواعد السلوك الوظيفي بالقطاع الحكومي.",kind:"مدونة",url:"https://www.hrsd.gov.sa/sites/default/files/2022-10/08102022.pdf",src:"الموارد البشرية والتنمية الاجتماعية"},
     {title:"دليل استخدام الهواتف والأجهزة المحمولة",desc:"سياسات وضوابط استخدام الأجهزة.",kind:"دليل",url:"https://drive.google.com/file/d/1lIlgSYa-iGNNjNXlKoPHHecAUL5znDsD/view?usp=sharing",src:"وزارة التعليم"},
-    /* جديد اليوم: ميثاق أخلاقيات مهنة التعليم */
     {title:"ميثاق أخلاقيات مهنة التعليم",desc:"مبادئ وقيم مهنة التعليم وسلوكياتها المهنية.",kind:"ميثاق",url:"https://drive.google.com/file/d/11VzU583QOvvP10DJ6Y9CfDsFI2hqUzSF/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"},
-    /* جديد اليوم: الخطة الإجرائية لتعزيز الانضباط المدرسي */
     {title:"الخطة الإجرائية لتعزيز الانضباط المدرسي",desc:"خطة عملية لتعزيز الانضباط المدرسي ومتابعته.",kind:"خطة إجرائية",url:"https://drive.google.com/file/d/1hA28lIXMq9D3e1PF8ilYnUEhmGb6jxAp/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   policies: [
@@ -432,7 +431,6 @@ const CATALOG = {
     {title:"الدليل الإرشادي للجدارات",desc:"إطار مرجعي للجدارات المهنية والتعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/1dr09uQ7u5hdlghwrtpLGFsjR35XTZfP/view?usp=sharing",src:"وزارة التعليم"},
     {title:"المركز الوطني للمناهج — دليل الوثيقة التعريفية لمرحلة الثانوية العامة",desc:"تعريف بوثيقة المرحلة الثانوية ومساراتها.",kind:"دليل",url:"https://drive.google.com/file/d/1eX_OGdyNl7fMb_xapBDSzdvrBeZBr5BT/view?usp=sharing",src:"المركز الوطني للمناهج"},
     {title:"دليل التحول إلى نموذج الخدمات المركزي",desc:"مرجع لتحول إدارات التعليم إلى نموذج الخدمات المركزي.",kind:"دليل",url:"https://drive.google.com/file/d/1vYJlzeQXbxQI5Au-Q8wiNruc9XCxSzoS/view?usp=sharing",src:"وزارة التعليم"},
-    /* جديد اليوم: منح مديري ومديرات المدارس الصلاحيات */
     {title:"منح مديري ومديرات المدارس الصلاحيات",desc:"ضوابط تنظيم ومنح الصلاحيات لقادة المدارس.",kind:"تعميم",url:"https://drive.google.com/file/d/166h6cj6lRPBMSro_HRNoltRQPj8LLxPq/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   staff: [
@@ -458,7 +456,6 @@ const CATALOG = {
     {title:"دليل القواعد التنظيمية لبرنامج فرص",desc:"ضوابط وآليات برنامج فرص لشاغلي الوظائف التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/1_wR6GRu61SmD57Id-UqVBQSFifB-ioz3/view?usp=sharing",src:"وزارة التعليم"},
     {title:"الأسئلة الشائعة لبرنامج فرص",desc:"توضيحات حول برنامج فرص وإجراءاته.",kind:"أسئلة شائعة",url:"https://drive.google.com/file/d/1uhMKoVU8e589y_FUeFJuFychUg926qlf/view?usp=sharing",src:"وزارة التعليم"},
     {title:"دليل اعتماد وتنفيذ أنشطة (التطوير المهني التعليمي)",desc:"إجراءات اعتماد وتنفيذ أنشطة التطوير المهني التعليمي لشاغلي الوظائف التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/1MWtVAXOgDjrJL3BBKtuawuazd_7fbByD/view?usp=sharing",src:"وزارة التعليم"},
-    /* جديد اليوم: دليل احتساب نقاط التطوير المهني للترقية */
     {title:"دليل احتساب نقاط التطوير المهني للترقية في لائحة الوظائف التعليمية",desc:"آلية احتساب نقاط التطوير المهني لأغراض الترقية.",kind:"دليل",url:"https://drive.google.com/file/d/1Nc4aNIWmMRSZfLtz_8Aq5dUYhRuIPyhh/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   platformsOps: [
@@ -478,14 +475,14 @@ const CATALOG = {
     {title:"نموذج الحصص الأسبوعية في الفصلين",desc:"توزيع الحصص للأسبوع الدراسي.",kind:"نموذج",url:"https://drive.google.com/file/d/157rFurVpjSpxV6o7pRfMTZInLGMv5rjx/view",src:"وزارة التعليم"},
     {title:"نموذج الحصص الأسبوعية في الفصلين — نسخة",desc:"نسخة إضافية للنموذج المعتمد.",kind:"نموذج",url:"https://drive.google.com/file/d/198fELpFFSTf2DC08w0T44SUrAO4ZhOX9/view?usp=sharing",src:"وزارة التعليم"},
     {title:"نموذج استرشادي للحصص الدراسية خلال 36 أسبوعًا",desc:"تخطيط زمني للحصص على مدار العام.",kind:"نموذج",url:"https://drive.google.com/file/d/1zFVc-Qod32G-Q3eGwBDlfg7elOP-SNWY/view?usp=sharing",src:"وزارة التعليم"},
-    {title:"نموذج حجز موعد / استدعاء ولي الأمر",desc:"نموذج رسمي للتواصل مع ولي الأمر.",kind:"نموذج",url:"https://drive.google.com/file/d/1ynR-bkrzI7RHWOg-j8FQ1aNvp8LoY1dx/view?usp=sharing",src:"وزارة التعليم"}
+    {title:"نموذج حجز موعد / استدعاء ولي الأمر",desc:"نموذج رسمي للتواصل مع ولي الأمر.",kind:"نموذج",url:"https://drive.google.com/file/d/1ynR-bkrzI7RHWOg-j8FQ1aNvp8LoY1dx/view?usp=sharing",src:"وزارة التعليم"},
+    {title:"بطاقة زيارة مدرسة للمشرف التربوي",desc:"نموذج معتمد لتوثيق زيارة المشرف التربوي للمدرسة.",kind:"نموذج",url:"https://drive.google.com/file/d/1rGqq0tDOSZgGpqwearcAlvgdP637IcEu/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   inclusive: [
     {title:"القواعد التنظيمية لفصول ومدارس الموهوبين",desc:"تنظيم البرامج والمسارات.",kind:"قواعد",url:"https://drive.google.com/file/d/15g8C3aVaStWcftLa4toBJQtP-2wP113O/view",src:"وزارة التعليم"},
     {title:"ضوابط تسريع انتقال الطلبة الموهوبين 1447هـ",desc:"آليات وإجراءات التسريع الأكاديمي.",kind:"ضوابط",url:"https://drive.google.com/file/d/15ekZaGwDQY2PJSk7yyAbctOvx0gZghsw/view",src:"وزارة التعليم"},
     {title:"مختصر حقيبة تفاعلية لنواتج تعلم أفضل (15-5-1447هـ)",desc:"ملخّص عملي لتحسين نواتج التعلم.",kind:"مختصر",url:"https://drive.google.com/file/d/1emdta_YyOhWk6a__fbe7Idx2GRszi8xd/view?usp=sharing",src:"وزارة التعليم"},
     {title:"إطار الاحتفاء والتكريم للطلاب والطالبات في المدارس",desc:"منهجية تكريم ذات أثر محفّز.",kind:"إطار",url:"https://drive.google.com/file/d/1eK1WzZ3rvtHorRF0pQiKtN39Ap_uuWpL/view?usp=sharing",src:"وزارة التعليم"},
-    /* جديد اليوم: دليل التدخلات التربوية */
     {title:"دليل التدخلات التربوية",desc:"إرشادات التدخلات التربوية لدعم تعلم الطلبة.",kind:"دليل",url:"https://drive.google.com/file/d/1SFcTcKKBUGq2K-3JrTDp5Lh10rnE1sxe/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   safety: [
@@ -519,7 +516,6 @@ const CATALOG = {
     {title:"دليل الخدمات الإلكترونية للتقويم والاعتماد المدرسي (الإصدار الأول 2023)",desc:"منظومة الخدمات الإلكترونية للتقويم والاعتماد المدرسي.",kind:"دليل",url:"https://drive.google.com/file/d/11ZkLI5dxsivSW8KC-FX734As1jBfk3U_/view?usp=sharing",src:"وزارة التعليم"},
     {title:"قائمة الملفات والسجلات الأساسية",desc:"حصر السجلات والملفات الأساسية لعمل التقويم المدرسي.",kind:"قائمة",url:"https://drive.google.com/file/d/11ZkLI5dxsivSW8KC-FX734As1jBfk3U_/view?usp=sharing",src:"وزارة التعليم"},
     {title:"الدليل الإجرائي للتقويم الذاتي لمدارس الطفولة المبكرة ورياض الأطفال",desc:"آليات التقويم الذاتي لمدارس الطفولة المبكرة ورياض الأطفال.",kind:"دليل",url:"https://drive.google.com/file/d/1jKCt3ho7k47TTaVk0HPRhrZVbibPj_9s/view?usp=sharing",src:"وزارة التعليم"},
-    /* جديد اليوم: خريطة نواتج التعلم */
     {title:"خريطة نواتج التعلم",desc:"خريطة مرجعية لنواتج التعلم لتحسين التقويم والمتابعة.",kind:"خريطة",url:"https://drive.google.com/file/d/1Ht6HA3YXRkoKVM36w8fbIdXDsoHzR0dR/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   guides: [
@@ -528,7 +524,6 @@ const CATALOG = {
     {title:"طريقة التسجيل في منصة التطوع",desc:"شرح خطوات التسجيل في المنصة الوطنية للتطوع.",kind:"إرشادات",url:"https://drive.google.com/file/d/1Rzlq0XJIZRvvrz7PsbxGS4Kt27iyum0C/view?usp=sharing",src:"وزارة الموارد البشرية والتنمية الاجتماعية"},
     {title:"حوكمة تصميم الفرص التطوعية",desc:"منهجية وضوابط تصميم فرص تطوعية ذات أثر.",kind:"حوكمة",url:"https://drive.google.com/file/d/1AoMuzLJrGY0u08l-35nQfYSmbZCYv-v1/view?usp=sharing",src:"جهات تنظيمية"},
     {title:"دليل إجراءات تفعيل الفرص التطوعية",desc:"خطوات عملية لتفعيل وتنفيذ الفرص.",kind:"دليل إجراءات",url:"https://drive.google.com/file/d/18TXQsp7uvAHCFF2RsPWka_AXRH7z-HLB/view?usp=sharing",src:"جهات تنظيمية"},
-    /* جديد اليوم: دليل حوكمة الشراكات والاتفاقات */
     {title:"دليل حوكمة الشراكات والاتفاقات",desc:"إطار حوكمة للشراكات والاتفاقات مع الجهات المختلفة.",kind:"دليل",url:"https://drive.google.com/file/d/1mJEedJWEmh46KaPb-pDcNTMwpWU4HF0l/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ]
 };
