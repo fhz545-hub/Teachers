@@ -179,7 +179,7 @@ button{font-family:inherit;cursor:pointer}
 .card:hover::before{transform:translateX(125%) rotate(10deg)}
 .card:hover::after{opacity:.6}
 .card.reveal{animation:popIn .45s ease both}
-@keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}
+@keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 /* تذييل بسيط بالحقوق */
 .footer{
@@ -313,12 +313,12 @@ button{font-family:inherit;cursor:pointer}
         <div class="badge" style="position:absolute;top:10px;inset-inline-end:10px;background:#b41d3a;border-color:#b41d3a;color:#fff">جديد</div>
       </a>
 
-      <!-- مناسبات وفعاليات (قريبًا) -->
-      <a class="card" href="#" style="text-align:center;position:relative" aria-disabled="true">
+      <!-- مناسبات وفعاليات -->
+      <a class="card" href="https://moe.gov.sa/ar/mediacenter/events/Pages/default.aspx" target="_blank" rel="noopener" style="text-align:center;position:relative">
         <div class="ico">🎉</div>
         <div class="title" style="margin-top:6px">مناسبات وفعاليات</div>
         <div class="desc">روزنامة الفعاليات المدرسية والتنبيهات المرتبطة بها.</div>
-        <div class="badge" style="position:absolute;top:10px;inset-inline-end:10px;background:#ffc107;border-color:#ffc107;color:#4b3a00">قريبًا</div>
+        <div class="badge" style="position:absolute;top:10px;inset-inline-end:10px;background:#ffc107;border-color:#ffc107;color:#4b3a00">مباشر</div>
       </a>
     </div>
   </section>
@@ -411,7 +411,8 @@ const CATALOG = {
     {title:"أدوات دعم تطبيق إطار تحسين مجال التدريس",desc:"أدوات مساندة لتفعيل إطار تحسين التدريس.",kind:"أدوات",url:"https://drive.google.com/file/d/1aWElL4f0-KhDcHH4nfGP9e3REviu2XuI/view?usp=sharing",src:"وزارة التعليم"},
     {title:"الخطط الدراسية للأنشطة الطلابية",desc:"أطر وخطط أنشطة طلابية معتمدة.",kind:"خطط",url:"https://drive.google.com/file/d/18BSL4doQo6Z72Ih8-HEN1KD9inPOZrvp/view?usp=sharing",src:"وزارة التعليم"},
     {title:"التطوير المهني للمدرسة (التطوير الموجّه ذاتيًا) — نسخة",desc:"مرجع داعم للتطوير الذاتي على مستوى المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1FyCJXw_RJDc-X-qSzWz94boyo3NnONYm/view",src:"وزارة التعليم"},
-    {title:"دليل المبادرات",desc:"مرجع لتنظيم وتصميم المبادرات التعليمية والمدرسية.",kind:"دليل",url:"https://drive.google.com/file/d/1YdT4vmNrkFqXp8y3TcldiSFTo-vBXjsy/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
+    {title:"دليل المبادرات",desc:"مرجع لتنظيم وتصميم المبادرات التعليمية والمدرسية.",kind:"دليل",url:"https://drive.google.com/file/d/1YdT4vmNrkFqXp8y3TcldiSFTo-vBXjsy/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"},
+    {title:"إضاءات في طريق التميز المدرسي",desc:"إضاءات داعمة لمسار التميز والجودة المدرسية.",kind:"إضاءات",url:"https://drive.google.com/file/d/1triSCffklFvhC9DAYxiizxkzdtfIVKuA/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   conduct: [
     {title:"قواعد السلوك والمواظبة 1447هـ",desc:"حقوق الطالب وإجراءات الانضباط.",kind:"قواعد",url:"https://drive.google.com/file/d/1RYIYPFlAcT9Ya-RnPw3bnpQASVQIz0FX/view",src:"وزارة التعليم"},
@@ -503,7 +504,8 @@ const CATALOG = {
     {title:"الدليل الاسترشادي لأبرز الخدمات التقنية للتوجيه الطلابي في نظام نور",desc:"شرح الخدمات الرقمية الداعمة للتوجيه عبر نور.",kind:"دليل",url:"https://drive.google.com/file/d/1CSM9tTP6b5RrvmuajOOEFLJNKHzejfTW/view?usp=sharing",src:"وزارة التعليم"},
     {title:"الدليل الاسترشادي لبرامج وخدمات التوجيه الطلابي — نسخة",desc:"نسخة إضافية للدليل المعتمد.",kind:"دليل",url:"https://drive.google.com/file/d/1ERsDW7c_ReFF0Sa2KhzZKB8wkDKKNjhU/view?usp=sharing",src:"وزارة التعليم"},
     {title:"التوجيه وقت الأزمات — دليل (نسخة)",desc:"نسخة أخرى من دليل التوجيه وقت الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/16-YjeHhz0d4Z8FnG6a88ipz30majKOWO/view?usp=sharing",src:"وزارة التعليم"},
-    {title:"الدليل الإجرائي لمؤشرات التوجيه الطلابي في ضوء تمكين المدرسة",desc:"مؤشرات وإجراءات للتوجيه الطلابي.",kind:"دليل إجرائي",url:"https://drive.google.com/file/d/1KECIXVNAuGIfHgcr4cFZkTZ7RjDEDzNP/view?usp=sharing",src:"وزارة التعليم"}
+    {title:"الدليل الإجرائي لمؤشرات التوجيه الطلابي في ضوء تمكين المدرسة",desc:"مؤشرات وإجراءات للتوجيه الطلابي.",kind:"دليل إجرائي",url:"https://drive.google.com/file/d/1KECIXVNAuGIfHgcr4cFZkTZ7RjDEDzNP/view?usp=sharing",src:"وزارة التعليم"},
+    {title:"رصد السلوك الإيجابي في نظام نور",desc:"إرشادات رصد السلوك الإيجابي وتوثيقه عبر نظام نور.",kind:"دليل",url:"https://drive.google.com/file/d/17zltfHuIawEAJMFrk0DnZXM1gaXkk9TU/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   kg: [
     {title:"الدليل التنظيمي للحضانة ورياض الأطفال (1438-1439)",desc:"تنظيم العمل في رياض الأطفال.",kind:"دليل",url:"https://drive.google.com/file/d/1BzZtwzOQtO45A5A3SCq5j6XqbwEZOkDT/view",src:"وزارة التعليم"},
