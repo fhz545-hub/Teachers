@@ -350,7 +350,7 @@ const GROUP_TITLES={
   inclusive:"التعليم الشامل والدعم الطلابي",
   safety:"الأمن والسلامة المدرسية",
   elearn:"التعلّم الإلكتروني والمحتوى الرقمي",
-  counseling:"الإرشاد الطلابي والرعاية النفسية",
+  counseling:"التوجيه الطلابي والرعاية النفسية", /* ✅ تعديل المسمّى ليطابق المتداول رسميًا */
   kg:"رياض الأطفال",
   interactive:"التقويم المدرسي",
   guides:"المسؤولية المجتمعية والعمل التطوعي"
@@ -385,9 +385,7 @@ function isLatest(item){
 /* الكتالوج المصنّف */
 const CATALOG = {
   grading: [
-    /* ✅ إضافة جديدة (ستظهر أعلى القائمة مع شارة "جديد") */
     {title:"أهم مستجدات لائحة تقويم الطالب في المرحلة الابتدائية 2025م",desc:"مستجدات وتحديثات مرتبطة بتطبيق لائحة تقويم الطالب للمرحلة الابتدائية.",kind:"مستجدات",url:"https://drive.google.com/file/d/1HCgjtGboL6stBjtbpzcs6-A4SkWsQpEv/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-17"},
-
     {title:"لائحة تقويم الطالب 2025م",desc:"سياسة التقييم وأدوات القياس.",kind:"لائحة",url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view",src:"وزارة التعليم"},
     {title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م",desc:"آليات تطبيق اللائحة داخل المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view",src:"وزارة التعليم"},
     {title:"توزيع درجات الطلاب 2025م",desc:"نِسَب عناصر التقويم.",kind:"دليل",url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view",src:"وزارة التعليم"}
@@ -502,16 +500,17 @@ const CATALOG = {
     {title:"المجلس الوطني للسلامة والصحة المهنية — دليل فحص اللياقة المهنية",desc:"متطلبات الفحص واللياقة المهنية.",kind:"دليل",url:"https://drive.google.com/file/d/1iwG07if-AoD6a-jy4dJpz1kVnWKkht9P/view?usp=sharing",src:"جهات وطنية"}
   ],
   elearn: [
-    /* ✅ إضافتان جديدتان (ستظهران أعلى القائمة مع شارة "جديد") */
     {title:"الدليل الإرشادي للانتقال من التعليم الحضوري إلى التعليم عن بعد",desc:"آليات التحول للتعلم عن بعد.",kind:"دليل",url:"https://drive.google.com/file/d/1t0soxVEaEm6BEwpeCaY3cRMUsNEdre6k/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-17"},
     {title:"دليل قواعد (التعليم الإلكتروني) لإدارات التعليم - (الإصدار الأول)",desc:"قواعد وضوابط تنظيم التعليم الإلكتروني على مستوى إدارات التعليم.",kind:"قواعد",url:"https://drive.google.com/file/d/15zvPyL1OCzqMfbE6uoKf-lasWjJzEIhg/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-17"},
-
     {title:"دليل السلوك الرقمي لمنصة مدرستي",desc:"استخدام آمن ومسؤول.",kind:"دليل",url:"https://drive.google.com/file/d/19ym1Uih9GbXyHhDRcpP1qlk-kbgGfjQ_/view",src:"وزارة التعليم"},
     {title:"دليل الانتقال من التعليم الحضوري إلى التعليم عن بعد",desc:"آليات التحول للتعلم عن بعد.",kind:"دليل",url:"https://drive.google.com/file/d/1s-rEuHph2XmZxm1sfy7en6ZD7HDRYXyO/view?usp=sharing",src:"وزارة التعليم"},
     {title:"سياسة الاستخدام والخصوصية لمنصة مدرستي",desc:"سياسة الاستخدام والخصوصية.",kind:"سياسة",url:"https://drive.google.com/file/d/1wF_m9vtZkBTAxbsHgoIm_rnjSQhNNvo0/view?usp=sharing",src:"وزارة التعليم"},
     {title:"القواعد التنفيذية للائحة التعليم الإلكتروني",desc:"قواعد تنفيذية لتنظيم التعليم الإلكتروني.",kind:"قواعد تنفيذية",url:"https://drive.google.com/file/d/1DOvnk2JgYQO0c1Dc8o20DRwPrDUYkrea/view?usp=sharing",src:"وزارة التعليم"}
   ],
   counseling: [
+    /* ✅ إضافة ملف خطة التوعية بمنصة قبول داخل "التوجيه الطلابي" + يُعد جديدًا خلال يومين */
+    {title:"خطة التوعية بمنصة قبول",desc:"خطة توعوية وإجرائية لدعم الطلاب وتهيئتهم لاستخدام منصة قبول.",kind:"خطة",url:"https://drive.google.com/file/d/1qfgnj7_AgbUq04bVzwr_5sZ4cRYT0PST/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-19"},
+
     {title:"تعزيز السلوك الإيجابي",desc:"برامج تعزيز السلوك.",kind:"دليل",url:"https://drive.google.com/file/d/1EA5oYQ4PtSxM_rLjbgm9c4iQJATDTEKq/view",src:"وزارة التعليم"},
     {title:"دليل التوجيه وقت الأزمات",desc:"أدوار وتدخلات أثناء الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/1Cr4LULa-HDsIo49UrFvMq80hZO1YLs9Q/view",src:"وزارة التعليم"},
     {title:"خطة برامج وخدمات التوجيه الطلابي",desc:"حزمة برامج وخدمات إرشادية.",kind:"خطة",url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view",src:"وزارة التعليم"},
@@ -815,6 +814,7 @@ setupPlatformFX();
 /* زر إخفاء شريط الإشعار (احتياطي في حال التهيئة قبل renderDocs) */
 document.getElementById('announce').querySelector('.close').addEventListener('click',()=>{document.getElementById('announce').style.display='none'});
 </script>
+
 <script type="module">
 /* =====================================================
    Firebase – Global Visitor Counter
