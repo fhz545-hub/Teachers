@@ -323,8 +323,15 @@ button{font-family:inherit;cursor:pointer}
     </div>
   </section>
 
-  <div class="footer"><small>© تنفيذ وتجميع: فهد حامد الزهراني</small></div>
+  <div class="footer">
+  <small>
+    © تنفيذ وتجميع: فهد حامد الزهراني
+    <span style="font-size:11px;color:#6a7;margin-inline-start:10px">
+      • أنت الزائر رقم <b id="visitorCount">—</b>
+    </span>
+  </small>
 </div>
+
 
 <script>
 /* عناوين الأقسام وترتيبها */
@@ -808,5 +815,68 @@ setupPlatformFX();
 /* زر إخفاء شريط الإشعار (احتياطي في حال التهيئة قبل renderDocs) */
 document.getElementById('announce').querySelector('.close').addEventListener('click',()=>{document.getElementById('announce').style.display='none'});
 </script>
+<script type="module">
+/* =====================================================
+   Firebase – Global Visitor Counter
+   Project: fhz545-teachers
+   Starts from: 783
+   ===================================================== */
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getFirestore, doc, runTransaction, onSnapshot } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+/* Firebase configuration */
+const firebaseConfig = {
+  apiKey: "AIzaSyD6ewzxqeXlpueL5KZ51HiZgrf6pBrAyXY",
+  authDomain: "fhz545-teachers.firebaseapp.com",
+  projectId: "fhz545-teachers",
+  storageBucket: "fhz545-teachers.firebasestorage.app",
+  messagingSenderId: "475715515720",
+  appId: "1:475715515720:web:9b0d894433fe8500566f7d"
+};
+
+/* Initialize Firebase */
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+/* Reference to counter document */
+const counterRef = doc(db, "site", "counter");
+
+/* UI element */
+const counterEl = document.getElementById("visitorCount");
+
+/* Prevent double counting on refresh */
+const SESSION_KEY = "FH_VISITOR_COUNTED";
+
+/* Live update for all visitors */
+onSnapshot(counterRef, (snap) => {
+  if (!snap.exists()) return;
+  const visits = snap.data().visits ?? 783;
+  if (counterEl) {
+    counterEl.textContent = Number(visits).toLocaleString("ar-SA");
+  }
+});
+
+/* Increment counter once per visitor session */
+async function incrementVisitor() {
+  if (sessionStorage.getItem(SESSION_KEY)) return;
+
+  try {
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(counterRef);
+      if (!snap.exists()) return;
+      const current = snap.data().visits ?? 783;
+      tx.update(counterRef, { visits: current + 1 });
+    });
+
+    sessionStorage.setItem(SESSION_KEY, "1");
+  } catch (e) {
+    console.warn("Visitor counter error:", e);
+  }
+}
+
+incrementVisitor();
+</script>
+
 </body>
 </html>
