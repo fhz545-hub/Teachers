@@ -181,6 +181,16 @@ button{font-family:inherit;cursor:pointer}
 .card.reveal{animation:popIn .45s ease both}
 @keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 
+/* ✅ شعارات/أيقونات المنصات الجديدة (موحّد) */
+.platform-logo{
+  max-width:100px;
+  max-height:70px;
+  object-fit:contain;
+  margin:0 auto 8px;
+  display:block;
+  transform:translateZ(15px);
+}
+
 /* تذييل بسيط بالحقوق */
 .footer{
   background:transparent;
@@ -226,82 +236,107 @@ button{font-family:inherit;cursor:pointer}
     <div class="columns" id="docsCols"></div>
   </section>
 
-  <!-- المنصات التعليمية -->
+  <!-- المنصات التعليمية (✅ تم الاستبدال بالأيقونات الجديدة) -->
   <section class="section" id="platforms">
-  <h2>المنصات التعليمية</h2>
+    <h2>المنصات التعليمية</h2>
+    <div class="cards" id="platformCards">
 
-  <div class="cards" id="platformCards">
+      <a class="card" href="https://iam.moe.gov.sa/" target="_blank" rel="noopener">
+        <div class="ico">🔐</div>
+        <div class="title">الدعم الموحّد (IAM)</div>
+        <div class="desc">نفاذ موحّد لبوابات الوزارة.</div>
+      </a>
 
-    <a class="card" href="https://schools.madrasati.sa/" target="_blank" rel="noopener">
-      <img src="icons/madrasati.svg" alt="مدرستي" class="platform-logo">
-      <div class="title">مدرستي</div>
-      <div class="desc">التعليم الإلكتروني وإدارة الفصول</div>
-    </a>
+      <a class="card" href="https://schools.madrasati.sa/" target="_blank" rel="noopener">
+        <img class="platform-logo" src="madrasati.svg" alt="مدرستي" loading="lazy">
+        <div class="title">مدرستي</div>
+        <div class="desc">التعليم الإلكتروني وإدارة الفصول.</div>
+      </a>
 
-    <a class="card" href="https://noor.moe.gov.sa/" target="_blank" rel="noopener">
-      <img src="icons/noor.svg" alt="نظام نور" class="platform-logo">
-      <div class="title">نور</div>
-      <div class="desc">إدارة بيانات الطلاب والقبول</div>
-    </a>
+      <a class="card" href="https://noor.moe.gov.sa/Noor/login.aspx" target="_blank" rel="noopener">
+        <img class="platform-logo" src="noor.svg" alt="نور" loading="lazy">
+        <div class="title">نور</div>
+        <div class="desc">معلومات الطالب والقبول.</div>
+      </a>
 
-    <a class="card" href="https://sshr.moe.gov.sa/" target="_blank" rel="noopener">
-      <img src="icons/faris.svg" alt="نظام فارس" class="platform-logo">
-      <div class="title">فارس</div>
-      <div class="desc">الخدمة الذاتية لمنسوبي التعليم</div>
-    </a>
+      <a class="card" href="http://www.ientv.edu.sa/" target="_blank" rel="noopener">
+        <img class="platform-logo" src="ien.svg" alt="قناة عين" loading="lazy">
+        <div class="title">قناة عين</div>
+        <div class="desc">بث تعليمي ومكتبة فيديو.</div>
+      </a>
 
-    <a class="card" href="https://hather-ui.moe.gov.sa/" target="_blank" rel="noopener">
-      <img src="icons/huduri.svg" alt="حضوري" class="platform-logo">
-      <div class="title">حضوري</div>
-      <div class="desc">الحضور والانصراف</div>
-    </a>
+      <a class="card" href="https://hather-ui.moe.gov.sa/dashboard" target="_blank" rel="noopener">
+        <img class="platform-logo" src="huduri.svg" alt="حضوري" loading="lazy">
+        <div class="title">حضوري</div>
+        <div class="desc">الحضور والانصراف.</div>
+      </a>
 
-    <a class="card" href="https://teams.microsoft.com/" target="_blank" rel="noopener">
-      <img src="icons/teams.svg" alt="Microsoft Teams" class="platform-logo">
-      <div class="title">Microsoft Teams</div>
-      <div class="desc">الاجتماعات والدروس الافتراضية</div>
-    </a>
+      <a class="card" href="https://sshr.moe.gov.sa/" target="_blank" rel="noopener">
+        <img class="platform-logo" src="faris.svg" alt="فارس" loading="lazy">
+        <div class="title">فارس</div>
+        <div class="desc">الخدمة الذاتية لمنسوبي التعليم.</div>
+      </a>
 
-    <a class="card" href="https://forms.office.com/" target="_blank" rel="noopener">
-      <img src="icons/forms.svg" alt="Microsoft Forms" class="platform-logo">
-      <div class="title">Microsoft Forms</div>
-      <div class="desc">النماذج والاستبانات</div>
-    </a>
+      <a class="card" href="https://sncc.gov.sa/index_ar.html" target="_blank" rel="noopener">
+        <img class="platform-logo" src="manahg.svg" alt="المركز الوطني للمناهج" loading="lazy">
+        <div class="title">المركز الوطني للمناهج</div>
+        <div class="desc">منصة المناهج الوطنية.</div>
+      </a>
 
-    <a class="card" href="https://ien.edu.sa/" target="_blank" rel="noopener">
-      <img src="icons/ien.svg" alt="قناة عين" class="platform-logo">
-      <div class="title">قناة عين</div>
-      <div class="desc">محتوى تعليمي مرئي</div>
-    </a>
+      <a class="card" href="https://nelc.gov.sa/" target="_blank" rel="noopener">
+        <img class="platform-logo" src="dam.svg" alt="المركز الوطني للتعليم الإلكتروني" loading="lazy">
+        <div class="title">المركز الوطني للتعليم الإلكتروني</div>
+        <div class="desc">تشريعات ومعايير التعليم الإلكتروني.</div>
+      </a>
 
-    <a class="card" href="https://manahg.edu.sa/" target="_blank" rel="noopener">
-      <img src="icons/manahg.svg" alt="المناهج" class="platform-logo">
-      <div class="title">المناهج</div>
-      <div class="desc">المحتوى والمقررات الدراسية</div>
-    </a>
+      <a class="card" href="https://niepd.futurex.sa/" target="_blank" rel="noopener" data-added-at="2025-11-04">
+        <img class="platform-logo" src="المركز%20الوطني%20للتدريب%20.svg" alt="المعهد الوطني للتطوير المهني التعليمي" loading="lazy">
+        <div class="title">المعهد الوطني للتطوير المهني التعليمي</div>
+        <div class="desc">دورات وبرامج للتطوير المهني التعليمي.</div>
+      </a>
 
-    <a class="card" href="https://www.etec.gov.sa/" target="_blank" rel="noopener">
-      <img src="icons/هيئة تقويم التعليم والتدريب.svg" alt="هيئة تقويم التعليم والتدريب" class="platform-logo">
-      <div class="title">هيئة تقويم التعليم</div>
-      <div class="desc">التقويم والاعتماد</div>
-    </a>
+      <a class="card" href="https://forms.office.com/" target="_blank" rel="noopener">
+        <img class="platform-logo" src="forms.svg" alt="Microsoft Forms" loading="lazy">
+        <div class="title">Microsoft Forms</div>
+        <div class="desc">نماذج واستبانات وأنشطة.</div>
+      </a>
 
-    <a class="card" href="https://niepd.futurex.sa/" target="_blank" rel="noopener">
-      <img src="icons/المركز الوطني للتدريب .svg" alt="المركز الوطني للتطوير المهني" class="platform-logo">
-      <div class="title">التطوير المهني</div>
-      <div class="desc">برامج ودورات تعليمية</div>
-    </a>
+      <a class="card" href="https://teams.microsoft.com/" target="_blank" rel="noopener">
+        <img class="platform-logo" src="teams.svg" alt="Microsoft Teams" loading="lazy">
+        <div class="title">Microsoft Teams</div>
+        <div class="desc">اجتماعات ودروس افتراضية.</div>
+      </a>
 
-  </div>
-</section>
+      <a class="card" href="https://x.com/moe_gov_sa" target="_blank" rel="noopener">
+        <div class="ico">🕊️</div>
+        <div class="title">وزارة التعليم — X</div>
+        <div class="desc">الحساب الرسمي.</div>
+      </a>
 
-      <a class="card" href="https://forms.office.com/" target="_blank" rel="noopener"><div class="ico">📋</div><div class="title">Microsoft Forms</div><div class="desc">نماذج واستبانات وأنشطة.</div></a>
-      <a class="card" href="https://teams.microsoft.com/" target="_blank" rel="noopener"><div class="ico">🧑‍🏫</div><div class="title">Microsoft Teams</div><div class="desc">اجتماعات ودروس افتراضية.</div></a>
-      <a class="card" href="https://x.com/moe_gov_sa" target="_blank" rel="noopener"><div class="ico">🕊️</div><div class="title">وزارة التعليم — X</div><div class="desc">الحساب الرسمي.</div></a>
-      <a class="card" href="https://x.com/EtecKsa" target="_blank" rel="noopener"><div class="ico">📊</div><div class="title">هيئة تقويم التعليم — X</div><div class="desc">تقويم التعليم والتدريب.</div></a>
-      <a class="card" href="https://x.com/MOE_EPR" target="_blank" rel="noopener"><div class="ico">📰</div><div class="title">تعليم الشرقية — X</div><div class="desc">حساب الإدارة.</div></a>
-      <a class="card" href="https://x.com/MOE_RYH" target="_blank" rel="noopener"><div class="ico">📰</div><div class="title">تعليم الرياض — X</div><div class="desc">حساب الإدارة.</div></a>
-      <a class="card" href="https://x.com/MOE_MHC" target="_blank" rel="noopener"><div class="ico">📰</div><div class="title">تعليم مكة — X</div><div class="desc">حساب الإدارة.</div></a>
+      <a class="card" href="https://x.com/EtecKsa" target="_blank" rel="noopener">
+        <img class="platform-logo" src="هيئة%20تقويم%20التعليم%20والتدريب.svg" alt="هيئة تقويم التعليم والتدريب" loading="lazy">
+        <div class="title">هيئة تقويم التعليم — X</div>
+        <div class="desc">تقويم التعليم والتدريب.</div>
+      </a>
+
+      <a class="card" href="https://x.com/MOE_EPR" target="_blank" rel="noopener">
+        <div class="ico">📰</div>
+        <div class="title">تعليم الشرقية — X</div>
+        <div class="desc">حساب الإدارة.</div>
+      </a>
+
+      <a class="card" href="https://x.com/MOE_RYH" target="_blank" rel="noopener">
+        <div class="ico">📰</div>
+        <div class="title">تعليم الرياض — X</div>
+        <div class="desc">حساب الإدارة.</div>
+      </a>
+
+      <a class="card" href="https://x.com/MOE_MHC" target="_blank" rel="noopener">
+        <div class="ico">📰</div>
+        <div class="title">تعليم مكة — X</div>
+        <div class="desc">حساب الإدارة.</div>
+      </a>
+
     </div>
   </section>
 
@@ -382,7 +417,6 @@ button{font-family:inherit;cursor:pointer}
   </small>
 </div>
 
-
 <script>
 /* عناوين الأقسام وترتيبها */
 const GROUP_TITLES={
@@ -400,7 +434,7 @@ const GROUP_TITLES={
   inclusive:"التعليم الشامل والدعم الطلابي",
   safety:"الأمن والسلامة المدرسية",
   elearn:"التعلّم الإلكتروني والمحتوى الرقمي",
-  counseling:"التوجيه الطلابي والرعاية النفسية", /* ✅ تعديل المسمّى ليطابق المتداول رسميًا */
+  counseling:"التوجيه الطلابي والرعاية النفسية",
   kg:"رياض الأطفال",
   interactive:"التقويم المدرسي",
   guides:"المسؤولية المجتمعية و التطوع"
@@ -560,9 +594,7 @@ const CATALOG = {
     {title:"القواعد التنفيذية للائحة التعليم الإلكتروني",desc:"قواعد تنفيذية لتنظيم التعليم الإلكتروني.",kind:"قواعد تنفيذية",url:"https://drive.google.com/file/d/1DOvnk2JgYQO0c1Dc8o20DRwPrDUYkrea/view?usp=sharing",src:"وزارة التعليم"}
   ],
   counseling: [
-    /* ✅ إضافة ملف خطة التوعية بمنصة قبول داخل "التوجيه الطلابي" + يُعد جديدًا خلال يومين */
     {title:"خطة التوعية بمنصة قبول",desc:"خطة توعوية وإجرائية لدعم الطلاب وتهيئتهم لاستخدام منصة قبول.",kind:"خطة",url:"https://drive.google.com/file/d/1qfgnj7_AgbUq04bVzwr_5sZ4cRYT0PST/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-19"},
-
     {title:"تعزيز السلوك الإيجابي",desc:"برامج تعزيز السلوك.",kind:"دليل",url:"https://drive.google.com/file/d/1EA5oYQ4PtSxM_rLjbgm9c4iQJATDTEKq/view",src:"وزارة التعليم"},
     {title:"دليل التوجيه وقت الأزمات",desc:"أدوار وتدخلات أثناء الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/1Cr4LULa-HDsIo49UrFvMq80hZO1YLs9Q/view",src:"وزارة التعليم"},
     {title:"خطة برامج وخدمات التوجيه الطلابي",desc:"حزمة برامج وخدمات إرشادية.",kind:"خطة",url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view",src:"وزارة التعليم"},
@@ -605,10 +637,10 @@ function renderDocs(){
   ORDER.forEach((key,i)=>{
     const items=(CATALOG[key]||[]).slice().sort((a,b)=>{
       const aL=isLatest(a), bL=isLatest(b);
-      if(aL!==bL) return bL - aL;                 // ✅ الجديد أولاً داخل المجلد
+      if(aL!==bL) return bL - aL;
       const aD=a.addedAt?new Date(a.addedAt).getTime():0;
       const bD=b.addedAt?new Date(b.addedAt).getTime():0;
-      if(aD!==bD) return bD - aD;                 // ثم الأحدث بتاريخ الإضافة
+      if(aD!==bD) return bD - aD;
       return a.title.localeCompare(b.title,'ar',{numeric:true});
     });
 
@@ -692,7 +724,7 @@ function renderPlatformNewBadge(){
   }
 }
 
-/* ====== عدسة البحث الذكية (أكثر دقة وتطويرًا) ====== */
+/* ====== عدسة البحث الذكية ====== */
 function normalizeArabic(str){
   return String(str||"").toLowerCase()
     .replace(/[أإآا]/g,'ا')
