@@ -22,10 +22,10 @@
   --acc:#f59e0b;
   --weak:#ef4444;
 
-  --hdrH:32mm;              /* طول الهيدر (تمت زيادته قليلًا) */
-  --printScale:.965;         /* لضمان صفحة واحدة */
-  --donutSize:74px;          /* تكبير الدونات */
-  --donutSizePrint:80px;     /* تكبير إضافي للطباعة */
+  --hdrH:32mm;
+  --printScale:.965;
+  --donutSize:74px;
+  --donutSizePrint:80px;
 }
 
 *{box-sizing:border-box;}
@@ -57,7 +57,7 @@ body{
   width:100%;
   height:100%;
   display:block;
-  object-fit:contain;           /* بدون قص */
+  object-fit:contain;
   object-position:center center;
   background:transparent !important;
 }
@@ -125,7 +125,7 @@ body{
   position:absolute;
   left:50%;
   transform:translateX(-50%);
-  top:0mm;                 /* رفع الصفحة لمحاذاة الهيدر */
+  top:0mm;
   bottom:4mm;
   width:186mm;
   max-width:94%;
@@ -230,7 +230,30 @@ body{
 }
 .btn-main:hover{background:#065f64;}
 
-/* سطر الحقوق داخل العدسة (ثابت غير قابل للتعديل) */
+/* مربع التحذير/التلميح (مطلوب) */
+.hint-box{
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border-radius:12px;
+  border:1px solid #fecaca;
+  background:#fef2f2;
+  padding:8px 10px;
+}
+.hint-icon{
+  font-size:18px;
+  color:#b91c1c;
+  margin-top:1px;
+}
+.hint-text{
+  font-size:10px;
+  color:#7f1d1d;
+  line-height:1.7;
+}
+.hint-text strong{font-weight:900;color:#b91c1c;}
+
+/* سطر الحقوق داخل العدسة */
 .lens-credit{
   margin-top:10px;
   padding-top:8px;
@@ -428,11 +451,7 @@ body{
   text-align:center;
   background:#fafafa;
 }
-.donut-wrap{
-  width:100%;
-  display:grid;
-  place-items:center;
-}
+.donut-wrap{width:100%;display:grid;place-items:center;}
 .donut-canvas{
   width:var(--donutSize) !important;
   height:var(--donutSize) !important;
@@ -498,7 +517,7 @@ body{
     left:auto; transform:none;
     width:min(980px,96%);
     max-width:96%;
-    margin:8px auto 18px; /* رفع المحتوى */
+    margin:8px auto 18px;
     overflow:visible;
   }
   .card{height:auto;border-radius:14px;}
@@ -532,15 +551,10 @@ body{
     margin:0 !important;
     overflow:hidden !important;
     background:transparent !important;
-
     transform:scale(var(--printScale));
     transform-origin:top center;
   }
-
-  .moe-header{
-    height:var(--hdrH) !important;
-    overflow:hidden !important;
-  }
+  .moe-header{height:var(--hdrH) !important;overflow:hidden !important;}
   .a4-page{
     width:210mm !important;
     height:calc(297mm - var(--hdrH)) !important;
@@ -578,7 +592,7 @@ body{
     <img class="hdr-img" src="هيدر التحليل .png" alt="هيدر التحليل" />
     <div class="hdr-text">
       <span id="eduName" class="edu" contenteditable="true">الإدارة العامة للتعليم بالمنطقة الشرقية</span>
-      <span id="schoolName" class="school" contenteditable="true">اسم المدرسة هنا</span>
+      <span id="schoolName" class="school" contenteditable="true">ثانوية اليعقوبي بالخبر</span>
     </div>
 
     <div class="header-tools">
@@ -672,6 +686,15 @@ body{
               <div class="lens-actions">
                 <button type="button" class="btn-main" id="analyzeBtn">بدء التحليل من ملف الدرجات</button>
                 <button type="button" class="btn-main" id="printBtn">طباعة / حفظ PDF</button>
+              </div>
+
+              <!-- ✅ التلميح المطلوب -->
+              <div class="hint-box" aria-label="طريقة استخراج ملف الإكسل من نور">
+                <div class="hint-icon">⚠️</div>
+                <div class="hint-text">
+                  <strong>طريقة استخراج ملف الإكسل من «نور»:</strong><br/>
+                  نظام نور → التقارير → تقارير نظام المسارات → كشف رصد درجات مادة → «تصدير إلى Excel».
+                </div>
               </div>
 
               <div class="lens-credit">تصميم وبرمجة فهد حامد الزهراني</div>
@@ -1041,7 +1064,6 @@ function setupCharts(){
   ];
   donuts.forEach(cfg=>{
     const canvas = document.getElementById(cfg.id);
-    if(!canvas) return;
     donutCharts[cfg.id] = new Chart(canvas.getContext("2d"),{
       type:"doughnut",
       data:{ labels:["النسبة","الباقي"], datasets:[{ data:[0,100], backgroundColor:[cfg.color,"#e5e7eb"], borderWidth:0 }] },
@@ -1108,14 +1130,14 @@ function generateServices(percent, index){
   return bank[index % bank.length];
 }
 
-/* قراءة الشُعب من الإدخال (1,2,3) */
+/* قراءة الشُعب من الإدخال */
 function parseSectionsInput(txt){
   const s = normalizeDigits(txt || "").trim();
   if(!s) return [];
   return s.split(/[,،/|]+/).map(v=>v.trim()).filter(Boolean);
 }
 
-/* بناء السجلات (مع محاولة التقاط عمود الشعبة إن وُجد) */
+/* بناء السجلات */
 function buildRecordsFromSheet(rows){
   if(!rows || !rows.length) return [];
 
@@ -1209,14 +1231,13 @@ function buildRecordsFromSheet(rows){
   return out;
 }
 
-/* تطبيق فلاتر المادة/الشعبة بذكاء */
+/* فلترة المادة/الشعبة */
 function applyFilters(raw){
   const subjectNeed = (subjectInput.value||"").trim();
   const sectionsNeed = parseSectionsInput(sectionInput.value);
 
   let arr = raw.slice();
 
-  // فلترة المادة إن وُجد عمود مادة + أدخل المستخدم مادة
   if(subjectNeed){
     const hasSubCol = arr.some(r => (r.subject||"").trim());
     if(hasSubCol){
@@ -1225,7 +1246,6 @@ function applyFilters(raw){
     }
   }
 
-  // فلترة الشُعب إن وُجد عمود شعبة + أدخل المستخدم شعبة/شُعب
   if(sectionsNeed.length){
     const hasSecCol = arr.some(r => (r.section||"").trim());
     if(hasSecCol){
@@ -1241,12 +1261,11 @@ function applyFilters(raw){
 function updateImprovementPlan(fullScore){
   const n = records.length;
   const subjectChosen = (subjectInput.value||"").trim();
-  const showStudentsPlan = !!subjectChosen;
 
   const weakStudents = records.filter(r => (r.grade/fullScore)*100 < PLAN_THRESHOLD_PERCENT);
   improvBodyEl.innerHTML = "";
 
-  if(!showStudentsPlan){
+  if(!subjectChosen){
     improvBodyEl.innerHTML =
       '<tr><td colspan="5" style="text-align:center;">تحليل دون تحديد مادة؛ تُستخدم الخطة كمؤشر عام.</td></tr>';
     const percentWeak = n ? ((weakStudents.length/n)*100).toFixed(1) : "0.0";
@@ -1455,7 +1474,6 @@ analyzeBtn.addEventListener("click", async ()=>{
   syncHeaderFromInputs();
   syncPrincipalFromInput();
 
-  // متطلبات أساسية
   let ok = true;
   [stageInput, termInput].forEach(inp=>{
     if(!inp.value.trim()){inp.classList.add("missing"); ok=false;}
@@ -1484,7 +1502,6 @@ analyzeBtn.addEventListener("click", async ()=>{
 
     records = filtered;
 
-    // تحديد الدرجة الكاملة
     const grades = records.map(r=>r.grade);
     const maxGrade = Math.max(...grades);
 
