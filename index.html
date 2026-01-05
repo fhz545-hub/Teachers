@@ -137,11 +137,12 @@ button{font-family:inherit;cursor:pointer}
 .btn.download{color:#0a6e5f;border-color:#cfeadf}
 .btn:disabled,[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
 
-/* بطاقات المنصات — تنسيقات احترافية مع تفاعل ثلاثي الأبعاد طفيف */
+/* بطاقات المنصات التعليمية */
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 @media (max-width:1100px){.cards{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:760px){.cards{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:520px){.cards{grid-template-columns:1fr}}
+
 .card{
   position:relative;
   background:linear-gradient(180deg,#ffffff,#f7fbfb);
@@ -167,9 +168,6 @@ button{font-family:inherit;cursor:pointer}
   background:linear-gradient(120deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.45) 45%,rgba(255,255,255,0) 60%);
   transform:translateX(-60%) rotate(10deg); transition:transform .9s ease;
 }
-.card .title{font-size:15.5px;font-weight:800;color:#064a45}
-.card .desc{font-size:13px;color:#5d737a}
-.card .ico{font-size:28px; transform:translateZ(15px)}
 .card:hover{
   transform:perspective(800px) rotateX(4deg) rotateY(-4deg) translateY(-4px);
   box-shadow:0 18px 40px rgba(0,0,0,.10);
@@ -180,6 +178,86 @@ button{font-family:inherit;cursor:pointer}
 .card:hover::after{opacity:.6}
 .card.reveal{animation:popIn .45s ease both}
 @keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* ====== (تعديل) البنر: بدون اجتزاء + عنوان واضح عند المرور (بدون خلفية للكتابة) ====== */
+.bannerCard{
+  padding:0 !important;
+  min-height:124px;
+  display:block;
+  background:#fff;
+}
+.bannerCard .banner{
+  position:absolute; inset:0;
+  background-image:var(--banner);
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:contain; /* ✅ بدون قص/اجتزاء */
+  transform:scale(1.0);
+  filter:brightness(1.06) contrast(1.06) saturate(1.06);
+  transition:transform .55s ease, filter .25s ease;
+  z-index:0;
+}
+/* طبقة تظليل خفيفة لتحسين قراءة النص بدون وضع خلفية للنص نفسه */
+.bannerCard .veil{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(1100px 320px at 30% 0%, rgba(255,255,255,.10), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, rgba(0,0,0,.04) 0%, rgba(0,0,0,.18) 55%, rgba(0,0,0,.45) 100%);
+  opacity:.32;
+  transition:opacity .25s ease;
+  z-index:1;
+}
+.bannerCard .hoverLabel{
+  position:absolute;
+  inset-inline:12px;
+  bottom:12px;
+  z-index:2;
+  display:grid;
+  gap:3px;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .20s ease, transform .20s ease;
+  pointer-events:none;
+}
+.bannerCard .hoverTitle{
+  font-weight:900;
+  font-size:17px;
+  color:#eafffb;
+  letter-spacing:.2px;
+  text-shadow:
+    0 10px 22px rgba(0,0,0,.55),
+    0 2px 6px rgba(0,0,0,.35);
+}
+.bannerCard .hoverSub{
+  font-size:12.5px;
+  color:#c9fff7;
+  opacity:.95;
+  text-shadow:
+    0 10px 20px rgba(0,0,0,.50),
+    0 2px 6px rgba(0,0,0,.30);
+}
+
+/* إبراز البنر عند المرور */
+.bannerCard:hover .banner{
+  transform:scale(1.06);
+  filter:brightness(1.15) contrast(1.10) saturate(1.10);
+}
+.bannerCard:hover .veil{opacity:.26}
+.bannerCard:hover .hoverLabel{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* إظهار العنوان عند التركيز من لوحة المفاتيح */
+.bannerCard:focus-visible .hoverLabel{opacity:1;transform:none}
+.bannerCard:focus-visible{outline:3px solid rgba(61,178,170,.35);outline-offset:3px}
+
+/* للأجهزة اللمسية: إظهار العنوان دائمًا بشكل لطيف */
+@media (hover:none){
+  .bannerCard .hoverLabel{opacity:1;transform:none}
+  .bannerCard .veil{opacity:.30}
+  .bannerCard .banner{background-size:contain}
+}
 
 /* تذييل بسيط بالحقوق */
 .footer{
@@ -229,29 +307,163 @@ button{font-family:inherit;cursor:pointer}
   <!-- المنصات التعليمية -->
   <section class="section" id="platforms">
     <h2>المنصات التعليمية</h2>
-    <div class="cards" id="platformCards">
-      <a class="card" href="https://iam.moe.gov.sa/" target="_blank" rel="noopener"><div class="ico">🔐</div><div class="title">الدعم الموحّد (IAM)</div><div class="desc">نفاذ موحّد لبوابات الوزارة.</div></a>
-      <a class="card" href="https://schools.madrasati.sa/" target="_blank" rel="noopener"><div class="ico">💻</div><div class="title">مدرستي</div><div class="desc">التعليم الإلكتروني وإدارة الفصول.</div></a>
-      <a class="card" href="https://noor.moe.gov.sa/Noor/login.aspx" target="_blank" rel="noopener"><div class="ico">🟢</div><div class="title">نور</div><div class="desc">معلومات الطالب والقبول.</div></a>
-      <a class="card" href="http://www.ientv.edu.sa/" target="_blank" rel="noopener"><div class="ico">📺</div><div class="title">قناة عين</div><div class="desc">بث تعليمي ومكتبة فيديو.</div></a>
-      <a class="card" href="https://hather-ui.moe.gov.sa/dashboard" target="_blank" rel="noopener"><div class="ico">⏱️</div><div class="title">حضوري</div><div class="desc">الحضور والانصراف.</div></a>
-      <a class="card" href="https://sshr.moe.gov.sa/" target="_blank" rel="noopener"><div class="ico">🧾</div><div class="title">فارس</div><div class="desc">الخدمة الذاتية لمنسوبي التعليم.</div></a>
-      <a class="card" href="https://sncc.gov.sa/index_ar.html" target="_blank" rel="noopener"><div class="ico">📚</div><div class="title">المركز الوطني للمناهج</div><div class="desc">منصة المناهج الوطنية.</div></a>
-      <a class="card" href="https://nelc.gov.sa/" target="_blank" rel="noopener"><div class="ico">🌐</div><div class="title">المركز الوطني للتعليم الإلكتروني</div><div class="desc">تشريعات ومعايير التعليم الإلكتروني.</div></a>
 
-      <a class="card" href="https://niepd.futurex.sa/" target="_blank" rel="noopener" data-added-at="2025-11-04">
-        <div class="ico">🎓</div>
-        <div class="title">المعهد الوطني للتطوير المهني التعليمي</div>
-        <div class="desc">دورات وبرامج للتطوير المهني التعليمي.</div>
+    <div class="cards" id="platformCards">
+      <!-- IAM -->
+      <a class="card bannerCard" style="--banner:url('dam.svg')" href="https://iam.moe.gov.sa/" target="_blank" rel="noopener" aria-label="الدعم الموحّد (IAM)">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">الدعم الموحّد (IAM)</div>
+          <div class="hoverSub">نفاذ موحّد لبوابات الوزارة.</div>
+        </div>
       </a>
 
-      <a class="card" href="https://forms.office.com/" target="_blank" rel="noopener"><div class="ico">📋</div><div class="title">Microsoft Forms</div><div class="desc">نماذج واستبانات وأنشطة.</div></a>
-      <a class="card" href="https://teams.microsoft.com/" target="_blank" rel="noopener"><div class="ico">🧑‍🏫</div><div class="title">Microsoft Teams</div><div class="desc">اجتماعات ودروس افتراضية.</div></a>
-      <a class="card" href="https://x.com/moe_gov_sa" target="_blank" rel="noopener"><div class="ico">🕊️</div><div class="title">وزارة التعليم — X</div><div class="desc">الحساب الرسمي.</div></a>
-      <a class="card" href="https://x.com/EtecKsa" target="_blank" rel="noopener"><div class="ico">📊</div><div class="title">هيئة تقويم التعليم — X</div><div class="desc">تقويم التعليم والتدريب.</div></a>
-      <a class="card" href="https://x.com/MOE_EPR" target="_blank" rel="noopener"><div class="ico">📰</div><div class="title">تعليم الشرقية — X</div><div class="desc">حساب الإدارة.</div></a>
-      <a class="card" href="https://x.com/MOE_RYH" target="_blank" rel="noopener"><div class="ico">📰</div><div class="title">تعليم الرياض — X</div><div class="desc">حساب الإدارة.</div></a>
-      <a class="card" href="https://x.com/MOE_MHC" target="_blank" rel="noopener"><div class="ico">📰</div><div class="title">تعليم مكة — X</div><div class="desc">حساب الإدارة.</div></a>
+      <!-- Madrasati -->
+      <a class="card bannerCard" style="--banner:url('madrasati.png')" href="https://schools.madrasati.sa/" target="_blank" rel="noopener" aria-label="مدرستي">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">مدرستي</div>
+          <div class="hoverSub">التعليم الإلكتروني وإدارة الفصول.</div>
+        </div>
+      </a>
+
+      <!-- Noor -->
+      <a class="card bannerCard" style="--banner:url('noor.svg')" href="https://noor.moe.gov.sa/Noor/login.aspx" target="_blank" rel="noopener" aria-label="نور">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">نور</div>
+          <div class="hoverSub">معلومات الطالب والقبول.</div>
+        </div>
+      </a>
+
+      <!-- IEN -->
+      <a class="card bannerCard" style="--banner:url('ien.svg')" href="http://www.ientv.edu.sa/" target="_blank" rel="noopener" aria-label="قناة عين">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">قناة عين</div>
+          <div class="hoverSub">بث تعليمي ومكتبة فيديو.</div>
+        </div>
+      </a>
+
+      <!-- Huduri -->
+      <a class="card bannerCard" style="--banner:url('huduri.svg')" href="https://hather-ui.moe.gov.sa/dashboard" target="_blank" rel="noopener" aria-label="حضوري">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">حضوري</div>
+          <div class="hoverSub">الحضور والانصراف.</div>
+        </div>
+      </a>
+
+      <!-- Faris -->
+      <a class="card bannerCard" style="--banner:url('faris.svg')" href="https://sshr.moe.gov.sa/" target="_blank" rel="noopener" aria-label="فارس">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">فارس</div>
+          <div class="hoverSub">الخدمة الذاتية لمنسوبي التعليم.</div>
+        </div>
+      </a>
+
+      <!-- Manahg / SNCC -->
+      <a class="card bannerCard" style="--banner:url('manahg.svg')" href="https://sncc.gov.sa/index_ar.html" target="_blank" rel="noopener" aria-label="المركز الوطني للمناهج">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">المركز الوطني للمناهج</div>
+          <div class="hoverSub">منصة المناهج الوطنية.</div>
+        </div>
+      </a>
+
+      <!-- NELC -->
+      <a class="card bannerCard" style="--banner:url('المركز الوطني للتعليم الإلكتروني.svg')" href="https://nelc.gov.sa/" target="_blank" rel="noopener" aria-label="المركز الوطني للتعليم الإلكتروني">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">المركز الوطني للتعليم الإلكتروني</div>
+          <div class="hoverSub">تشريعات ومعايير التعليم الإلكتروني.</div>
+        </div>
+      </a>
+
+      <!-- NIEPD -->
+      <a class="card bannerCard" style="--banner:url('المركز الوطني للتدريب .svg')" href="https://niepd.futurex.sa/" target="_blank" rel="noopener" data-added-at="2025-11-04" aria-label="المعهد الوطني للتطوير المهني التعليمي">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">المعهد الوطني للتطوير المهني التعليمي</div>
+          <div class="hoverSub">دورات وبرامج للتطوير المهني التعليمي.</div>
+        </div>
+      </a>
+
+      <!-- Forms -->
+      <a class="card bannerCard" style="--banner:url('forms.svg')" href="https://forms.office.com/" target="_blank" rel="noopener" aria-label="Microsoft Forms">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">Microsoft Forms</div>
+          <div class="hoverSub">نماذج واستبانات وأنشطة.</div>
+        </div>
+      </a>
+
+      <!-- Teams -->
+      <a class="card bannerCard" style="--banner:url('teams.svg')" href="https://teams.microsoft.com/" target="_blank" rel="noopener" aria-label="Microsoft Teams">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">Microsoft Teams</div>
+          <div class="hoverSub">اجتماعات ودروس افتراضية.</div>
+        </div>
+      </a>
+
+      <!-- X -->
+      <a class="card bannerCard" style="--banner:url('X.png')" href="https://x.com/moe_gov_sa" target="_blank" rel="noopener" aria-label="وزارة التعليم — X">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">وزارة التعليم — X</div>
+          <div class="hoverSub">الحساب الرسمي.</div>
+        </div>
+      </a>
+
+      <a class="card bannerCard" style="--banner:url('X.png')" href="https://x.com/EtecKsa" target="_blank" rel="noopener" aria-label="هيئة تقويم التعليم — X">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">هيئة تقويم التعليم — X</div>
+          <div class="hoverSub">تقويم التعليم والتدريب.</div>
+        </div>
+      </a>
+
+      <a class="card bannerCard" style="--banner:url('X.png')" href="https://x.com/MOE_EPR" target="_blank" rel="noopener" aria-label="تعليم الشرقية — X">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">تعليم الشرقية — X</div>
+          <div class="hoverSub">حساب الإدارة.</div>
+        </div>
+      </a>
+
+      <a class="card bannerCard" style="--banner:url('X.png')" href="https://x.com/MOE_RYH" target="_blank" rel="noopener" aria-label="تعليم الرياض — X">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">تعليم الرياض — X</div>
+          <div class="hoverSub">حساب الإدارة.</div>
+        </div>
+      </a>
+
+      <a class="card bannerCard" style="--banner:url('X.png')" href="https://x.com/MOE_MHC" target="_blank" rel="noopener" aria-label="تعليم مكة — X">
+        <div class="banner" aria-hidden="true"></div>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="hoverLabel">
+          <div class="hoverTitle">تعليم مكة — X</div>
+          <div class="hoverSub">حساب الإدارة.</div>
+        </div>
+      </a>
     </div>
   </section>
 
@@ -350,7 +562,7 @@ const GROUP_TITLES={
   inclusive:"التعليم الشامل والدعم الطلابي",
   safety:"الأمن والسلامة المدرسية",
   elearn:"التعلّم الإلكتروني والمحتوى الرقمي",
-  counseling:"التوجيه الطلابي والرعاية النفسية", /* ✅ تعديل المسمّى ليطابق المتداول رسميًا */
+  counseling:"التوجيه الطلابي والرعاية النفسية",
   kg:"رياض الأطفال",
   interactive:"التقويم المدرسي",
   guides:"المسؤولية المجتمعية و التطوع"
@@ -387,11 +599,10 @@ const CATALOG = {
   grading: [
     {title:"أهم مستجدات لائحة تقويم الطالب في المرحلة الابتدائية 2025م",desc:"مستجدات وتحديثات مرتبطة بتطبيق لائحة تقويم الطالب للمرحلة الابتدائية.",kind:"مستجدات",url:"https://drive.google.com/file/d/1HCgjtGboL6stBjtbpzcs6-A4SkWsQpEv/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-17"},
     {title:"لائحة تقويم الطالب 2025م",desc:"سياسة التقييم وأدوات القياس.",kind:"لائحة",url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view",src:"وزارة التعليم"},
-    {title:"توزيع درجات المواد الدراسية_2025_للائحة_المحدثة",desc:"إدارة تقويم الأداء المعرفي والمهاري نجران.",kind:"لائحة",url:"https://drive.google.com/file/d/1FB7bDXAWutT_FH1fvK1T53P0o0ZEFd29/view?usp=sharing",src:"تعليم نجران  "},
     {title:"دليل توزيع الدرجات لجميع المراحل الدراسية ٢٠٢٥",desc:" نِسَب عناصر التقويم.",kind:"دليل",url:"https://drive.google.com/file/d/1WE62DFBgeCrHf1noqxvechwULBDYi58Y/view?usp=sharing",src:" تعليم المدينه"},
     {title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م",desc:"آليات تطبيق اللائحة داخل المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view",src:"وزارة التعليم"},
     {title:"توزيع درجات الطلاب 2025م",desc:"نِسَب عناصر التقويم.",kind:"دليل",url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view",src:"وزارة التعليم"}
-  ],
+    {title:"توزيع درجات المواد الدراسية_2025_للائحة_المحدثة",desc:"إدارة تقويم الأداء المعرفي والمهاري نجران.",kind:"لائحة",url:"https://drive.google.com/file/d/1FB7bDXAWutT_FH1fvK1T53P0o0ZEFd29/view?usp=sharing",src:"تعليم نجران  "},  ],
   exams: [
     {title:"دليل الاختبارات 2025م",desc:"أسس تنفيذ الاختبارات وتنظيمها.",kind:"دليل",url:"https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view",src:"وزارة التعليم"},
     {title:"إطار الاختبارات المركزية في إدارات التعليم العامة 1446",desc:"تنظيم وآليات الاختبارات المركزية.",kind:"إطار",url:"https://drive.google.com/file/d/1tHeew76-antAa3jRdJx2gjKE9OSbSyER/view?usp=sharing",src:"وزارة التعليم"},
@@ -446,7 +657,7 @@ const CATALOG = {
     {title:"منح مديري ومديرات المدارس الصلاحيات",desc:"ضوابط تنظيم ومنح الصلاحيات لقادة المدارس.",kind:"تعميم",url:"https://drive.google.com/file/d/166h6cj6lRPBMSro_HRNoltRQPj8LLxPq/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
   ],
   staff: [
-    {title:"وثيقة التشكيلات الإشرافية والمدرسية لشاغلي الوظائف التعليمية (وكالة الموارد البشرية) 1445هـ–2024م",desc:"تنظيم الهياكل والتشكيلات الإشرافية والمدرسية.",kind:"وثيقة",url:"https://drive.google.com/file/d/1aXEQ1jJRA_Sa-w-Cv436نB2DTY1PNpnn/view?usp=sharing".replace('ن',''),src:"وكالة الموارد البشرية — وزارة التعليم"},
+    {title:"وثيقة التشكيلات الإشرافية والمدرسية لشاغلي الوظائف التعليمية (وكالة الموارد البشرية) 1445هـ–2024م",desc:"تنظيم الهياكل والتشكيلات الإشرافية والمدرسية.",kind:"وثيقة",url:"https://drive.google.com/file/d/1aXEQ1jJRA_Sa-w-Cv436B2DTY1PNpnn/view?usp=sharing",src:"وكالة الموارد البشرية — وزارة التعليم"},
     {title:"دليل الاستثمار الأمثل لشاغلي الوظائف التعليمية",desc:"تعظيم الاستفادة من الكفاءات التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/1MlINioNLhRXmIzhRQzt-eSMpuRkXhPVh/view?usp=sharing",src:"وزارة التعليم"},
     {title:"آلية تنفيذ مرحلة التهيئة لبرنامج تطوير القيادات المدرسية 2026م",desc:"خطوات تهيئة قادة المدارس ضمن برنامج التطوير المهني 2026.",kind:"دليل",url:"https://drive.google.com/file/d/14mPpdnqQdvNj5ipa4AS-lTjz309o1Gpl/view?usp=sharing",src:"وزارة التعليم"},
     {title:"القواعد التنظيمية لنقل وتكليف شاغلي الوظائف التعليمية ذوي الظروف الخاصة",desc:"ضوابط وإجراءات النقل والتكليف للحالات ذات الظروف الخاصة.",kind:"قواعد",url:"https://drive.google.com/file/d/1z968r5Psl7-TO4gIG1ZbBwDAi0AQrGTd/view?usp=sharing",src:"وزارة التعليم"},
@@ -454,7 +665,7 @@ const CATALOG = {
     {title:"الأسئلة الشائعة: تسكين الموظفين في الهيكل التنظيمي بنظام فارس",desc:"توضيحات حول آلية تسكين الموظفين ضمن الهيكل التنظيمي عبر نظام فارس.",kind:"أسئلة شائعة",url:"https://drive.google.com/file/d/1OXlh4F_HOZMhaCsVlXLsnkavv2HqHZ52/view?usp=sharing",src:"وزارة التعليم — نظام فارس"},
     {title:"القواعد التنظيمية لشاغلي الوظائف التعليمية",desc:"الصلاحيات والواجبات المهنية.",kind:"قواعد",url:"https://drive.google.com/file/d/17HJEFDY0lCkio24cY6dAN7xD0N8bt_AI/view",src:"وزارة التعليم"},
     {title:"الدليل المبسّط لتقييم أداء شاغلي الوظائف التعليمية",desc:"خطوات عملية لتقويم الأداء.",kind:"دليل",url:"https://drive.google.com/file/d/1nI-G3DRY1MhK0t9PLu-P8PcouAY22G5f/view?usp=sharing",src:"وزارة التعليم"},
-    {title:"نماذج تقييم أداء شاغلي الوظائف التعليمية",desc:"نماذج معتمدة لتوثيق الأداء.",kind:"نماذج",url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdكT0H5vMJvSzYn7/view".replace('ك',''),src:"وزارة التعليم"},
+    {title:"نماذج تقييم أداء شاغلي الوظائف التعليمية",desc:"نماذج معتمدة لتوثيق الأداء.",kind:"نماذج",url:"https://drive.google.com/file/d/16PvCHjoi_SvgdrNFbdT0H5vMJvSzYn7/view",src:"وزارة التعليم"},
     {title:"تهيئة الموظف الجديد على نظام فارس (دليل مستخدم)",desc:"خطوات التهيئة واستخدام فارس.",kind:"دليل",url:"https://drive.google.com/file/d/15idPnrerHN3eJT7Pu_xePZduJZKL7hd/view",src:"وزارة التعليم"},
     {title:"دليل تخطيط شاغلي الوظائف التعليمية في إدارات التعليم",desc:"تخطيط الموارد البشرية التعليمية.",kind:"دليل",url:"https://drive.google.com/file/d/14x89e8QNvMwJrfrzN5U1FzWeOlp-Czyk/view",src:"وزارة التعليم"},
     {title:"إسناد تدريس المواد التي ليس لها تخصص",desc:"تنظيم الإسناد وضوابطه.",kind:"ضوابط",url:"https://drive.google.com/file/d/153qd1HGE5B3N7bxYGxG9mUCYKqwh_Srd/view",src:"وزارة التعليم"},
@@ -476,7 +687,7 @@ const CATALOG = {
     {title:"خدمة متابعة حالات الطلبة في نظام نور",desc:"متابعة تحصيلية وسلوكية.",kind:"دليل",url:"https://drive.google.com/file/d/15t7S2de_uzWuQvjQAIl60C1_Nkf_DhHS/view",src:"وزارة التعليم"},
     {title:"دليل الخطط الدراسية",desc:"بناء وتخطيط الخطط الدراسية.",kind:"دليل",url:"https://drive.google.com/file/d/1jLtxUE_wF9-as7GhUEFmCTBcNTBQ2Kue/view?usp=sharing",src:"وزارة التعليم"},
     {title:"دليل الخطط الدراسية (نسخة)",desc:"نسخة إضافية للدليل المعتمد.",kind:"دليل",url:"https://drive.google.com/file/d/1lU6gJxY13GfrIHK7Md6T5xELZqSjEMx8/view?usp=sharing",src:"وزارة التعليم"},
-    {title:"دليل المجال الاختياري",desc:"إرشادات رصد وتقويم المجال الاختياري.",kind:"دليل",url:"https://drive.google.com/file/d/1-hDzrrpMvQirRzZj342فghp0KKfFrzf4/view".replace('ف',''),src:"وزارة التعليم"},
+    {title:"دليل المجال الاختياري",desc:"إرشادات رصد وتقويم المجال الاختياري.",kind:"دليل",url:"https://drive.google.com/file/d/1-hDzrrpMvQirRzZj342ghp0KKfFrzf4/view",src:"وزارة التعليم"},
     {title:"دليل المستخدم لخدمة معادلة الشهادات",desc:"طريقة استخدام خدمة معادلة الشهادات عبر المنصات الرسمية.",kind:"دليل مستخدم",url:"https://drive.google.com/file/d/1o1ogm37x2FMAuh2hoOax9SqHaQyDix7m/view?usp=sharing",src:"وزارة التعليم"}
   ],
   uniform: [
@@ -511,9 +722,7 @@ const CATALOG = {
     {title:"القواعد التنفيذية للائحة التعليم الإلكتروني",desc:"قواعد تنفيذية لتنظيم التعليم الإلكتروني.",kind:"قواعد تنفيذية",url:"https://drive.google.com/file/d/1DOvnk2JgYQO0c1Dc8o20DRwPrDUYkrea/view?usp=sharing",src:"وزارة التعليم"}
   ],
   counseling: [
-    /* ✅ إضافة ملف خطة التوعية بمنصة قبول داخل "التوجيه الطلابي" + يُعد جديدًا خلال يومين */
     {title:"خطة التوعية بمنصة قبول",desc:"خطة توعوية وإجرائية لدعم الطلاب وتهيئتهم لاستخدام منصة قبول.",kind:"خطة",url:"https://drive.google.com/file/d/1qfgnj7_AgbUq04bVzwr_5sZ4cRYT0PST/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-19"},
-
     {title:"تعزيز السلوك الإيجابي",desc:"برامج تعزيز السلوك.",kind:"دليل",url:"https://drive.google.com/file/d/1EA5oYQ4PtSxM_rLjbgm9c4iQJATDTEKq/view",src:"وزارة التعليم"},
     {title:"دليل التوجيه وقت الأزمات",desc:"أدوار وتدخلات أثناء الأزمات.",kind:"دليل",url:"https://drive.google.com/file/d/1Cr4LULa-HDsIo49UrFvMq80hZO1YLs9Q/view",src:"وزارة التعليم"},
     {title:"خطة برامج وخدمات التوجيه الطلابي",desc:"حزمة برامج وخدمات إرشادية.",kind:"خطة",url:"https://drive.google.com/file/d/1BNrzJ4mNuw4gumB0wN1o5Ih9vMNRcWrM/view",src:"وزارة التعليم"},
@@ -556,10 +765,10 @@ function renderDocs(){
   ORDER.forEach((key,i)=>{
     const items=(CATALOG[key]||[]).slice().sort((a,b)=>{
       const aL=isLatest(a), bL=isLatest(b);
-      if(aL!==bL) return bL - aL;                 // ✅ الجديد أولاً داخل المجلد
+      if(aL!==bL) return bL - aL;
       const aD=a.addedAt?new Date(a.addedAt).getTime():0;
       const bD=b.addedAt?new Date(b.addedAt).getTime():0;
-      if(aD!==bD) return bD - aD;                 // ثم الأحدث بتاريخ الإضافة
+      if(aD!==bD) return bD - aD;
       return a.title.localeCompare(b.title,'ar',{numeric:true});
     });
 
@@ -643,7 +852,7 @@ function renderPlatformNewBadge(){
   }
 }
 
-/* ====== عدسة البحث الذكية (أكثر دقة وتطويرًا) ====== */
+/* ====== البحث الذكي ====== */
 function normalizeArabic(str){
   return String(str||"").toLowerCase()
     .replace(/[أإآا]/g,'ا')
@@ -807,14 +1016,14 @@ function setupPlatformFX(){
   });
 }
 
-/* تشغيل الرسوم وإعداد البحث */
+/* تشغيل */
 renderDocs();
 rebuildIndex();
 renderPlatformNewBadge();
 setupSearchUI();
 setupPlatformFX();
 
-/* زر إخفاء شريط الإشعار (احتياطي في حال التهيئة قبل renderDocs) */
+/* زر إخفاء شريط الإشعار */
 document.getElementById('announce').querySelector('.close').addEventListener('click',()=>{document.getElementById('announce').style.display='none'});
 </script>
 
