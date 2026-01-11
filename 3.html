@@ -14,7 +14,6 @@
   --moe:#0b7e88;
   --moe2:#0aa38b;
   --ink:#0f172a;
-  --muted:#6b7280;
   --line:#e5e7eb;
   --soft:#f7fafb;
 
@@ -27,14 +26,13 @@
   --pageW:210mm;
   --pageH:297mm;
 
-  /* هوامش الطباعة (متناسقة وتقلل الصفحات الفاضية) */
-  --pageMargin:7mm;
+  /* هوامش A4 */
+  --pageMargin:6mm;
 
-  /* مساحة داخلية للصفحة */
+  /* مساحة داخلية */
   --padX:7mm;
   --padY:6mm;
 
-  --r:16px;
   --shadow:0 10px 22px rgba(15,23,42,.14);
 
   --fs-kpi:12px;
@@ -43,9 +41,7 @@
   --fs-foot:12.6px;
 
   --donutSize:74px;
-
-  /* تكبير مخطط الأعمدة ليصل قرب نهاية الصفحة */
-  --barH:210px;
+  --barH:235px;
 
   --overlay:rgba(15,23,42,.35);
 
@@ -56,10 +52,19 @@
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#fff;}
-body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);}
+/* ✅ تمكين التمرير (حل الجمود) */
+html,body{overflow:auto;}
+
+body{
+  font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink);
+}
 
 .paper{width:var(--pageW); margin:0 auto; background:#fff;}
-.page{min-height:var(--pageH); padding:var(--padY) var(--padX); position:relative;}
+.page{
+  padding:var(--padY) var(--padX);
+  position:relative;
+}
 .fitRoot{transform-origin:top center; transform:scale(var(--fitScale,1));}
 
 /* ===== Header banner ===== */
@@ -89,8 +94,6 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
   padding:10px 14px;
   pointer-events:none;
 }
-
-/* نص الهيدر (مضبوط للطباعة + الجوال) */
 .headerText{
   width:min(92%, 980px);
   color:#fff;
@@ -98,10 +101,9 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
   font-weight:900;
   line-height:1.2;
   white-space:normal;
-  overflow:visible;
 }
-.headerText .edu{font-size:18px; letter-spacing:.2px;}
-.headerText .school{font-size:17px; letter-spacing:.15px;}
+.headerText .edu{font-size:18px;}
+.headerText .school{font-size:17px;}
 .headerText .title{font-size:16px; margin-top:2px;}
 
 .afterHeaderTight{margin-top:8px;}
@@ -201,6 +203,7 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .donutItem{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;}
 .donutCanvas{width:var(--donutSize) !important;height:var(--donutSize) !important;}
 .donutLabel,.donutPct{font-weight:900;font-size:12.2px;white-space:nowrap;}
+.donutLabel,.donutPct{max-width:100%;overflow:hidden;text-overflow:ellipsis;}
 
 .barCard{margin-top:8px;border:2px solid #0aa38b55;border-radius:18px;padding:8px 8px 10px;}
 .barCanvas{width:100% !important;height:var(--barH) !important;}
@@ -224,29 +227,20 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .tbl th,.tbl td{border:1px solid #d1d5db;padding:7px 6px;vertical-align:top;}
 .tbl th{background:#f3f4f6;font-weight:900;white-space:nowrap;}
 .tbl td.center{text-align:center;font-weight:900;white-space:nowrap;}
-.tbl td.nameCell{white-space:nowrap;overflow:visible;}
+.tbl td.nameCell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .plan{line-height:1.6;}
 
 /* buttons */
-.fab{
-  position:fixed;
-  left:14px;
-  bottom:14px;
-  z-index:50;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
+.fab{position:fixed;left:14px;bottom:14px;z-index:50;display:flex;gap:8px;flex-wrap:wrap;}
 .btn{
   border:none;border-radius:14px;background:linear-gradient(135deg,var(--moe2),var(--moe));
   color:#fff;font-weight:900;font-family:inherit;padding:10px 14px;cursor:pointer;
   box-shadow:0 10px 22px rgba(15,23,42,.18);white-space:nowrap;font-size:12.5px;
 }
 .btn.secondary{background:#fff;color:var(--moe);border:2px solid #0aa38b55;box-shadow:none;}
-.btn:active{transform:translateY(1px);}
 
 /* modal */
-.overlay{position:fixed;inset:0;background:var(--overlay);display:none;align-items:flex-start;justify-content:center;padding:14px;z-index:80;}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);display:none;align-items:flex-start;justify-content:center;padding:14px;z-index:80; overflow:auto;}
 .overlay.open{display:flex;}
 .modal{
   width:min(980px,96vw);
@@ -263,12 +257,13 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .modalHead .x{border:none;background:transparent;font-size:18px;cursor:pointer;width:34px;height:34px;border-radius:10px;}
 .modalHead .x:hover{background:#f3f4f6;}
 .modalBody{padding:10px 12px 10px;}
+
 .formGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 10px;}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0;}
 .field label{font-weight:900;color:#334155;font-size:11.8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .field input,.field select{
   border:2px solid var(--dangerSoft);
-  background:var(--dangerBg);
+  background:#fff1f2;
   border-radius:12px;
   padding:9px 9px;
   font-family:inherit;
@@ -277,66 +272,35 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
   outline:none;
 }
 .field input::placeholder{color:#991b1b; opacity:.9; font-weight:900;}
-.field select{color:#111827; background:#fff;}
-.field select{border-color:#cfd8dc;}
+.field select{color:#111827; background:#fff; border-color:#cfd8dc;}
 .req{color:#b91c1c;font-weight:900;}
-.invalid{border-color:var(--danger) !important;background:var(--dangerBg) !important;}
+.invalid{border-color:#ef4444 !important;background:#fff1f2 !important;}
 .valid{border-color:#22c55e55 !important; background:#f0fdf4 !important;}
 
 .actions{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center;}
-.badge{
-  margin-right:auto;border:2px solid #0aa38b55;color:var(--moe);background:#fff;
-  font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px;white-space:nowrap;
-}
+.badge{margin-right:auto;border:2px solid #0aa38b55;color:var(--moe);background:#fff;font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px;white-space:nowrap;}
 .badge.bad{border-color:#fecaca;background:#fff1f2;color:#991b1b;}
-.note{
-  margin-top:10px;border-radius:14px;border:1px solid #fed7aa;background:#fff7ed;
-  padding:9px 10px;font-weight:800;color:#7c2d12;line-height:1.7;font-size:12px;
-}
-.note strong{font-weight:900;}
-.modalFooterTiny{
-  margin-top:10px;
-  text-align:center;
-  color:#94a3b8;
-  font-weight:800;
-  font-size:11px;
-}
+.note{margin-top:10px;border-radius:14px;border:1px solid #fed7aa;background:#fff7ed;padding:9px 10px;font-weight:800;color:#7c2d12;line-height:1.7;font-size:12px;}
+.modalFooterTiny{margin-top:10px;text-align:center;color:#94a3b8;font-weight:800;font-size:11px;}
 
-/* ====== PRINT OVERRIDES (هوامش + إزالة الصفحات الفاضية) ====== */
+/* ===== Print ===== */
 @media print{
   @page{ size:A4 portrait; margin:var(--pageMargin); }
-
-  html,body{background:#fff;}
+  html,body{overflow:visible !important;}
   body{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
-
   .fab,.overlay{display:none !important;}
-
-  .paper{width:var(--pageW) !important;}
-  .page{
-    min-height:auto !important;
-    height:auto !important;
-    padding:var(--padY) var(--padX) !important;
-  }
-
-  /* يمنع إنشاء صفحة إضافية بسبب حد أدنى للارتفاع */
-  .fitRoot{break-inside:avoid;}
-
-  /* لا تكسر داخل الكروت */
+  .paper{width:100% !important;}
+  .page{margin:0 !important;}
   .headerWrap,.metaBox,.card,.chartCard,.barCard,.footer,.weakCard{break-inside:avoid; page-break-inside:avoid;}
-
-  /* دونات صف واحد ثابت */
+  /* تثبيت الدونات صف واحد */
   .donutsRow{grid-template-columns:repeat(5,1fr) !important; gap:6px !important;}
   .donutCanvas{width:72px !important;height:72px !important;}
   .donutLabel,.donutPct{font-size:12px !important;}
-
-  /* الأعمدة أطول في الطباعة */
-  .barCanvas{height:225px !important;}
 }
-
-/* ===== Responsive ===== */
 @media (max-width:1100px){
   .formGrid{grid-template-columns:repeat(2,1fr);}
   .donutsRow{grid-template-columns:repeat(3,1fr);}
+  .paper{width:100%;}
 }
 @media (max-width:700px){
   .paper{width:100%;}
@@ -348,17 +312,13 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
   .headerText .school{font-size:15px;}
   .headerText .title{font-size:14px;}
 }
-@media (max-width:420px){
-  .donutCanvas{width:66px !important;height:66px !important;}
-  .headerText{width:94%;}
-}
 </style>
 </head>
 
 <body>
 <div class="paper">
 
-  <!-- ===== PAGE 1 ===== -->
+  <!-- PAGE 1 -->
   <div class="page" id="page1">
     <div class="fitRoot" id="fitRoot">
 
@@ -388,11 +348,11 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
           <div class="gridMain">
             <div class="detailTable">
               <div class="dtHead"><div style="text-align:center">عدد الطلاب</div><div style="text-align:center">النطاق</div><div style="text-align:center">المستوى</div></div>
-              <div class="dtRow"><div class="boxVal" id="cEx">0</div><div class="boxVal" id="rEx">—</div><div class="pillLvl pEx">ممتاز</div></div>
-              <div class="dtRow"><div class="boxVal" id="cVg">0</div><div class="boxVal" id="rVg">—</div><div class="pillLvl pVg">جيد جداً</div></div>
-              <div class="dtRow"><div class="boxVal" id="cGd">0</div><div class="boxVal" id="rGd">—</div><div class="pillLvl pGd">جيد</div></div>
-              <div class="dtRow"><div class="boxVal" id="cAc">0</div><div class="boxVal" id="rAc">—</div><div class="pillLvl pAc">مقبول</div></div>
-              <div class="dtRow"><div class="boxVal" id="cWk">0</div><div class="boxVal" id="rWk">—</div><div class="pillLvl pWk">ضعيف</div></div>
+              <div class="dtRow"><div class="boxVal" id="cEx">0</div><div class="boxVal" id="rEx">—</div><div class="pillLvl" style="background:var(--ex)">ممتاز</div></div>
+              <div class="dtRow"><div class="boxVal" id="cVg">0</div><div class="boxVal" id="rVg">—</div><div class="pillLvl" style="background:var(--vg)">جيد جداً</div></div>
+              <div class="dtRow"><div class="boxVal" id="cGd">0</div><div class="boxVal" id="rGd">—</div><div class="pillLvl" style="background:var(--gd)">جيد</div></div>
+              <div class="dtRow"><div class="boxVal" id="cAc">0</div><div class="boxVal" id="rAc">—</div><div class="pillLvl" style="background:var(--ac)">مقبول</div></div>
+              <div class="dtRow"><div class="boxVal" id="cWk">0</div><div class="boxVal" id="rWk">—</div><div class="pillLvl" style="background:var(--wk)">ضعيف</div></div>
             </div>
 
             <div class="sideKPIs">
@@ -425,13 +385,14 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
             <div class="fBox">معلم المادة / <span id="fTeacher">—</span></div>
             <div class="fBox">مدير المدرسة / <span id="fPrincipal">—</span></div>
           </div>
+
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- ===== PAGE 2 ===== -->
+  <!-- PAGE 2 -->
   <div class="page hidden pageBreak" id="page2">
     <div class="fitRoot" id="fitRoot2">
 
@@ -546,8 +507,7 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 
         <div class="field">
           <label>رفع ملف الدرجات (Excel/CSV) <span class="req">*</span></label>
-          <input type="file" id="file" class="invalid" accept=".xlsx,.xls,.csv"
-                 style="border-color:var(--dangerSoft);background:var(--dangerBg);" />
+          <input type="file" id="file" class="invalid" accept=".xlsx,.xls,.csv" />
         </div>
         <div class="field">
           <label>تصفية الشُعب (اختياري)</label>
@@ -562,19 +522,32 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
       </div>
 
       <div class="note">
-        <strong>طريقة استخراج ملف الدرجات من «نور» (جميع المراحل):</strong><br>
-        نور → <b>التقارير</b> → <b>تقارير الدرجات/رصد الدرجات</b> → <b>كشف رصد درجات مادة</b> → <b>تصدير إلى Excel</b>.<br>
-        <strong>للثانوي (إن وُجد نظام المسارات):</strong> نور → التقارير → <b>تقارير نظام المسارات</b> → كشف رصد درجات مادة → تصدير إلى Excel.
+        <b>ملاحظة:</b> إذا لم يتوفر ملف جاهز، نزّل القالب ثم عبّئ أسماء الطلاب والدرجات وأعد استيراده.
       </div>
 
-      <!-- حفظ الحقوق -->
       <div class="modalFooterTiny">تصميم وبرمجة هذه الصفحة: فهد حامد الزهراني</div>
     </div>
   </div>
 </div>
 
 <script>
-/* ========= Helpers ========= */
+/* =========================
+   🔒 تعطيل أي Datalabels نهائياً (لو كان موجوداً من بيئة أخرى)
+========================= */
+(function hardDisableDataLabels(){
+  try{
+    if (Chart?.defaults?.plugins){
+      // منع أي بلجن datalabels من الرسم لو كان محمّل سابقاً
+      Chart.defaults.plugins.datalabels = Chart.defaults.plugins.datalabels || {};
+      Chart.defaults.plugins.datalabels.display = false;
+
+      // تعطيل tooltip افتراضياً (وسنفعّله للبار فقط)
+      Chart.defaults.plugins.tooltip = Chart.defaults.plugins.tooltip || {};
+    }
+  }catch(e){}
+})();
+
+/* Helpers */
 const $ = (id)=>document.getElementById(id);
 const clean = (s)=> (s??"").toString().replace(/\s+/g," ").trim();
 const normalizeDigits = (str)=>{
@@ -596,13 +569,13 @@ const toNumber = (v)=>{
 };
 const pct = (a,b)=> b ? (a/b)*100 : 0;
 
-/* ========= Modal ========= */
+/* Modal */
 const ov = $("ov");
 $("openModal").onclick = ()=> ov.classList.add("open");
 $("closeOv").onclick = ()=> ov.classList.remove("open");
 ov.addEventListener("click",(e)=>{ if(e.target===ov) ov.classList.remove("open"); });
 
-/* ========= Inputs ========= */
+/* Inputs */
 const inEdu = $("inEdu");
 const inSchool = $("inSchool");
 const inPrincipal = $("inPrincipal");
@@ -639,7 +612,6 @@ function validateInputs(){
     markField(el, good);
     if(!good) ok=false;
   });
-
   const fileOk = !!selectedFile;
   markField(fileEl, fileOk);
   if(!fileOk) ok=false;
@@ -654,7 +626,7 @@ function validateInputs(){
   return ok;
 }
 
-/* ========= Header binding ========= */
+/* Header binding */
 const hEdu = $("hEdu"), hSchool = $("hSchool"), hSubject = $("hSubject");
 const hEdu2 = $("hEdu2"), hSchool2 = $("hSchool2"), hSubject2 = $("hSubject2");
 const tStage = $("tStage"), tTerm = $("tTerm"), tFull = $("tFull");
@@ -681,7 +653,7 @@ function syncHeader(){
   fTeacher2.textContent = teacher; fPrincipal2.textContent = principal;
 }
 
-/* ========= Fit header text ========= */
+/* Fit header text */
 function fitHeaderText(boxId){
   const box = $(boxId);
   if(!box) return;
@@ -722,7 +694,7 @@ window.addEventListener("resize", ()=> fitAllHeaderText());
 syncHeader();
 setTimeout(()=>{fitAllHeaderText(); validateInputs();}, 120);
 
-/* ========= Sections ========= */
+/* Sections */
 function parseSections(v){
   const s = normalizeDigits(v||"").trim();
   if(!s) return [];
@@ -734,7 +706,7 @@ function inferSectionFromSheet(name){
   return m ? String(m[1]) : clean(name||"");
 }
 
-/* ========= Column detection ========= */
+/* Column detection */
 function normToken(t){
   return clean(normalizeDigits(String(t||"")).toLowerCase())
     .replace(/[()（）【】\[\]{}]/g," ")
@@ -744,7 +716,6 @@ function normToken(t){
 }
 const P = {
   name:[/اسم\s*الطالب/,/اسم\s*المتعلم/,/\bالطالب\b/,/\bname\b/],
-  id:[/هوية/,/السجل\s*المدني/,/رقم\s*الهوية/,/\bid\b/],
   gradeFinal:[/نهاية\s*فصل/,/نهائي/,/final/,/الدرجة\s*النهائية/],
   gradeSum:[/المجموع/,/مجموع/,/الدرجة/,/total/,/score/],
   section:[/الشعبة/,/الشعبه/,/القسم/]
@@ -759,7 +730,6 @@ function detectHeaderRow(rows){
     const joined=" "+toks.join(" ")+" ";
     let s=0;
     if(P.name.some(rx=>rx.test(joined))) s+=5;
-    if(P.id.some(rx=>rx.test(joined))) s+=4;
     if(P.gradeFinal.some(rx=>rx.test(joined))) s+=6;
     if(P.gradeSum.some(rx=>rx.test(joined))) s+=4;
     if(P.section.some(rx=>rx.test(joined))) s+=2;
@@ -782,7 +752,6 @@ function buildRecordsFromSheet(rows, sheetName){
   const tokens=header.map(normToken);
 
   const nameCol = pickCol(tokens, P.name);
-  const idCol   = pickCol(tokens, P.id);
   const sectionCol = pickCol(tokens, P.section);
 
   let gradeCol = pickCol(tokens, P.gradeFinal);
@@ -815,17 +784,15 @@ function buildRecordsFromSheet(rows, sheetName){
   for(let r=h+1;r<rows.length;r++){
     const row=rows[r]||[];
     const name = nameCol>=0 ? clean(row[nameCol]) : "";
-    const id   = idCol>=0 ? normalizeDigits(row[idCol]).replace(/[^\d]/g,"") : "";
     const gRaw = gradeCol>=0 ? row[gradeCol] : null;
     const grade = isNumeric(gRaw) ? toNumber(gRaw) : NaN;
 
-    if(!name && !id) continue;
+    if(!name) continue;
     if(!Number.isFinite(grade) || grade<0 || grade>200) continue;
 
     const sec = sectionCol>=0 ? clean(row[sectionCol]) : "";
     out.push({
       student: name || "—",
-      id: id || "—",
       grade,
       section: clean(sec) ? normalizeDigits(sec) : sectionFromSheet
     });
@@ -833,7 +800,7 @@ function buildRecordsFromSheet(rows, sheetName){
   return out;
 }
 
-/* ========= Full score + weak rule ========= */
+/* Full score + weak rule */
 function inferFullScoreSmart(list, mode){
   if(mode!=="auto") return Number(mode);
   const mx = Math.max(...list.map(r=>r.grade));
@@ -889,7 +856,7 @@ function stats(list, full){
   return {n,sum,mx,mn,avg,rate,c};
 }
 
-/* ========= Plans ========= */
+/* Plans */
 const planBank = [
   "تعزيز المهارات الأساسية: تدريب يومي قصير (10 دقائق) + ورقة عمل علاجية + تقويم أسبوعي وتوثيق التحسن.",
   "تصحيح الأخطاء الشائعة: تشخيص نوع الخطأ + شرح مصغر + تدريب موجه + إعادة قياس بعد أسبوع.",
@@ -906,7 +873,10 @@ function pickPlanByGap(gap, full){
   return planBank[4];
 }
 
-/* ========= Charts ========= */
+/* =========================
+   ✅ الدونات: لا tooltips ولا events ولا datalabels
+   ✅ مركز الدونات فقط نسبة صحيحة (بدون أرقام طويلة)
+========================= */
 const centerText = {
   id:"centerText",
   afterDraw(chart, args, opts){
@@ -923,21 +893,55 @@ const centerText = {
     ctx.restore();
   }
 };
+Chart.register(centerText);
 
-/* إظهار الأعداد فوق الأعمدة بوضوح */
+function donut(el, color){
+  const ctx=$(el).getContext("2d");
+  return new Chart(ctx,{
+    type:"doughnut",
+    data:{datasets:[{data:[0,100],backgroundColor:[color,"#e5e7eb"],borderWidth:0}]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:true,
+      aspectRatio:1,
+      animation:false,
+      events: [],                 // ✅ يمنع hover
+      plugins:{
+        legend:{display:false},
+        tooltip:{enabled:false},  // ✅ لا تلميحات
+        datalabels:{display:false},// ✅ حتى لو كان موجود
+        centerText:{text:"0%"}
+      },
+      cutout:"80%"
+    }
+  });
+}
+function setDonut(ch, percent){
+  const p=Math.max(0,Math.min(100, Math.round(percent))); // ✅ منع كسور طويلة
+  ch.data.datasets[0].data=[p,100-p];
+  ch.options.plugins.centerText.text = `${p}%`;
+  ch.update();
+}
+
+const css = getComputedStyle(document.documentElement);
+const chWk = donut("dWk", css.getPropertyValue("--wk").trim());
+const chAc = donut("dAc", css.getPropertyValue("--ac").trim());
+const chGd = donut("dGd", css.getPropertyValue("--gd").trim());
+const chVg = donut("dVg", css.getPropertyValue("--vg").trim());
+const chEx = donut("dEx", css.getPropertyValue("--ex").trim());
+
+/* bar labels (داخل الأعمدة) */
 const barValueLabels = {
   id:"barValueLabels",
   afterDatasetsDraw(chart){
     const {ctx} = chart;
     const meta = chart.getDatasetMeta(0);
     if(!meta || !meta.data) return;
-
     ctx.save();
     ctx.font = "900 14px Tajawal, system-ui";
     ctx.fillStyle = "#0f172a";
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
-
     meta.data.forEach((bar, i)=>{
       const v = chart.data.datasets[0].data[i];
       const p = bar.tooltipPosition();
@@ -946,34 +950,7 @@ const barValueLabels = {
     ctx.restore();
   }
 };
-
-Chart.register(centerText, barValueLabels);
-
-function donut(el, color){
-  const ctx=$(el).getContext("2d");
-  return new Chart(ctx,{
-    type:"doughnut",
-    data:{datasets:[{data:[0,100],backgroundColor:[color,"#e5e7eb"],borderWidth:0}]},
-    options:{
-      responsive:true, maintainAspectRatio:true, aspectRatio:1,
-      animation:false,
-      plugins:{legend:{display:false},tooltip:{enabled:false},centerText:{text:"0%"}},
-      cutout:"80%"
-    }
-  });
-}
-function setDonut(ch, percent){
-  const p=Math.max(0,Math.min(100,percent));
-  ch.data.datasets[0].data=[p,100-p];
-  ch.options.plugins.centerText.text = `${Math.round(p)}%`;
-  ch.update();
-}
-const css = getComputedStyle(document.documentElement);
-const chWk = donut("dWk", css.getPropertyValue("--wk").trim());
-const chAc = donut("dAc", css.getPropertyValue("--ac").trim());
-const chGd = donut("dGd", css.getPropertyValue("--gd").trim());
-const chVg = donut("dVg", css.getPropertyValue("--vg").trim());
-const chEx = donut("dEx", css.getPropertyValue("--ex").trim());
+Chart.register(barValueLabels);
 
 const barChart = new Chart($("bar").getContext("2d"),{
   type:"bar",
@@ -992,50 +969,18 @@ const barChart = new Chart($("bar").getContext("2d"),{
     animation:false,
     plugins:{
       legend:{display:false},
-      tooltip:{enabled:true}
+      tooltip:{enabled:true},
+      datalabels:{display:false}
     },
-    layout:{padding:{top:18}}, /* مساحة للأرقام فوق الأعمدة */
+    layout:{padding:{top:18}},
     scales:{
-      y:{
-        beginAtZero:true,
-        ticks:{font:{family:"Tajawal",weight:"900",size:13}},
-        grid:{color:"#e5e7eb"}
-      },
-      x:{
-        ticks:{font:{family:"Tajawal",weight:"900",size:13}},
-        grid:{display:false}
-      }
+      y:{beginAtZero:true,ticks:{font:{family:"Tajawal",weight:"900",size:13}},grid:{color:"#e5e7eb"}},
+      x:{ticks:{font:{family:"Tajawal",weight:"900",size:13}},grid:{display:false}}
     }
   }
 });
 
-/* ========= Fit printing ========= */
-const fitRoot = $("fitRoot");
-const fitRoot2 = $("fitRoot2");
-const page2 = $("page2");
-
-function computeFitScale(rootEl, pageEl){
-  const pageRect = pageEl.getBoundingClientRect();
-  const rootRect = rootEl.getBoundingClientRect();
-  const availH = pageRect.height;
-  const usedH  = rootRect.height;
-  if(usedH <= availH) return 1;
-  const safe = 0.985;
-  return Math.max(0.84, (availH / usedH) * safe);
-}
-function applyFit(rootEl, pageEl){
-  rootEl.style.setProperty("--fitScale", 1);
-  requestAnimationFrame(()=> requestAnimationFrame(()=>{
-    const s = computeFitScale(rootEl, pageEl);
-    rootEl.style.setProperty("--fitScale", s.toFixed(4));
-  }));
-}
-function fitAllPages(){
-  applyFit(fitRoot, $("page1"));
-  if(!page2.classList.contains("hidden")) applyFit(fitRoot2, $("page2"));
-}
-
-/* ========= Read files ========= */
+/* Read files */
 function readWorkbook(file){
   return new Promise((resolve,reject)=>{
     const fr=new FileReader();
@@ -1068,29 +1013,27 @@ function readCSV(file){
   });
 }
 
-/* ========= Outputs ========= */
+/* Outputs */
 const rEx = $("rEx"), rVg = $("rVg"), rGd = $("rGd"), rAc = $("rAc"), rWk = $("rWk");
 const cEx = $("cEx"), cVg = $("cVg"), cGd = $("cGd"), cAc = $("cAc"), cWk = $("cWk");
 const kN = $("kN"), kMax = $("kMax"), kMin = $("kMin"), kAvg = $("kAvg"), kRate = $("kRate"), kSum = $("kSum");
 const pEx = $("pEx"), pVg = $("pVg"), pGd = $("pGd"), pAc = $("pAc"), pWk = $("pWk");
 const weakRuleEl = $("weakRule"), weakCountEl = $("weakCount"), weakBody = $("weakBody");
+const page2 = $("page2");
 
 function renderWeak(list, full){
   const cutoff = weakCutoff(full);
   const weak = list.filter(r=> r.grade <= cutoff).sort((a,b)=> a.grade-b.grade);
-
   if(!weak.length){
     page2.classList.add("hidden");
     weakBody.innerHTML = `<tr><td colspan="6" style="text-align:center;font-weight:900;color:#6b7280;">لا يوجد طلاب ضمن فئة الضعفاء.</td></tr>`;
     return;
   }
-
   page2.classList.remove("hidden");
   weakRuleEl.textContent = `قاعدة الضعفاء: من 0 إلى ${cutoff} (من أصل ${full})`;
   weakCountEl.textContent = `عدد الضعفاء: ${weak.length}`;
-
   weakBody.innerHTML = weak.map(r=>{
-    const p = pct(r.grade,full);
+    const per = pct(r.grade,full);
     const gap = Math.max(0, full - r.grade);
     const plan = pickPlanByGap(gap, full);
     return `
@@ -1098,7 +1041,7 @@ function renderWeak(list, full){
         <td class="nameCell">${clean(r.student)||"—"}</td>
         <td class="center">${clean(r.section)||"—"}</td>
         <td class="center">${Number(r.grade).toFixed(0)}</td>
-        <td class="center">${p.toFixed(1)}%</td>
+        <td class="center">${per.toFixed(1)}%</td>
         <td class="center" style="color:#991b1b;">${gap.toFixed(0)}</td>
         <td class="plan">${plan}</td>
       </tr>
@@ -1106,7 +1049,7 @@ function renderWeak(list, full){
   }).join("");
 }
 
-/* ========= Download template ========= */
+/* Template download */
 $("dlTemplate").addEventListener("click", ()=>{
   const rows = [["بيانات الطلاب"],["اسم الطالب","الشعبة","الدرجة"]];
   for(let i=0;i<25;i++) rows.push(["","",""]);
@@ -1117,14 +1060,13 @@ $("dlTemplate").addEventListener("click", ()=>{
   XLSX.writeFile(wb, "قالب-تعبئة-الدرجات.xlsx");
 });
 
-/* ========= Analyze ========= */
+/* Analyze */
 $("doAnalyze").addEventListener("click", async ()=>{
   try{
     if(!validateInputs()){
       alert("فضلاً أكمل الحقول الإلزامية (بالأحمر) ثم ارفع ملف الدرجات.");
       return;
     }
-
     setStatus("جارٍ التحليل...", true);
 
     const f = selectedFile;
@@ -1140,17 +1082,9 @@ $("doAnalyze").addEventListener("click", async ()=>{
       list = list.filter(r=> set.has(String(clean(r.section))) );
     }
 
-    const seen=new Set();
-    list = list.filter(r=>{
-      const k = `${clean(r.id)}|${clean(r.section)}|${r.grade}|${clean(r.student)}`;
-      if(seen.has(k)) return false;
-      seen.add(k);
-      return true;
-    });
-
     if(!list.length){
       setStatus("لم تُكتشف بيانات", false);
-      alert("لم يتم العثور على بيانات صالحة داخل الملف. الأفضل تصدير Excel مباشرة من نور أو استخدام قالب التعبئة.");
+      alert("لم يتم العثور على بيانات صالحة داخل الملف. استخدم قالب التعبئة أو تصدير Excel من نور.");
       return;
     }
 
@@ -1173,17 +1107,20 @@ $("doAnalyze").addEventListener("click", async ()=>{
 
     const n = st.n || 1;
     const pc = (x)=> pct(x,n);
+
+    // ✅ الآن الدونات تعتمد فقط على رقم صحيح (بدون كسور طويلة)
     setDonut(chWk, pc(st.c.wk));
     setDonut(chAc, pc(st.c.ac));
     setDonut(chGd, pc(st.c.gd));
     setDonut(chVg, pc(st.c.vg));
     setDonut(chEx, pc(st.c.ex));
 
-    pWk.textContent = `${pc(st.c.wk).toFixed(0)}%`;
-    pAc.textContent = `${pc(st.c.ac).toFixed(0)}%`;
-    pGd.textContent = `${pc(st.c.gd).toFixed(0)}%`;
-    pVg.textContent = `${pc(st.c.vg).toFixed(0)}%`;
-    pEx.textContent = `${pc(st.c.ex).toFixed(0)}%`;
+    // ✅ النص أسفل الدونات كذلك أرقام قصيرة
+    pWk.textContent = `${Math.round(pc(st.c.wk))}%`;
+    pAc.textContent = `${Math.round(pc(st.c.ac))}%`;
+    pGd.textContent = `${Math.round(pc(st.c.gd))}%`;
+    pVg.textContent = `${Math.round(pc(st.c.vg))}%`;
+    pEx.textContent = `${Math.round(pc(st.c.ex))}%`;
 
     barChart.data.datasets[0].data = [st.c.wk, st.c.ac, st.c.gd, st.c.vg, st.c.ex];
     barChart.update();
@@ -1192,10 +1129,8 @@ $("doAnalyze").addEventListener("click", async ()=>{
 
     syncHeader();
     fitAllHeaderText();
-
     ov.classList.remove("open");
 
-    setTimeout(()=>{ fitAllPages(); setTimeout(fitAllPages,140); }, 200);
     setStatus("تم التحليل بنجاح", true);
   }catch(err){
     console.error(err);
@@ -1204,25 +1139,17 @@ $("doAnalyze").addEventListener("click", async ()=>{
   }
 });
 
-/* ========= Print/save ========= */
+/* Print/save */
 $("printSave").addEventListener("click", ()=>{
-  fitAllPages();
   fitAllHeaderText();
-  setTimeout(()=>{
-    chWk.resize(); chAc.resize(); chGd.resize(); chVg.resize(); chEx.resize();
-    barChart.resize();
-    setTimeout(()=> window.print(), 140);
-  }, 140);
+  setTimeout(()=> window.print(), 120);
 });
-window.addEventListener("beforeprint", ()=>{
-  fitAllPages();
-  fitAllHeaderText();
-  chWk.resize(); chAc.resize(); chGd.resize(); chVg.resize(); chEx.resize();
-  barChart.resize();
-});
-window.addEventListener("afterprint", ()=>{
-  fitAllPages();
-  fitAllHeaderText();
+window.addEventListener("beforeprint", ()=>{ fitAllHeaderText(); });
+
+/* Fit header on image load */
+[$("headerImg1"), $("headerImg2")].forEach(img=>{
+  if(!img) return;
+  img.addEventListener("load", ()=> setTimeout(fitAllHeaderText, 60));
 });
 </script>
 
