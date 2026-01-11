@@ -176,14 +176,53 @@ body{
 .pEx{background:var(--ex);} .pVg{background:var(--vg);} .pGd{background:var(--gd);} .pAc{background:var(--ac);} .pWk{background:var(--wk);}
 .boxVal{border:2px solid #cfd8dc;border-radius:12px;padding:7px 8px;font-weight:900;text-align:center;background:#fff;font-size:12.5px;white-space:nowrap;}
 
-.sideKPIs{display:grid;gap:8px;}
-.sideRow{display:grid;grid-template-columns:1fr 1.02fr;gap:8px;align-items:stretch;}
-.sideLabel{
-  border:2px solid #0aa38b55;border-radius:12px;
-  padding:7px 8px;color:var(--moe);font-weight:900;font-size:12.2px;
-  display:flex;align-items:center;justify-content:flex-end;text-align:right;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+.sideKPIs{
+  display:grid;
+  gap:8px;
 }
+
+/* عكس الأعمدة + توسيط كامل */
+.sideRow{
+  display:grid;
+  grid-template-columns:1.02fr 1fr; /* القيمة يسار – العنوان يمين */
+  gap:8px;
+  align-items:stretch;
+}
+
+.sideLabel{
+  border:2px solid #0aa38b55;
+  border-radius:12px;
+  padding:7px 8px;
+  color:var(--moe);
+  font-weight:900;
+  font-size:12.2px;
+
+  display:flex;
+  align-items:center;      /* توسيط عمودي */
+  justify-content:center;  /* توسيط أفقي */
+  text-align:center;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.sideValue{
+  border:2px solid #cfd8dc;
+  border-radius:12px;
+  padding:7px 8px;
+  font-weight:900;
+  font-size:12.5px;
+  background:#fff;
+
+  display:flex;
+  align-items:center;      /* توسيط عمودي */
+  justify-content:center;  /* توسيط أفقي */
+  text-align:center;
+
+  white-space:nowrap;
+}
+
 .sideValue{
   border:2px solid #cfd8dc;border-radius:12px;
   padding:7px 8px;font-weight:900;font-size:12.5px;
