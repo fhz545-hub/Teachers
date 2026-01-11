@@ -3,1291 +3,851 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>تحليل نتائج الاختبار</title>
+<title>تحليل نتائج مادة</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <style>
 :root{
   --moe:#0b7e88;
+  --moe2:#0aa38b;
   --ink:#0f172a;
   --muted:#6b7280;
   --line:#e5e7eb;
+  --soft:#f7fafb;
 
-  --good:#22c55e;   /* ممتاز */
-  --vgood:#10b981;  /* جيد جدًا */
-  --good2:#3b82f6;  /* جيد */
-  --acc:#f59e0b;    /* مقبول */
-  --weak:#ef4444;   /* ضعيف */
+  --ex:#35b46f;
+  --vg:#2fb1ab;
+  --gd:#3f94e6;
+  --ac:#f08b2f;
+  --wk:#ff5a5f;
 
-  --hdrH:34mm;
   --pageW:210mm;
   --pageH:297mm;
+  --pageMargin:6mm;
+  --padX:7.5mm;
+  --padY:6.5mm;
 
-  --cardR:18px;
+  --r:16px;
+  --shadow:0 10px 22px rgba(15,23,42,.14);
 
-  /* ✅ الدونات أصغر ومتناسقة للطباعة والشاشة */
-  --donut:clamp(76px, 10vw, 96px);
-  --donutPrint:70px;
+  --fs-kpi:12px;
+  --fs-val:12.6px;
+  --fs-table:11.4px;
+  --fs-foot:12.4px;
 
-  /* ✅ ارتفاع الرسم العمودي (أوضح + بدون اجتزاء) */
+  --donutSize:74px;
   --barH:132px;
-  --barHPrint:120px;
 
-  --printScale:0.975;
+  --overlay:rgba(15,23,42,.35);
 }
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#fff;}
-body{
-  font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color:var(--ink);
-}
+body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);}
 
-/* الغلاف الكامل */
-.sheet{
-  width:var(--pageW);
-  max-width:100%;
-  margin:0 auto 14px;
-  background:#fff;
-  position:relative;
-  overflow:visible;
-}
+.paper{width:var(--pageW); margin:0 auto; background:#fff;}
+.page{min-height:var(--pageH); padding:var(--padY) var(--padX); position:relative;}
+.fitRoot{transform-origin:top center; transform:scale(var(--fitScale,1));}
 
-/* الهيدر */
-.header{
-  position:relative;
+/* ===== Header banner (no background, no distortion, no cropping) =====
+   - الصورة بعرض 100% وارتفاع تلقائي => لا تشوه ولا اجتزاء
+   - النص داخل الهيدر لا يُقص (يتقلص تلقائياً إذا طال)
+*/
+.headerWrap{
+  margin:0;
+  padding:0;
   width:100%;
-  height:var(--hdrH);
+  border-radius:18px;
+  overflow:hidden;
+  /* لا خلفية إطلاقاً */
+  background:transparent;
+  box-shadow:none;
+  position:relative;
+}
+.headerWrap img{
+  display:block;
+  width:100%;
+  height:auto;          /* مهم: لا تشوه */
+  object-fit:fill;      /* غير مؤثر مع height:auto */
+}
+.headerOverlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:10px 14px;
+  pointer-events:none;
+}
+.headerText{
+  width:min(92%, 920px);
+  color:#fff;
+  text-shadow:0 2px 10px rgba(0,0,0,.35);
+  font-weight:900;
+  line-height:1.18;
+  /* بدون ellipsis/قص */
+  white-space:normal;
+  overflow:visible;
+  word-break:break-word;
+}
+.headerText .edu,
+.headerText .school,
+.headerText .title{
+  white-space:normal;   /* يسمح بالالتفاف عند الحاجة بدل الاجتزاء */
+  overflow:visible;
+  text-overflow:clip;
+}
+.headerText .edu{font-size:16px;}
+.headerText .school{font-size:15px;}
+.headerText .title{font-size:14.5px;}
+
+.afterHeaderTight{margin-top:8px;}
+
+.metaRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.metaBox{
+  border:2px solid #2f80ed33;
+  border-radius:14px;
+  background:#fff;
+  padding:8px 10px;
+  min-height:48px;
+  box-shadow:var(--shadow);
+}
+.metaBox.green{border-color:#0aa38b55;}
+.metaLabel{
+  color:var(--moe);
+  font-weight:900;
+  font-size:var(--fs-kpi);
+  margin-bottom:6px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.metaVal{
+  font-weight:900;
+  font-size:var(--fs-val);
+  color:#111827;
+  text-align:center;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.card{
+  margin-top:10px;
+  border:2px solid #dfe7ea;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:var(--shadow);
   overflow:hidden;
 }
-.header img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:contain;
-  object-position:center;
-}
-.header .txt{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+.cardInner{padding:10px 10px 10px;}
+.sectionTitle{
   text-align:center;
-  gap:2px;
-  padding:0 12mm;
-  z-index:3;
-}
-.header .txt .edu,
-.header .txt .school{
-  outline:none;border:none;
-  color:#fff;
-  font-weight:900;
-  line-height:1.35;
-  text-shadow:0 3px 10px rgba(0,0,0,.36);
-}
-.header .txt .edu{font-size:15px;}
-.header .txt .school{font-size:14px;opacity:.98}
-
-/* زر العدسة */
-.header-tools{
-  position:absolute;
-  left:10mm;
-  top:calc(var(--hdrH) - 18mm);
-  z-index:5;
-}
-.tools-pill{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 18px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.72);
-  background:linear-gradient(135deg,#0b7e88,#0b5f88);
-  color:#fff;
-  font-size:12px;
-  cursor:pointer;
-  box-shadow:0 4px 14px rgba(15,23,42,.30);
-  white-space:nowrap;
-}
-.tools-pill span.icon{font-size:15px;}
-.tools-pill:hover{background:linear-gradient(135deg,#065f64,#064f7a);}
-
-/* جسم الصفحة */
-.page{
-  width:100%;
-  min-height:calc(var(--pageH) - var(--hdrH));
-  position:relative;
-  padding:8mm 0 6mm;
-}
-
-/* صندوق المحتوى */
-.content{
-  width:186mm;
-  max-width:94%;
-  margin:0 auto;
-  overflow:visible;
-}
-
-/* البطاقة */
-.card{
-  width:100%;
-  background:rgba(255,255,255,.98);
-  border-radius:var(--cardR);
-  box-shadow:0 10px 26px rgba(15,23,42,.18);
-  padding:10px 12px 10px;
-}
-
-/* شريط رسالة */
-.top-strip{
-  margin-bottom:6px;
-  font-size:10.5px;
-  color:var(--muted);
-}
-
-/* نافذة العدسة */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(15,23,42,.16);
-  display:none;
-  align-items:flex-start;
-  justify-content:center;
-  z-index:100;
-  padding:10px;
-}
-.overlay.open{display:flex;}
-.panel{
-  margin-top:12mm;
-  width:min(980px,94vw);
-  background:#fff;
-  border-radius:16px;
-  box-shadow:0 10px 25px rgba(15,23,42,.18);
-  border:1px solid #e1f3f1;
-  padding:12px 16px;
-  font-size:11px;
-}
-.panel-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px;
-}
-.panel-title{font-weight:900;color:var(--moe);font-size:13px;}
-.panel-close{border:none;background:transparent;font-size:18px;cursor:pointer;}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px 12px;
-}
-.field{display:flex;flex-direction:column;gap:4px;}
-.field label{font-size:10px;color:var(--muted);}
-.field input[type="text"], .field select{
-  border-radius:999px;
-  border:1px solid #d1d5db;
-  padding:7px 10px;
-  font-size:11px;
-  font-family:inherit;
-  background:#f9fafb;
-}
-.field input[type="file"]{font-size:11px;}
-.missing{border-color:#ef4444 !important;background:#fef2f2 !important;}
-
-.actions{
-  margin-top:10px;
-  display:flex;
-  justify-content:flex-end;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.btn{
-  border-radius:12px;
-  border:1px solid var(--moe);
-  background:var(--moe);
-  color:#fff;
-  padding:9px 18px;
-  font-size:11px;
-  cursor:pointer;
-  font-family:inherit;
-  min-width:170px;
-  text-align:center;
-  white-space:nowrap;
-  box-shadow:0 3px 10px rgba(15,23,42,.25);
-}
-.btn:hover{background:#065f64;}
-.btn.secondary{
-  background:#fff;
   color:var(--moe);
-}
-.btn.secondary:hover{background:#f0fdfa;}
-
-.hint{
-  margin-top:10px;
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  border-radius:12px;
-  border:1px solid #fecaca;
-  background:#fef2f2;
-  padding:8px 10px;
-}
-.hint .ic{font-size:18px;color:#b91c1c;margin-top:1px;}
-.hint .tx{font-size:10px;color:#7f1d1d;line-height:1.7;}
-.hint .tx strong{font-weight:900;color:#b91c1c;}
-
-.credit{
-  margin-top:10px;
-  padding-top:8px;
-  border-top:1px dashed #e5e7eb;
-  font-size:10px;
-  color:#475569;
-  text-align:center;
-  font-weight:800;
-}
-
-/* رأس التقرير */
-.report-header{border-top:1px solid var(--line);padding-top:6px;}
-.title-wrap{display:flex;justify-content:center;margin-bottom:6px;}
-.title{
-  border:1px solid var(--moe);
-  border-radius:26px;
-  padding:6px 22px;
-  font-size:13px;
   font-weight:900;
-  background:#fff;
+  font-size:14.2px;
+  margin:2px 0 8px;
+  white-space:nowrap;
 }
-.title span{color:var(--moe);font-weight:900;}
+.gridMain{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;}
 
-.header-row{
-  margin-top:6px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:#f6f7f8;
-  font-size:11px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  min-width:0;
+.detailTable{border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+.dtHead{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  background:var(--soft);
+  border-bottom:1px solid var(--line);
+  padding:8px 8px;
+  font-weight:900;color:#111827;font-size:var(--fs-table);
 }
-.header-main{
-  flex:1;min-width:0;
+.dtRow{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:8px;padding:7px 8px;align-items:center;
+  border-bottom:1px solid #f0f3f5;font-size:var(--fs-table);
+}
+.dtRow:last-child{border-bottom:none;}
+.dtRow:nth-child(even){background:#fbfdfe;}
+
+.pillLvl{border-radius:12px;padding:8px 8px;color:#fff;font-weight:900;text-align:center;font-size:12.2px;white-space:nowrap;}
+.pEx{background:var(--ex);} .pVg{background:var(--vg);} .pGd{background:var(--gd);} .pAc{background:var(--ac);} .pWk{background:var(--wk);}
+.boxVal{border:2px solid #cfd8dc;border-radius:12px;padding:7px 8px;font-weight:900;text-align:center;background:#fff;font-size:12.5px;white-space:nowrap;}
+
+.sideKPIs{display:grid;gap:8px;}
+.sideRow{display:grid;grid-template-columns:1fr 1.02fr;gap:8px;align-items:stretch;}
+.sideLabel{
+  border:2px solid #0aa38b55;border-radius:12px;
+  padding:7px 8px;color:var(--moe);font-weight:900;font-size:12.2px;
+  display:flex;align-items:center;justify-content:flex-end;text-align:right;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.header-main strong{color:var(--moe);}
-.header-max{white-space:nowrap;}
-
-/* الوسط */
-.mid{
-  margin-top:10px;
-  border-top:1px solid var(--line);
-  padding-top:10px;
-  display:grid;
-  grid-template-columns:2.1fr 1.3fr;
-  gap:10px;
+.sideValue{
+  border:2px solid #cfd8dc;border-radius:12px;
+  padding:7px 8px;font-weight:900;font-size:12.5px;
+  display:flex;align-items:center;justify-content:center;background:#fff;white-space:nowrap;
 }
 
-/* الإحصائيات التفصيلية */
-.details-title{font-size:12px;font-weight:900;color:var(--moe);margin:0 0 6px;}
-.table{
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:#fff;
-  overflow:hidden;
-}
-.thead{
-  display:grid;
-  grid-template-columns:2.4fr 1.1fr 0.9fr;
-  gap:6px;
-  padding:8px 10px;
-  font-weight:900;
-  font-size:10.5px;
-  background:#f3f4f6;
-  border-bottom:1px solid var(--line);
-}
-.thead div:nth-child(2), .thead div:nth-child(3){text-align:center;}
-.trow{
-  display:grid;
-  grid-template-columns:2.4fr 1.1fr 0.9fr;
-  gap:6px;
-  padding:7px 10px;
-  align-items:center;
-  border-bottom:1px solid #f1f5f9;
-}
-.trow:last-child{border-bottom:none;}
-.trow:nth-child(even){background:#fbfbfb;}
-.trow .c2,.trow .c3{text-align:center;}
+.chartCard{margin-top:8px;border:2px solid #0aa38b55;border-radius:18px;padding:8px 8px 9px;}
+.chartTitle{text-align:center;color:var(--moe);font-weight:900;font-size:12.8px;margin:2px 0 8px;white-space:nowrap;}
+.donutsRow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:start;}
+.donutItem{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;}
+.donutCanvas{width:var(--donutSize) !important;height:var(--donutSize) !important;}
+.donutLabel,.donutPct{font-weight:900;font-size:12.2px;white-space:nowrap;}
 
-.badge{
-  display:flex;
-  align-items:center;
-  width:100%;
-  padding:7px 12px;
-  min-height:28px;
-  border-radius:999px;
-  color:#fff;
-  font-size:11.5px;
-  font-weight:900;
-  box-shadow:0 1px 4px rgba(15,23,42,.15);
-}
-.ex{background:var(--good);}
-.vg{background:var(--vgood);}
-.gd{background:var(--good2);}
-.ac{background:var(--acc);}
-.wk{background:var(--weak);}
+.barCard{margin-top:8px;border:2px solid #0aa38b55;border-radius:18px;padding:8px 8px 9px;}
+.barCanvas{width:100% !important;height:var(--barH) !important;}
 
-/* المؤشرات */
-.stats{
-  border-radius:14px;
-  border:1px solid var(--line);
-  padding:10px 12px;
-  background:#fff;
-}
-.stat{
-  border-radius:12px;
-  border:1px solid #eef2f7;
-  padding:8px 10px;
-  background:#fafafa;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-  margin-bottom:8px;
-}
-.stat:last-child{margin-bottom:0;}
-.stat .lab{color:var(--moe);font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.stat .val{font-size:15px;font-weight:900;white-space:nowrap;}
+.footer{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-weight:900;font-size:var(--fs-foot);color:#111827;}
+.footer .fBox{border-top:2px solid #d1d5db;padding-top:8px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-/* الرسوم */
-.charts{
-  margin-top:10px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  padding:10px 12px;
-  background:#fff;
-}
-.ch-title{
-  font-size:12px;
-  font-weight:900;
-  color:var(--moe);
-  text-align:center;
-  margin-bottom:8px;
-}
-
-/* ✅ صفّان: (ممتاز/جيد جدًا/جيد) ثم (مقبول/ضعيف) */
-.dgrid{
-  display:grid;
-  gap:10px;
-  grid-template-columns:repeat(6,1fr);
-  grid-template-areas:
-    "ex ex vg vg gd gd"
-    "ac ac ac wk wk wk";
-}
-.dcard{
-  border-radius:14px;
-  border:1px solid #eef2f7;
-  padding:10px 6px 10px;
-  text-align:center;
-  background:#fafafa;
-}
-.dwrap{
-  width:var(--donut);
-  height:var(--donut);
-  margin:0 auto;
-  display:grid;
-  place-items:center;
-}
-.donut{
-  width:100% !important;
-  height:100% !important;
-  display:block;
-}
-.dlab{font-size:10px;color:#4b5563;font-weight:900;margin-top:4px;}
-.dval{font-size:10px;font-weight:900;color:#111827;}
-
-.dcard[data-area="ex"]{grid-area:ex;}
-.dcard[data-area="vg"]{grid-area:vg;}
-.dcard[data-area="gd"]{grid-area:gd;}
-.dcard[data-area="ac"]{grid-area:ac;}
-.dcard[data-area="wk"]{grid-area:wk;}
-
-/* ✅ بار أوضح + أعمدة أعرض */
-.bar{
-  margin-top:10px;
-  border-radius:14px;
-  border:1px solid #eef2f7;
-  padding:10px;
-}
-.bar canvas{width:100%;height:var(--barH);}
-
-/* صفحة الضعفاء */
-.weak-card .wkHead{
-  display:flex;justify-content:space-between;align-items:center;gap:10px;
-  margin-top:8px;
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:#f6f7f8;
-  font-size:11px;
-}
-.pill{
-  padding:4px 10px;border-radius:999px;
-  border:1px solid rgba(15,23,42,.12);
-  background:#fff;
-  font-weight:900;
-  white-space:nowrap;
-}
-.pill.red{border-color:#fecaca;background:#fee2e2;color:#991b1b;}
-.pill.mo{border-color:#a5f3fc;background:#ecfeff;color:#0e7490;}
-.smallMuted{color:var(--muted);font-size:10px;font-weight:800}
-
-/* ✅ جدول الضعفاء مضغوط ومناسب للطباعة */
-.tbl{
-  width:100%;
-  border-collapse:collapse;
-  font-size:9.6px;
-  margin-top:10px;
-}
-.tbl th,.tbl td{border:1px solid var(--line);padding:6px 6px;vertical-align:top;}
-.tbl th{background:#f3f4f6;white-space:nowrap;}
-.tbl td.name,.tbl td.id{white-space:nowrap;}
-.follow{text-align:center;white-space:nowrap;}
-.follow label{display:inline-flex;align-items:center;gap:3px;margin-inline:2px;font-size:8.8px;}
-.follow input{width:11px;height:11px;}
-
-.footer{
-  margin-top:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:11px;
-  color:#4b5563;
-  gap:10px;
-}
-.footer p{margin:0;white-space:nowrap;}
-.footer strong{color:#111827;}
-
+/* weak */
 .hidden{display:none !important;}
+.pageBreak{page-break-before:always;}
+.weakCard{margin-top:10px;border:2px solid #0aa38b55;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);}
+.weakHead{
+  padding:9px 10px;background:#f4fffb;border-bottom:1px solid #d7efe7;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  font-size:12.2px;font-weight:900;
+}
+.badgeInfo{border:2px solid #0aa38b55;background:#fff;border-radius:999px;padding:6px 10px;white-space:nowrap;}
+.badgeInfo.red{border-color:#fecaca;background:#fff1f2;color:#991b1b;}
+.tblWrap{padding:9px 9px 10px;}
+.tbl{width:100%;border-collapse:collapse;font-size:11.2px;table-layout:fixed;}
+.tbl th,.tbl td{border:1px solid #d1d5db;padding:7px 6px;vertical-align:top;}
+.tbl th{background:#f3f4f6;font-weight:900;white-space:nowrap;}
+.tbl td.center{text-align:center;font-weight:900;white-space:nowrap;}
+.tbl td.nameCell{white-space:nowrap;overflow:visible;} /* اسم بدون اجتزاء */
+.plan{line-height:1.6;}
 
-/* الجوال/التابلت */
-@media (max-width:900px){
-  .sheet{width:100%;}
-  .header{height:94px;}
-  .page{min-height:calc(100vh - 94px);padding:10px 0 12px;}
-  .content{width:min(980px,96%);max-width:96%;}
-  .grid{grid-template-columns:1fr;}
-  .header-tools{top:12px;left:12px;}
-  .mid{grid-template-columns:1fr;}
-  .dgrid{
-    grid-template-columns:repeat(2,1fr);
-    grid-template-areas:
-      "ex vg"
-      "gd ac"
-      "wk wk";
-  }
-  .dwrap{width:92px;height:92px;}
+/* buttons */
+.fab{position:fixed;left:14px;bottom:14px;z-index:50;display:flex;gap:8px;flex-wrap:wrap;}
+.btn{
+  border:none;border-radius:14px;background:linear-gradient(135deg,var(--moe2),var(--moe));
+  color:#fff;font-weight:900;font-family:inherit;padding:10px 14px;cursor:pointer;
+  box-shadow:0 10px 22px rgba(15,23,42,.18);white-space:nowrap;font-size:12.5px;
+}
+.btn.secondary{background:#fff;color:var(--moe);border:2px solid #0aa38b55;box-shadow:none;}
+.btn:active{transform:translateY(1px);}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:var(--overlay);display:none;align-items:flex-start;justify-content:center;padding:14px;z-index:80;}
+.overlay.open{display:flex;}
+.modal{
+  width:min(980px,96vw);
+  margin-top:12mm;
+  background:#fff;border-radius:18px;
+  box-shadow:0 18px 40px rgba(15,23,42,.22);
+  border:1px solid #dfe7ea;overflow:hidden;
+}
+.modalHead{
+  padding:10px 12px;background:linear-gradient(135deg,#f4fffb,#fff);
+  border-bottom:1px solid #d7efe7;display:flex;justify-content:space-between;align-items:center;gap:10px;
+}
+.modalHead .t{font-weight:900;color:var(--moe);font-size:14px;white-space:nowrap;}
+.modalHead .x{border:none;background:transparent;font-size:18px;cursor:pointer;width:34px;height:34px;border-radius:10px;}
+.modalHead .x:hover{background:#f3f4f6;}
+.modalBody{padding:10px 12px 12px;}
+.formGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 10px;}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0;}
+.field label{font-weight:900;color:#334155;font-size:11.8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.field input,.field select{
+  border:2px solid #cfd8dc;border-radius:12px;padding:9px 9px;font-family:inherit;
+  font-weight:900;background:#fff;font-size:12px;outline:none;
+}
+.req{color:#b91c1c;font-weight:900;}
+.invalid{border-color:#ef4444 !important;background:#fff1f2 !important;}
+.actions{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center;}
+.badge{margin-right:auto;border:2px solid #0aa38b55;color:var(--moe);background:#fff;font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px;white-space:nowrap;}
+.badge.bad{border-color:#fecaca;background:#fff1f2;color:#991b1b;}
+.note{
+  margin-top:10px;border-radius:14px;border:1px solid #fed7aa;background:#fff7ed;
+  padding:9px 10px;font-weight:800;color:#7c2d12;line-height:1.7;font-size:12px;
+}
+.note strong{font-weight:900;}
+
+/* print: منع صفحات فارغة */
+@media print{
+  @page{ size:A4 portrait; margin:var(--pageMargin); }
+  html,body{background:#fff;}
+  body{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  .fab,.overlay{display:none !important;}
+  .paper{width:var(--pageW) !important;}
+  .page{min-height:auto !important; height:auto !important; padding:var(--padY) var(--padX) !important;}
+  .pageBreak{break-before:page;}
+  .headerWrap,.metaBox,.card,.chartCard,.barCard,.footer,.weakCard{break-inside:avoid; page-break-inside:avoid;}
 }
 
-/* ✅ الطباعة: صفحتان (تحليل + ضعفاء) بدون اجتزاء */
-@media print{
-  @page{size:A4 portrait;margin:0;}
-  html,body{height:auto;background:#fff;}
-  body{margin:0;padding:0;}
-  .overlay{display:none !important;}
-  .header-tools{display:none !important;}
-
-  .sheet{
-    width:var(--pageW) !important;
-    height:var(--pageH) !important;
-    margin:0 !important;
-    overflow:hidden !important;
-    transform:scale(var(--printScale));
-    transform-origin:top center;
-    page-break-after:always;
-  }
-  .sheet:last-child{page-break-after:auto;}
-
-  .page{
-    min-height:calc(var(--pageH) - var(--hdrH)) !important;
-    padding:6mm 0 5mm !important;
-  }
-
-  .content{overflow:hidden !important;}
-
-  .card{
-    box-shadow:none !important;
-    border-radius:0 !important;
-    padding:9px 10px !important;
-  }
-
-  /* ✅ تثبيت مقاس الدونات في الطباعة */
-  .dwrap{width:var(--donutPrint) !important;height:var(--donutPrint) !important;}
-  .bar canvas{height:var(--barHPrint) !important;}
-
-  .trow:nth-child(even){background:#fff !important;}
-
-  .card,.report-header,.mid,.charts,.footer,.wkHead,.tbl{
-    break-inside:avoid !important;
-    page-break-inside:avoid !important;
-  }
+@media (max-width:1100px){
+  .formGrid{grid-template-columns:repeat(2,1fr);}
+  .donutsRow{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:700px){
+  .formGrid{grid-template-columns:1fr;}
+  .donutsRow{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
 
 <body>
+<div class="paper">
 
-<!-- =========================
-     الصفحة 1: التحليل الأساسي
-     ========================= -->
-<div class="sheet" id="sheet1">
-  <header class="header">
-    <img src="هيدر التحليل .png" alt="هيدر التحليل" />
-    <div class="txt">
-      <div id="eduName" class="edu" contenteditable="true">الإدارة العامة للتعليم بالمنطقة الشرقية</div>
-      <div id="schoolName" class="school" contenteditable="true">ثانوية اليعقوبي بالخبر</div>
-    </div>
-    <div class="header-tools">
-      <button type="button" class="tools-pill" id="toolsBtn">
-        <span class="icon">🔍</span>
-        <span>بيانات التحليل / طباعة PDF</span>
-      </button>
-    </div>
-  </header>
+  <!-- ===== PAGE 1 ===== -->
+  <div class="page" id="page1">
+    <div class="fitRoot" id="fitRoot">
 
-  <div class="page">
-    <div class="content">
-      <section class="card">
-
-        <div class="top-strip">
-          <span id="statusMessage">اضغط زر «بيانات التحليل / طباعة PDF» لاختيار ملف الدرجات وإدخال البيانات.</span>
-        </div>
-
-        <!-- العدسة -->
-        <div class="overlay" id="overlay">
-          <div class="panel">
-            <div class="panel-head">
-              <div class="panel-title">بيانات تحليل الاختبار</div>
-              <button type="button" class="panel-close" id="closeOverlay">✕</button>
-            </div>
-
-            <div class="grid">
-              <div class="field">
-                <label for="excelFile">📂 ملف الدرجات (Excel)</label>
-                <input id="excelFile" type="file" accept=".xlsx,.xls" />
-              </div>
-
-              <div class="field">
-                <label for="subjectInput">المادة (نص ثابت للتقرير)</label>
-                <input id="subjectInput" type="text" placeholder="مثال: رياضيات" />
-              </div>
-
-              <div class="field">
-                <label for="stageInput">الصف (نص ثابت للتقرير)</label>
-                <input id="stageInput" type="text" placeholder="مثال: أول ثانوي" />
-              </div>
-
-              <div class="field">
-                <label for="sectionInput">تحديد شُعب (اختياري)</label>
-                <input id="sectionInput" type="text" placeholder="مثال: 1 أو 1,2,3 (اتركه فارغًا لتحليل جميع الشيتات)" />
-              </div>
-
-              <div class="field">
-                <label for="periodInput">الفترة (اختياري)</label>
-                <input id="periodInput" type="text" placeholder="مثال: الفترة الأولى" />
-              </div>
-
-              <div class="field">
-                <label for="termInput">الفصل/العام</label>
-                <input id="termInput" type="text" placeholder="مثال: الفصل الدراسي الاول ١٤٤٧هـ" />
-              </div>
-
-              <div class="field">
-                <label for="teacherInput">معلم المادة</label>
-                <input id="teacherInput" type="text" placeholder="مثال: فهد حامد الزهراني" />
-              </div>
-
-              <div class="field">
-                <label for="scaleMode">نطاق الدرجة</label>
-                <select id="scaleMode">
-                  <option value="auto">آلي (ذكي)</option>
-                  <option value="period40">اختبار (0–40)</option>
-                  <option value="period60">اختبار (0–60)</option>
-                  <option value="final100">اختبار (0–100)</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="eduInputField">نص الإدارة (الهيدر)</label>
-                <input id="eduInputField" type="text" placeholder="الإدارة العامة للتعليم بالمنطقة الشرقية" />
-              </div>
-
-              <div class="field">
-                <label for="schoolInputField">اسم المدرسة (الهيدر)</label>
-                <input id="schoolInputField" type="text" placeholder="ثانوية اليعقوبي بالخبر" />
-              </div>
-
-              <div class="field">
-                <label for="principalInput">اسم مدير المدرسة</label>
-                <input id="principalInput" type="text" value="فهد حامد الزهراني" />
-              </div>
-            </div>
-
-            <div class="actions">
-              <button type="button" class="btn" id="analyzeBtn">بدء التحليل</button>
-              <button type="button" class="btn" id="printBtn">طباعة / حفظ PDF</button>
-              <button type="button" class="btn secondary" id="openWeakBtn">الانتقال لصفحة الضعفاء</button>
-            </div>
-
-            <div class="hint">
-              <div class="ic">⚠️</div>
-              <div class="tx">
-                <strong>طريقة استخراج ملف الإكسل من «نور»:</strong><br/>
-                نظام نور → التقارير → تقارير نظام المسارات → كشف رصد درجات مادة → «تصدير إلى Excel».
-              </div>
-            </div>
-
-            <div class="credit">تصميم وبرمجة فهد حامد الزهراني</div>
+      <div class="headerWrap">
+        <!-- ضع الصورة في نفس المجلد بنفس الاسم تمامًا -->
+        <img src="هيدر التحليل .png" alt="هيدر التحليل" id="headerImg1" />
+        <div class="headerOverlay">
+          <div class="headerText" id="headerTextFit">
+            <div class="edu" id="hEdu">—</div>
+            <div class="school" id="hSchool">—</div>
+            <div class="title">تحليل درجات مادة <span id="hSubject">—</span></div>
           </div>
         </div>
+      </div>
 
-        <!-- رأس التقرير -->
-        <div class="report-header">
-          <div class="title-wrap">
-            <div class="title">تحليل نتائج اختبار مادة <span id="titleSubject">[اسم المادة]</span></div>
+      <div class="afterHeaderTight">
+        <div class="metaRow">
+          <div class="metaBox green"><div class="metaLabel">المرحلة الدراسية / الصف</div><div class="metaVal" id="tStage">—</div></div>
+          <div class="metaBox"><div class="metaLabel">السنة / الفصل الدراسي</div><div class="metaVal" id="tTerm">—</div></div>
+          <div class="metaBox green"><div class="metaLabel">درجة القياس (الاختبار)</div><div class="metaVal" id="tFull">—</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardInner">
+          <div class="sectionTitle">الإحصائيات التفصيلية</div>
+
+          <div class="gridMain">
+            <div class="detailTable">
+              <div class="dtHead"><div style="text-align:center">عدد الطلاب</div><div style="text-align:center">النطاق</div><div style="text-align:center">المستوى</div></div>
+              <div class="dtRow"><div class="boxVal" id="cEx">0</div><div class="boxVal" id="rEx">—</div><div class="pillLvl pEx">ممتاز</div></div>
+              <div class="dtRow"><div class="boxVal" id="cVg">0</div><div class="boxVal" id="rVg">—</div><div class="pillLvl pVg">جيد جداً</div></div>
+              <div class="dtRow"><div class="boxVal" id="cGd">0</div><div class="boxVal" id="rGd">—</div><div class="pillLvl pGd">جيد</div></div>
+              <div class="dtRow"><div class="boxVal" id="cAc">0</div><div class="boxVal" id="rAc">—</div><div class="pillLvl pAc">مقبول</div></div>
+              <div class="dtRow"><div class="boxVal" id="cWk">0</div><div class="boxVal" id="rWk">—</div><div class="pillLvl pWk">ضعيف</div></div>
+            </div>
+
+            <div class="sideKPIs">
+              <div class="sideRow"><div class="sideValue" id="kN">0</div><div class="sideLabel">عدد الطلاب</div></div>
+              <div class="sideRow"><div class="sideValue" id="kMax">0</div><div class="sideLabel">أعلى درجة</div></div>
+              <div class="sideRow"><div class="sideValue" id="kMin">0</div><div class="sideLabel">أقل درجة</div></div>
+              <div class="sideRow"><div class="sideValue" id="kAvg">0</div><div class="sideLabel">متوسط الدرجات</div></div>
+              <div class="sideRow"><div class="sideValue" id="kRate">0%</div><div class="sideLabel">نسبة التحصيل</div></div>
+              <div class="sideRow"><div class="sideValue" id="kSum">0</div><div class="sideLabel">مجموع الدرجات</div></div>
+            </div>
           </div>
 
-          <div class="header-row">
-            <div class="header-main" id="headerMainText">
-              الصف: <strong id="stageField">—</strong>
-              · المادة: <strong id="subjectField">—</strong>
-              · الفصل/الفترة: <strong id="termField">—</strong>
-              · معلم المادة: <strong id="teacherField">—</strong>
+          <div class="chartCard">
+            <div class="chartTitle">رسم بياني (نِسب الطلاب لكل تقدير)</div>
+            <div class="donutsRow">
+              <div class="donutItem"><canvas id="dWk" class="donutCanvas"></canvas><div class="donutLabel" style="color:var(--wk)">ضعيف</div><div class="donutPct" id="pWk">0%</div></div>
+              <div class="donutItem"><canvas id="dAc" class="donutCanvas"></canvas><div class="donutLabel" style="color:var(--ac)">مقبول</div><div class="donutPct" id="pAc">0%</div></div>
+              <div class="donutItem"><canvas id="dGd" class="donutCanvas"></canvas><div class="donutLabel" style="color:var(--gd)">جيد</div><div class="donutPct" id="pGd">0%</div></div>
+              <div class="donutItem"><canvas id="dVg" class="donutCanvas"></canvas><div class="donutLabel" style="color:var(--vg)">جيد جداً</div><div class="donutPct" id="pVg">0%</div></div>
+              <div class="donutItem"><canvas id="dEx" class="donutCanvas"></canvas><div class="donutLabel" style="color:var(--ex)">ممتاز</div><div class="donutPct" id="pEx">0%</div></div>
             </div>
-            <div class="header-max">
-              الدرجة الكاملة: <strong id="maxScoreField">—</strong>
-            </div>
+          </div>
+
+          <div class="barCard">
+            <div class="chartTitle">رسم بياني (عدد الطلاب لكل تقدير)</div>
+            <canvas id="bar" class="barCanvas"></canvas>
+          </div>
+
+          <div class="footer">
+            <div class="fBox">معلم المادة / <span id="fTeacher">—</span></div>
+            <div class="fBox">مدير المدرسة / <span id="fPrincipal">—</span></div>
           </div>
         </div>
+      </div>
 
-        <!-- الإحصائيات -->
-        <div class="mid">
-          <div>
-            <div class="details-title">الإحصائيات التفصيلية</div>
-            <div class="table">
-              <div class="thead">
-                <div>المستوى</div><div>النطاق</div><div>عدد الحالات</div>
-              </div>
-
-              <div class="trow">
-                <div><span class="badge ex">ممتاز</span></div>
-                <div class="c2" id="rangeExcellent">—</div>
-                <div class="c3" id="countExcellent">0</div>
-              </div>
-              <div class="trow">
-                <div><span class="badge vg">جيد جدًا</span></div>
-                <div class="c2" id="rangeVGood">—</div>
-                <div class="c3" id="countVGood">0</div>
-              </div>
-              <div class="trow">
-                <div><span class="badge gd">جيد</span></div>
-                <div class="c2" id="rangeGood">—</div>
-                <div class="c3" id="countGood">0</div>
-              </div>
-              <div class="trow">
-                <div><span class="badge ac">مقبول</span></div>
-                <div class="c2" id="rangeAcceptable">—</div>
-                <div class="c3" id="countAcceptable">0</div>
-              </div>
-              <div class="trow">
-                <div><span class="badge wk">ضعيف</span></div>
-                <div class="c2" id="rangeWeak">—</div>
-                <div class="c3" id="countWeak">0</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="stats">
-            <div class="stat"><span class="lab">عدد الطلاب/الحالات</span><span class="val" id="statN">0</span></div>
-            <div class="stat"><span class="lab">أعلى درجة</span><span class="val" id="statMax">0</span></div>
-            <div class="stat"><span class="lab">أقل درجة</span><span class="val" id="statMin">0</span></div>
-            <div class="stat"><span class="lab">متوسط الدرجات</span><span class="val" id="statAvg">0</span></div>
-            <div class="stat"><span class="lab">نسبة التحصيل</span><span class="val" id="statPct">0%</span></div>
-            <div class="stat"><span class="lab">مجموع الدرجات</span><span class="val" id="statSum">0</span></div>
-          </div>
-        </div>
-
-        <!-- الرسوم -->
-        <div class="charts">
-          <div class="ch-title">نِسَب الحالات لكل تقدير</div>
-
-          <div class="dgrid">
-            <div class="dcard" data-area="ex">
-              <div class="dwrap"><canvas id="dEx" class="donut"></canvas></div>
-              <div class="dlab">ممتاز</div>
-              <div class="dval" id="pEx">0% (0)</div>
-            </div>
-
-            <div class="dcard" data-area="vg">
-              <div class="dwrap"><canvas id="dVGood" class="donut"></canvas></div>
-              <div class="dlab">جيد جدًا</div>
-              <div class="dval" id="pVGood">0% (0)</div>
-            </div>
-
-            <div class="dcard" data-area="gd">
-              <div class="dwrap"><canvas id="dGood" class="donut"></canvas></div>
-              <div class="dlab">جيد</div>
-              <div class="dval" id="pGood">0% (0)</div>
-            </div>
-
-            <div class="dcard" data-area="ac">
-              <div class="dwrap"><canvas id="dAcc" class="donut"></canvas></div>
-              <div class="dlab">مقبول</div>
-              <div class="dval" id="pAcc">0% (0)</div>
-            </div>
-
-            <div class="dcard" data-area="wk">
-              <div class="dwrap"><canvas id="dWeak" class="donut"></canvas></div>
-              <div class="dlab">ضعيف</div>
-              <div class="dval" id="pWeak">0% (0)</div>
-            </div>
-          </div>
-
-          <div class="ch-title" style="margin-top:10px;">عدد الحالات لكل تقدير</div>
-          <div class="bar">
-            <canvas id="barLevels"></canvas>
-          </div>
-        </div>
-
-        <div class="footer">
-          <p>معلم المادة / <strong id="ftTeacher">—</strong></p>
-          <p>مدير المدرسة / <strong id="ftPrincipal" contenteditable="true">فهد حامد الزهراني</strong></p>
-        </div>
-
-      </section>
     </div>
   </div>
+
+  <!-- ===== PAGE 2 ===== -->
+  <div class="page hidden pageBreak" id="page2">
+    <div class="fitRoot" id="fitRoot2">
+
+      <div class="headerWrap">
+        <img src="هيدر التحليل .png" alt="هيدر التحليل" id="headerImg2" />
+        <div class="headerOverlay">
+          <div class="headerText" id="headerTextFit2">
+            <div class="edu" id="hEdu2">—</div>
+            <div class="school" id="hSchool2">—</div>
+            <div class="title">خطة علاجية — مادة <span id="hSubject2">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="afterHeaderTight">
+        <div class="metaRow">
+          <div class="metaBox green"><div class="metaLabel">المرحلة الدراسية / الصف</div><div class="metaVal" id="tStage2">—</div></div>
+          <div class="metaBox"><div class="metaLabel">السنة / الفصل الدراسي</div><div class="metaVal" id="tTerm2">—</div></div>
+          <div class="metaBox green"><div class="metaLabel">درجة القياس (الاختبار)</div><div class="metaVal" id="tFull2">—</div></div>
+        </div>
+      </div>
+
+      <div class="weakCard">
+        <div class="weakHead">
+          <div class="badgeInfo" id="weakRule">قاعدة الضعفاء: —</div>
+          <div class="badgeInfo red" id="weakCount">عدد الضعفاء: 0</div>
+        </div>
+
+        <div class="tblWrap">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th style="width:28%">اسم الطالب</th>
+                <th style="width:10%">الشعبة</th>
+                <th style="width:10%">الدرجة</th>
+                <th style="width:10%">النسبة</th>
+                <th style="width:10%">الفجوة</th>
+                <th style="width:32%">خطة علاجية متنوعة</th>
+              </tr>
+            </thead>
+            <tbody id="weakBody">
+              <tr><td colspan="6" style="text-align:center;font-weight:900;color:#6b7280;">لا توجد بيانات بعد.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer" style="padding:0 10px 10px;">
+          <div class="fBox">معلم المادة / <span id="fTeacher2">—</span></div>
+          <div class="fBox">مدير المدرسة / <span id="fPrincipal2">—</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
-<!-- =========================
-     الصفحة 2: خطة متابعة ضعفاء (تتولد تلقائيًا عند وجود ضعفاء)
-     ========================= -->
-<div class="sheet hidden" id="sheet2">
-  <header class="header">
-    <img src="هيدر التحليل .png" alt="هيدر التحليل" />
-    <div class="txt">
-      <div id="eduName2" class="edu">الإدارة العامة للتعليم بالمنطقة الشرقية</div>
-      <div id="schoolName2" class="school">ثانوية اليعقوبي بالخبر</div>
+<!-- Buttons -->
+<div class="fab">
+  <button class="btn" id="openModal">تحليل</button>
+  <button class="btn secondary" id="printSave">حفظ / طباعة</button>
+</div>
+
+<!-- Modal -->
+<div class="overlay" id="ov">
+  <div class="modal">
+    <div class="modalHead">
+      <div class="t">إدخال البيانات واستيراد الدرجات</div>
+      <button class="x" id="closeOv" title="إغلاق">✕</button>
     </div>
-  </header>
+    <div class="modalBody">
 
-  <div class="page">
-    <div class="content">
-      <section class="card weak-card">
-
-        <div class="report-header">
-          <div class="title-wrap">
-            <div class="title">
-              خطة متابعة ضعفاء مادة <span id="weakTitleSubject">[المادة]</span> — <span id="weakTitleStage">[الصف]</span>
-            </div>
-          </div>
-
-          <div class="header-row">
-            <div class="header-main" id="headerMainText2">
-              الصف: <strong id="stageField2">—</strong>
-              · المادة: <strong id="subjectField2">—</strong>
-              · الفصل/الفترة: <strong id="termField2">—</strong>
-              · معلم المادة: <strong id="teacherField2">—</strong>
-            </div>
-            <div class="header-max">
-              الدرجة الكاملة: <strong id="maxScoreField2">—</strong>
-            </div>
-          </div>
+      <div class="formGrid">
+        <div class="field">
+          <label>إدارة التعليم <span class="req">*</span></label>
+          <input id="inEdu" placeholder="مثال: الإدارة العامة للتعليم بالمنطقة الشرقية" value="الإدارة العامة للتعليم بالمنطقة الشرقية" />
+        </div>
+        <div class="field">
+          <label>اسم المدرسة <span class="req">*</span></label>
+          <input id="inSchool" placeholder="مثال: ثانوية اليعقوبي بالخبر" value="ثانوية اليعقوبي بالخبر" />
+        </div>
+        <div class="field">
+          <label>اسم مدير المدرسة <span class="req">*</span></label>
+          <input id="inPrincipal" placeholder="مثال: فهد حامد الزهراني" value="فهد حامد الزهراني" />
+        </div>
+        <div class="field">
+          <label>معلم المادة <span class="req">*</span></label>
+          <input id="inTeacher" placeholder="مثال: أحمد محمد ..." />
         </div>
 
-        <div class="wkHead">
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <span class="pill mo" id="weakRulePill">قاعدة الضعفاء: —</span>
-            <span class="pill red" id="weakCountPill">عدد الضعفاء: 0</span>
-          </div>
-          <div class="smallMuted" id="weakHint">
-            تُولَّد القائمة تلقائيًا بعد التحليل، وكل صف يمثل شعبة (Sheet) — مع خطة علاجية متنوعة ومؤشرات متابعة.
-          </div>
+        <div class="field">
+          <label>المادة <span class="req">*</span></label>
+          <input id="inSubject" placeholder="مثال: الرياضيات" />
+        </div>
+        <div class="field">
+          <label>المرحلة / الصف <span class="req">*</span></label>
+          <input id="inStage" placeholder="مثال: سادس ابتدائي" />
+        </div>
+        <div class="field">
+          <label>السنة / الفصل الدراسي (اختياري)</label>
+          <input id="inTerm" placeholder="مثال: الفصل الأول / 1447هـ" />
+        </div>
+        <div class="field">
+          <label>درجة الاختبار (اختياري)</label>
+          <select id="inFullMode">
+            <option value="auto">آلي (ذكي)</option>
+            <option value="40">40</option>
+            <option value="60">60</option>
+            <option value="100">100</option>
+          </select>
         </div>
 
-        <table class="tbl" id="weakTbl">
-          <thead>
-            <tr>
-              <th style="width:20%">اسم الطالب</th>
-              <th style="width:13%">رقم الهوية</th>
-              <th style="width:9%">الشعبة</th>
-              <th style="width:9%">الدرجة</th>
-              <th style="width:9%">النسبة</th>
-              <th style="width:9%">الفجوة</th>
-              <th style="width:22%">الخطة العلاجية المقترحة</th>
-              <th style="width:9%">متابعة</th>
-            </tr>
-          </thead>
-          <tbody id="weakBody">
-            <tr><td colspan="8" style="text-align:center;">لا توجد بيانات بعد.</td></tr>
-          </tbody>
-        </table>
-
-        <div class="footer">
-          <p>معلم المادة / <strong id="ftTeacher2">—</strong></p>
-          <p>مدير المدرسة / <strong id="ftPrincipal2">فهد حامد الزهراني</strong></p>
+        <div class="field">
+          <label>رفع ملف الدرجات (Excel/CSV) <span class="req">*</span></label>
+          <input type="file" id="file" accept=".xlsx,.xls,.csv" />
         </div>
+        <div class="field">
+          <label>تصفية الشُعب (اختياري: 1 أو 1,2,3)</label>
+          <input id="inSections" placeholder="مثال: 1,2,3" />
+        </div>
+      </div>
 
-      </section>
+      <div class="actions">
+        <div class="badge" id="statusPill">جاهز</div>
+        <button class="btn secondary" id="dlTemplate">تنزيل قالب تعبئة (Excel)</button>
+        <button class="btn" id="doAnalyze">بدء التحليل</button>
+      </div>
+
+      <div class="note">
+        <strong>طريقة استخراج ملف الدرجات من «نور» (جميع المراحل):</strong><br>
+        نور → <b>التقارير</b> → <b>تقارير الدرجات/رصد الدرجات</b> → <b>كشف رصد درجات مادة</b> → <b>تصدير إلى Excel</b>.<br>
+        <strong>للثانوي (إن وُجد نظام المسارات):</strong> نور → التقارير → <b>تقارير نظام المسارات</b> → كشف رصد درجات مادة → تصدير إلى Excel.
+      </div>
+
     </div>
   </div>
 </div>
 
 <script>
-/* =========================
-   أدوات مساعدة
-   ========================= */
+/* ========= Helpers ========= */
+const $ = (id)=>document.getElementById(id);
+const clean = (s)=> (s??"").toString().replace(/\s+/g," ").trim();
 const normalizeDigits = (str)=>{
   if(str == null) return "";
   str = String(str);
   const map = {'٠':0,'١':1,'٢':2,'٣':3,'٤':4,'٥':5,'٦':6,'٧':7,'٨':8,'٩':9};
   return str.replace(/[٠-٩]/g,d=>map[d]).replace(/,/g,".");
 };
-const clean = (s)=> (s||"").toString().replace(/\s+/g," ").trim();
-
-const isNumeric = (val)=>{
-  if(val === null || val === undefined) return false;
-  if(typeof val === "number") return !isNaN(val);
-  const n = Number(normalizeDigits(val).replace(/[^\d.-]/g,""));
-  return !isNaN(n);
+const isNumeric = (v)=>{
+  if(v===null||v===undefined) return false;
+  if(typeof v==="number") return Number.isFinite(v);
+  const n = Number(normalizeDigits(v).replace(/[^\d.-]/g,""));
+  return Number.isFinite(n);
 };
-const toNumber = (val)=>{
-  if(typeof val === "number") return val;
-  const n = Number(normalizeDigits(val).replace(/[^\d.-]/g,""));
-  return isNaN(n) ? NaN : n;
+const toNumber = (v)=>{
+  if(typeof v==="number") return v;
+  const n = Number(normalizeDigits(v).replace(/[^\d.-]/g,""));
+  return Number.isFinite(n) ? n : NaN;
 };
-const clamp = (x,min,max)=>Math.max(min,Math.min(max,x));
+const pct = (a,b)=> b ? (a/b)*100 : 0;
 
-/* =========================
-   DOM
-   ========================= */
-const toolsBtn = document.getElementById("toolsBtn");
-const overlay = document.getElementById("overlay");
-const closeOverlay = document.getElementById("closeOverlay");
+/* ========= Modal ========= */
+const ov = $("ov");
+$("openModal").onclick = ()=> ov.classList.add("open");
+$("closeOv").onclick = ()=> ov.classList.remove("open");
+ov.addEventListener("click",(e)=>{ if(e.target===ov) ov.classList.remove("open"); });
 
-const excelFile = document.getElementById("excelFile");
-const subjectInput = document.getElementById("subjectInput");
-const stageInput = document.getElementById("stageInput");
-const sectionInput = document.getElementById("sectionInput");
-const periodInput = document.getElementById("periodInput");
-const termInput = document.getElementById("termInput");
-const teacherInput = document.getElementById("teacherInput");
-const scaleMode = document.getElementById("scaleMode");
+/* ========= Inputs ========= */
+const inEdu = $("inEdu");
+const inSchool = $("inSchool");
+const inPrincipal = $("inPrincipal");
+const inTeacher = $("inTeacher");
+const inSubject = $("inSubject");
+const inStage = $("inStage");
+const inTerm = $("inTerm");
+const inFullMode = $("inFullMode");
+const inSections = $("inSections");
+const fileEl = $("file");
+const statusPill = $("statusPill");
 
-const eduName = document.getElementById("eduName");
-const schoolName = document.getElementById("schoolName");
-const eduInputField = document.getElementById("eduInputField");
-const schoolInputField = document.getElementById("schoolInputField");
-
-const eduName2 = document.getElementById("eduName2");
-const schoolName2 = document.getElementById("schoolName2");
-
-const principalInput = document.getElementById("principalInput");
-const ftPrincipal = document.getElementById("ftPrincipal");
-const ftPrincipal2 = document.getElementById("ftPrincipal2");
-
-const analyzeBtn = document.getElementById("analyzeBtn");
-const printBtn = document.getElementById("printBtn");
-const statusMessage = document.getElementById("statusMessage");
-
-const titleSubject = document.getElementById("titleSubject");
-const stageField = document.getElementById("stageField");
-const subjectField = document.getElementById("subjectField");
-const termField = document.getElementById("termField");
-const teacherField = document.getElementById("teacherField");
-const maxScoreField = document.getElementById("maxScoreField");
-
-const rangeExcellent = document.getElementById("rangeExcellent");
-const rangeVGood = document.getElementById("rangeVGood");
-const rangeGood = document.getElementById("rangeGood");
-const rangeAcceptable = document.getElementById("rangeAcceptable");
-const rangeWeak = document.getElementById("rangeWeak");
-
-const countExcellent = document.getElementById("countExcellent");
-const countVGood = document.getElementById("countVGood");
-const countGood = document.getElementById("countGood");
-const countAcceptable = document.getElementById("countAcceptable");
-const countWeak = document.getElementById("countWeak");
-
-const statN = document.getElementById("statN");
-const statMax = document.getElementById("statMax");
-const statMin = document.getElementById("statMin");
-const statAvg = document.getElementById("statAvg");
-const statPct = document.getElementById("statPct");
-const statSum = document.getElementById("statSum");
-
-const pWeak = document.getElementById("pWeak");
-const pAcc  = document.getElementById("pAcc");
-const pGood = document.getElementById("pGood");
-const pVGood= document.getElementById("pVGood");
-const pEx   = document.getElementById("pEx");
-
-const ftTeacher = document.getElementById("ftTeacher");
-const ftTeacher2 = document.getElementById("ftTeacher2");
-
-/* صفحة 2 */
-const sheet2 = document.getElementById("sheet2");
-const weakTitleSubject = document.getElementById("weakTitleSubject");
-const weakTitleStage = document.getElementById("weakTitleStage");
-const stageField2 = document.getElementById("stageField2");
-const subjectField2 = document.getElementById("subjectField2");
-const termField2 = document.getElementById("termField2");
-const teacherField2 = document.getElementById("teacherField2");
-const maxScoreField2 = document.getElementById("maxScoreField2");
-const weakRulePill = document.getElementById("weakRulePill");
-const weakCountPill = document.getElementById("weakCountPill");
-const weakBody = document.getElementById("weakBody");
-const openWeakBtn = document.getElementById("openWeakBtn");
-
-/* =========================
-   حالة
-   ========================= */
 let selectedFile = null;
-let records = [];
-let donuts = {};
-let bar = null;
+fileEl.addEventListener("change",(e)=>{ selectedFile = e.target.files?.[0] || null; validateInputs(); });
 
-function setStatus(t){ statusMessage.textContent = t; }
+const required = [inEdu,inSchool,inPrincipal,inTeacher,inSubject,inStage];
 
-/* =========================
-   ربط الهيدر/الإدخالات
-   ========================= */
-function syncInputsFromHeader(){
-  eduInputField.value = clean(eduName.textContent);
-  schoolInputField.value = clean(schoolName.textContent);
+function setStatus(text, ok=true){
+  statusPill.textContent = text;
+  statusPill.classList.toggle("bad", !ok);
+  statusPill.style.borderColor = ok ? "#0aa38b55" : "#fecaca";
+  statusPill.style.background = ok ? "#fff" : "#fff1f2";
+  statusPill.style.color = ok ? "var(--moe)" : "#991b1b";
 }
-function syncHeaderFromInputs(){
-  if(clean(eduInputField.value)) eduName.textContent = clean(eduInputField.value);
-  if(clean(schoolInputField.value)) schoolName.textContent = clean(schoolInputField.value);
-
-  eduName2.textContent = clean(eduName.textContent) || "—";
-  schoolName2.textContent = clean(schoolName.textContent) || "—";
-}
-eduName.addEventListener("input", syncInputsFromHeader);
-schoolName.addEventListener("input", syncInputsFromHeader);
-eduInputField.addEventListener("input", syncHeaderFromInputs);
-schoolInputField.addEventListener("input", syncHeaderFromInputs);
-syncInputsFromHeader();
-syncHeaderFromInputs();
-
-/* اسم المدير */
-function syncPrincipalFromInput(){
-  const v = clean(principalInput.value) || "فهد حامد الزهراني";
-  ftPrincipal.textContent = v;
-  ftPrincipal2.textContent = v;
-}
-function syncPrincipalToInput(){
-  principalInput.value = clean(ftPrincipal.textContent) || "فهد حامد الزهراني";
-  ftPrincipal2.textContent = clean(ftPrincipal.textContent) || "فهد حامد الزهراني";
-}
-principalInput.addEventListener("input", syncPrincipalFromInput);
-ftPrincipal.addEventListener("input", syncPrincipalToInput);
-syncPrincipalToInput();
-
-/* =========================
-   نافذة العدسة
-   ========================= */
-toolsBtn.addEventListener("click", ()=>{
-  syncInputsFromHeader();
-  syncPrincipalToInput();
-  overlay.classList.add("open");
-});
-closeOverlay.addEventListener("click", ()=> overlay.classList.remove("open"));
-
-excelFile.addEventListener("change", (e)=>{
-  selectedFile = e.target.files && e.target.files[0] ? e.target.files[0] : null;
-});
-
-openWeakBtn.addEventListener("click", ()=>{
-  if(sheet2.classList.contains("hidden")){
-    setStatus("لا توجد قائمة ضعفاء بعد — نفّذ التحليل أولاً.");
-    return;
-  }
-  overlay.classList.remove("open");
-  sheet2.scrollIntoView({behavior:"smooth", block:"start"});
-});
-
-/* =========================
-   طباعة باسم ذكي
-   ========================= */
-let originalTitle = document.title;
-function buildPrintTitle(){
-  const subj = clean(subjectInput.value) || "مادة";
-  const stage = clean(stageInput.value) || "";
-  const sec = clean(sectionInput.value);
-  const secLabel = sec ? ` شعبة ${sec}` : "";
-  return `تحليل نتائج ${subj} ${stage}${secLabel}`.replace(/\s+/g," ").trim();
-}
-function printSmart(){
-  const t = buildPrintTitle();
-  originalTitle = document.title;
-  document.title = t;
-  window.print();
-  setTimeout(()=>{ document.title = originalTitle; }, 450);
-}
-printBtn.addEventListener("click", printSmart);
-
-/* =========================
-   قراءة جميع الشيتات (كل شيت = شعبة)
-   ========================= */
-function readWorkbookAllSheets(file){
-  return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.onload = (e)=>{
-      try{
-        const data = new Uint8Array(e.target.result);
-        const wb = XLSX.read(data,{type:"array"});
-        const sheets = wb.SheetNames.map(name=>{
-          const ws = wb.Sheets[name];
-          const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
-          return {name, rows};
-        });
-        resolve({wb, sheets});
-      }catch(err){reject(err);}
-    };
-    reader.onerror = reject;
-    reader.readAsArrayBuffer(file);
+function validateInputs(){
+  let ok = true;
+  required.forEach(el=>{
+    if(!clean(el.value)){ el.classList.add("invalid"); ok=false; }
+    else el.classList.remove("invalid");
   });
+  if(!selectedFile){ fileEl.classList.add("invalid"); ok=false; }
+  else fileEl.classList.remove("invalid");
+  setStatus(ok ? "جاهز للتحليل" : "أكمل الحقول الإلزامية", ok);
+  return ok;
 }
 
-/* استخراج رقم شعبة من اسم الشيت */
-function inferSectionFromSheetName(name){
+/* ========= Header binding ========= */
+const hEdu = $("hEdu"), hSchool = $("hSchool"), hSubject = $("hSubject");
+const hEdu2 = $("hEdu2"), hSchool2 = $("hSchool2"), hSubject2 = $("hSubject2");
+const tStage = $("tStage"), tTerm = $("tTerm"), tFull = $("tFull");
+const tStage2 = $("tStage2"), tTerm2 = $("tTerm2"), tFull2 = $("tFull2");
+const fTeacher = $("fTeacher"), fPrincipal = $("fPrincipal");
+const fTeacher2 = $("fTeacher2"), fPrincipal2 = $("fPrincipal2");
+
+function syncHeader(){
+  const edu = clean(inEdu.value) || "—";
+  const school = clean(inSchool.value) || "—";
+  const subject = clean(inSubject.value) || "—";
+  const stage = clean(inStage.value) || "—";
+  const term = clean(inTerm.value) || "—";
+  const teacher = clean(inTeacher.value) || "—";
+  const principal = clean(inPrincipal.value) || "—";
+
+  hEdu.textContent = edu; hSchool.textContent = school; hSubject.textContent = subject;
+  hEdu2.textContent = edu; hSchool2.textContent = school; hSubject2.textContent = subject;
+
+  tStage.textContent = stage; tTerm.textContent = term;
+  tStage2.textContent = stage; tTerm2.textContent = term;
+
+  fTeacher.textContent = teacher; fPrincipal.textContent = principal;
+  fTeacher2.textContent = teacher; fPrincipal2.textContent = principal;
+}
+
+/* ========= Fit header text (NO truncation) =========
+   يقلص الخط تدريجياً إذا زاد النص عن مساحة الهيدر (عرض/ارتفاع)
+*/
+function fitHeaderText(boxId, overlaySelector){
+  const box = $(boxId);
+  if(!box) return;
+  const overlay = box.closest(".headerOverlay");
+  if(!overlay) return;
+
+  // إعادة أحجام افتراضية
+  const edu = box.querySelector(".edu");
+  const school = box.querySelector(".school");
+  const title = box.querySelector(".title");
+  const base = {edu:16, school:15, title:14.5};
+
+  edu.style.fontSize = base.edu + "px";
+  school.style.fontSize = base.school + "px";
+  title.style.fontSize = base.title + "px";
+  box.style.transform = "none";
+
+  // قلّص حتى لا يتجاوز المساحة
+  const maxW = overlay.clientWidth - 24;
+  const maxH = overlay.clientHeight - 18;
+
+  let guard = 0;
+  while(guard < 30 && (box.scrollWidth > maxW || box.scrollHeight > maxH)){
+    guard++;
+    edu.style.fontSize = (parseFloat(getComputedStyle(edu).fontSize) - 0.6) + "px";
+    school.style.fontSize = (parseFloat(getComputedStyle(school).fontSize) - 0.6) + "px";
+    title.style.fontSize = (parseFloat(getComputedStyle(title).fontSize) - 0.6) + "px";
+  }
+}
+
+function fitAllHeaderText(){
+  fitHeaderText("headerTextFit");
+  fitHeaderText("headerTextFit2");
+}
+
+["input","change"].forEach(evt=>{
+  [inEdu,inSchool,inPrincipal,inTeacher,inSubject,inStage,inTerm,inFullMode,inSections].forEach(el=>{
+    el.addEventListener(evt, ()=>{ validateInputs(); syncHeader(); fitAllHeaderText(); });
+  });
+});
+window.addEventListener("resize", ()=> fitAllHeaderText());
+
+/* عند تحميل صورة الهيدر (لتصبح أبعاد overlay صحيحة) */
+[$("headerImg1"), $("headerImg2")].forEach(img=>{
+  if(!img) return;
+  img.addEventListener("load", ()=> setTimeout(fitAllHeaderText, 50));
+});
+
+syncHeader();
+setTimeout(fitAllHeaderText, 120);
+validateInputs();
+
+/* ========= Sections ========= */
+function parseSections(v){
+  const s = normalizeDigits(v||"").trim();
+  if(!s) return [];
+  return s.split(/[,،/|]+/).map(x=>x.trim()).filter(Boolean);
+}
+function inferSectionFromSheet(name){
   const s = normalizeDigits(name||"").trim();
   const m = s.match(/(?:شعبة|شعبه|ش|قسم|ق)\s*([0-9]+)/) || s.match(/([0-9]{1,2})/);
   return m ? String(m[1]) : clean(name||"");
 }
 
-/* بناء سجلات من شيت (مع إضافة section = رقم الشعبة من اسم الشيت) */
-function buildRecordsFromRows(rows, sheetName){
-  if(!rows || !rows.length) return [];
-  const sheetSection = inferSectionFromSheetName(sheetName);
-
-  // ابحث عن صف الهيدر
-  let h=-1;
-  for(let i=0;i<Math.min(rows.length,140);i++){
-    const row = rows[i] || [];
-    const joined = row.map(c=>c==null?"":String(c)).join(" ");
-    if(/اسم\s*الطالب/.test(joined)) { h=i; break; }
+/* ========= Column detection ========= */
+function normToken(t){
+  return clean(normalizeDigits(String(t||"")).toLowerCase())
+    .replace(/[()（）【】\[\]{}]/g," ")
+    .replace(/[:：]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+const P = {
+  name:[/اسم\s*الطالب/,/اسم\s*المتعلم/,/\bالطالب\b/,/\bname\b/],
+  id:[/هوية/,/السجل\s*المدني/,/رقم\s*الهوية/,/\bid\b/],
+  gradeFinal:[/نهاية\s*فصل/,/نهائي/,/final/,/الدرجة\s*النهائية/],
+  gradeSum:[/المجموع/,/مجموع/,/الدرجة/,/total/,/score/],
+  section:[/الشعبة/,/الشعبه/,/القسم/]
+};
+function detectHeaderRow(rows){
+  let bestI=-1, bestS=-1;
+  const scan=Math.min(rows.length, 250);
+  for(let i=0;i<scan;i++){
+    const row=rows[i]||[];
+    const toks=row.map(normToken).filter(Boolean);
+    if(!toks.length) continue;
+    const joined=" "+toks.join(" ")+" ";
+    let s=0;
+    if(P.name.some(rx=>rx.test(joined))) s+=5;
+    if(P.id.some(rx=>rx.test(joined))) s+=4;
+    if(P.gradeFinal.some(rx=>rx.test(joined))) s+=6;
+    if(P.gradeSum.some(rx=>rx.test(joined))) s+=4;
+    if(P.section.some(rx=>rx.test(joined))) s+=2;
+    if(toks.length>=4) s+=1;
+    if(s>bestS){bestS=s; bestI=i;}
   }
-
-  // fallback: أي أرقام درجات فقط
-  if(h===-1){
-    const nums=[];
-    for(const row of rows){
-      if(!row) continue;
-      for(const cell of row){
-        if(isNumeric(cell)){
-          const n=toNumber(cell);
-          if(n>=0 && n<=200) nums.push(n);
-        }
-      }
-    }
-    return nums.map(v=>({student:"—", id:"—", grade:v, subject:"", section:sheetSection, sheet:sheetName}));
+  return bestI;
+}
+function pickCol(tokens, rxList){
+  for(let i=0;i<tokens.length;i++){
+    const t=" "+tokens[i]+" ";
+    if(rxList.some(rx=>rx.test(t))) return i;
   }
+  return -1;
+}
+function buildRecordsFromSheet(rows, sheetName){
+  const h = detectHeaderRow(rows);
+  if(h<0) return [];
+  const header=rows[h]||[];
+  const tokens=header.map(normToken);
 
-  const headers = rows[h] || [];
-  let nameCol=-1,idCol=-1,subCol=-1,secCol=-1,gradeCol=-1;
+  const nameCol = pickCol(tokens, P.name);
+  const idCol   = pickCol(tokens, P.id);
+  const sectionCol = pickCol(tokens, P.section);
 
-  headers.forEach((cell,idx)=>{
-    if(cell==null) return;
-    const s=String(cell);
-    if(nameCol===-1 && /اسم/.test(s) && /طالب/.test(s)) nameCol=idx;
-    if(idCol===-1 && /هوية|السجل|المدني/.test(s)) idCol=idx;
-    if(subCol===-1 && /المادة|اسم المادة|المقرر/.test(s)) subCol=idx;
-    if(secCol===-1 && /الشعبة|الشعبه|القسم|شعبة/.test(s)) secCol=idx;
-    if(gradeCol===-1 && /مجموع|المجموع|الدرجة|الدرجه|النهائية|نهائي|final/i.test(s)) gradeCol=idx;
-  });
+  let gradeCol = pickCol(tokens, P.gradeFinal);
+  if(gradeCol<0) gradeCol = pickCol(tokens, P.gradeSum);
 
-  // إذا كانت الدرجة في صف تالي
-  if(gradeCol===-1){
-    const r2 = rows[h+1] || [];
-    r2.forEach((cell,idx)=>{
-      if(cell==null) return;
-      const s=String(cell);
-      if(gradeCol===-1 && /مجموع|المجموع|الدرجة|الدرجه|النهائية|نهائي|final/i.test(s)) gradeCol=idx;
-    });
-  }
-
-  // استدلال العمود الأفضل للدرجات
-  if(gradeCol===-1){
-    let best=-1,bScore=-1;
-    const maxCols = Math.max(...rows.map(r=>r? r.length:0));
-    for(let c=0;c<maxCols;c++){
-      const vals=[];
+  if(gradeCol<0){
+    let best=-1, bestCnt=-1, bestVar=-1;
+    for(let c=0;c<tokens.length;c++){
+      let cnt=0, vals=[];
       for(let r=h+1;r<rows.length;r++){
-        const row=rows[r];
-        if(!row || c>=row.length) continue;
-        const v=row[c];
+        const v=(rows[r]||[])[c];
         if(isNumeric(v)){
           const n=toNumber(v);
-          if(n>=0 && n<=200) vals.push(n);
+          if(n>=0 && n<=200){cnt++; vals.push(n);}
         }
       }
-      if(vals.length>=10){
+      if(cnt>=6){
         const mean = vals.reduce((a,b)=>a+b,0)/vals.length;
-        if(mean>bScore){bScore=mean;best=c;}
+        const vari = vals.reduce((a,b)=>a+(b-mean)*(b-mean),0)/vals.length;
+        if(cnt>bestCnt || (cnt===bestCnt && vari>bestVar)){
+          bestCnt=cnt; bestVar=vari; best=c;
+        }
       }
     }
     gradeCol=best;
   }
 
+  const sectionFromSheet = inferSectionFromSheet(sheetName);
   const out=[];
   for(let r=h+1;r<rows.length;r++){
-    const row=rows[r];
-    if(!row) continue;
-
-    const nameRaw = nameCol>=0 ? row[nameCol] : null;
-    const idRaw   = idCol>=0 ? row[idCol] : null;
-    const gRaw    = gradeCol>=0 ? row[gradeCol] : null;
-    const sRaw    = subCol>=0 ? row[subCol] : null;
-    const secRaw  = secCol>=0 ? row[secCol] : null;
-
-    const name = nameRaw ? String(nameRaw).trim() : "";
-    const id   = idRaw ? normalizeDigits(idRaw).replace(/[^\d]/g,"") : "";
+    const row=rows[r]||[];
+    const name = nameCol>=0 ? clean(row[nameCol]) : "";
+    const id   = idCol>=0 ? normalizeDigits(row[idCol]).replace(/[^\d]/g,"") : "";
+    const gRaw = gradeCol>=0 ? row[gradeCol] : null;
     const grade = isNumeric(gRaw) ? toNumber(gRaw) : NaN;
-    const subject = sRaw ? String(sRaw).trim() : "";
-    const section = clean(secRaw) ? normalizeDigits(String(secRaw)).trim() : sheetSection;
 
     if(!name && !id) continue;
-    if(!isFinite(grade) || grade<0 || grade>200) continue;
-    if(/الفصل|الشعبة|الشعبه|المادة|الصف|كشف رصد|المجموع|متوسط|الحد الأدنى|الحد الأقصى/i.test(name)) continue;
+    if(!Number.isFinite(grade) || grade<0 || grade>200) continue;
 
-    out.push({student:name||"طالب بدون اسم", id:id||"—", grade, subject, section:section||sheetSection, sheet:sheetName});
+    const sec = sectionCol>=0 ? clean(row[sectionCol]) : "";
+    out.push({
+      student: name || "—",
+      id: id || "—",
+      grade,
+      section: clean(sec) ? normalizeDigits(sec) : sectionFromSheet
+    });
   }
   return out;
 }
 
-/* تحديد الشُعب المطلوبة من الإدخال (إن وجد) */
-function parseSectionsInput(v){
-  const s = normalizeDigits(v||"").trim();
-  if(!s) return [];
-  return s.split(/[,،/|]+/).map(x=>x.trim()).filter(Boolean);
-}
-function filterByWantedSections(list){
-  const secs = parseSectionsInput(sectionInput.value);
-  if(!secs.length) return list;
-  const set = new Set(secs.map(String));
-  return list.filter(r=> set.has(String(clean(r.section))) || set.has(String(inferSectionFromSheetName(r.sheet))));
-}
-
-/* استدلال الدرجة الكاملة (مهم ودقيق) */
-function inferFullScoreSmart(list){
-  // 1) إن كان المستخدم حدده
-  if(scaleMode.value==="period40") return 40;
-  if(scaleMode.value==="period60") return 60;
-  if(scaleMode.value==="final100") return 100;
-
-  // 2) استدلال من أقصى درجة مع الالتزام بالقيم الأكثر شيوعًا
-  const maxGrade = Math.max(...list.map(r=>r.grade));
-  const common = [40,60,100,50,30,20];
-  // إذا كانت الدرجات كسور بسيطة (مثل 39.5) نقرّب لأعلى مرشح
-  let inferred = maxGrade;
-  let best = Infinity;
-
+/* ========= Full score + weak rule ========= */
+function inferFullScoreSmart(list, mode){
+  if(mode!=="auto") return Number(mode);
+  const mx = Math.max(...list.map(r=>r.grade));
+  const common=[40,60,100,50,30,20];
+  let best=Infinity, pick=mx;
   for(const c of common){
-    if(c >= maxGrade && Math.abs(c-maxGrade) <= 8){
-      const d = Math.abs(c-maxGrade);
-      if(d < best){best=d; inferred=c;}
+    if(c>=mx && Math.abs(c-mx)<=10){
+      const d=Math.abs(c-mx);
+      if(d<best){best=d; pick=c;}
     }
   }
-
-  // 3) fallback: إذا كان maxGrade قريب من قيمة صحيحة (مثل 39.8) نرفعها لأقرب 0.5 ثم نقرّب
-  if(!common.includes(inferred)){
-    const round05 = Math.round(maxGrade*2)/2;
-    for(const c of common){
-      if(c >= round05 && Math.abs(c-round05) <= 8){
-        const d = Math.abs(c-round05);
-        if(d < best){best=d; inferred=c;}
-      }
-    }
-  }
-
-  // 4) fallback نهائي: أعلى درجة مقربة لأعلى عدد صحيح
-  if(!isFinite(inferred) || inferred<=0) inferred = Math.ceil(maxGrade);
-  inferred = Math.max(1, Math.round(inferred));
-
-  return inferred;
+  if(!common.includes(pick)) pick = Math.ceil(mx);
+  return Math.max(1, Math.round(pick));
 }
-
-/* ✅ قاعدة الضعفاء: أقل من 25% من الدرجة الكلية (بالرياضيات) */
-function weakThreshold(fullScore){
-  // أقل من 25% (strictly less)
-  return (fullScore * 0.25);
+function weakCutoff(full){
+  if(full===100) return 49;
+  if(full===60) return 19;
+  if(full===40) return 9;
+  return Math.max(0, Math.floor(full*0.5)-1);
 }
-
-/* مستويات التقديرات (كما هي) */
-function level(score, fullScore){
-  const p = (score/fullScore)*100;
+function band(score, full){
+  const p = pct(score,full);
   if(p>=90) return "ex";
   if(p>=80) return "vg";
   if(p>=70) return "gd";
-  if(p>=60) return "ac";
+  if(p>=50) return "ac";
   return "wk";
 }
-
-/* نطاقات التقديرات */
-function setRanges(fullScore){
-  const exMin=Math.round(fullScore*0.90);
-  const vgMin=Math.round(fullScore*0.80);
-  const gdMin=Math.round(fullScore*0.70);
-  const acMin=Math.round(fullScore*0.60);
-
-  rangeExcellent.textContent=`${exMin}-${fullScore}`;
-  rangeVGood.textContent=`${vgMin}-${exMin-1}`;
-  rangeGood.textContent=`${gdMin}-${vgMin-1}`;
-  rangeAcceptable.textContent=`${acMin}-${gdMin-1}`;
-  rangeWeak.textContent=`0-${acMin-1}`;
+function ranges(full){
+  const ex0 = Math.ceil(full*0.90);
+  const vg0 = Math.ceil(full*0.80);
+  const gd0 = Math.ceil(full*0.70);
+  const ac0 = Math.ceil(full*0.50);
+  const fmt = (x)=> (Math.round(x*100)/100).toString().replace(/\.0+$/,"");
+  return {
+    ex:`${fmt(ex0)} - ${fmt(full)}`,
+    vg:`${fmt(vg0)} - ${fmt(ex0-0.01)}`,
+    gd:`${fmt(gd0)} - ${fmt(vg0-0.01)}`,
+    ac:`${fmt(ac0)} - ${fmt(gd0-0.01)}`,
+    wk:`0 - ${fmt(ac0-0.01)}`
+  };
+}
+function stats(list, full){
+  const n=list.length;
+  const grades=list.map(x=>x.grade);
+  const sum=grades.reduce((a,b)=>a+b,0);
+  const mx=Math.max(...grades);
+  const mn=Math.min(...grades);
+  const avg=n? sum/n : 0;
+  const rate = pct(avg, full);
+  const c={ex:0,vg:0,gd:0,ac:0,wk:0};
+  list.forEach(r=> c[band(r.grade,full)]++ );
+  return {n,sum,mx,mn,avg,rate,c};
 }
 
-/* ✅ بنك خطط علاجية متنوعة (مختصرة ومهنية) */
+/* ========= Plans ========= */
 const planBank = [
-  {key:"A", text:"خطة علاج مهاري: تحديد مهارتين أساسيتين + تدريب موجه + تقويم قصير أسبوعي + إعادة قياس."},
-  {key:"B", text:"علاج أخطاء شائعة: تحليل ورقة الإجابة + تغذية راجعة فردية + واجب علاجي قصير + متابعة تقدم."},
-  {key:"C", text:"تعزيز تدريجي: ملف إنجاز مختصر + أوراق عمل علاجية + حصص دعم + قياس بعد أسبوعين."},
-  {key:"D", text:"تدخل فردي: هدف محدد (SMART) + تدريب على نماذج مشابهة + متابعة ولي الأمر + قياس تحسن."},
-  {key:"E", text:"دعم مهارات الاختبار: إدارة وقت + استراتيجيات حل + تدريب على بنود متنوعة + اختبار قصير بعد كل درس."},
-  {key:"F", text:"برنامج تقوية مركّز: مجموعات صغيرة + تعلم تعاوني + أنشطة علاج + تقويم مرحلي + توثيق أثر."}
+  "تعزيز المهارات الأساسية: تدريب يومي قصير (10 دقائق) + ورقة عمل علاجية + تقويم أسبوعي وتوثيق التحسن.",
+  "تصحيح الأخطاء الشائعة: تشخيص نوع الخطأ + شرح مصغر + تدريب موجه + إعادة قياس بعد أسبوع.",
+  "دعم بمجموعات صغيرة: تعلم تعاوني + بنك أسئلة متدرج (سهل→متوسط) + واجب علاجي منزلي.",
+  "خطة مشتركة مع ولي الأمر: مهام منزلية محددة + متابعة أسبوعية مختصرة + اختبار محاكاة بعد كل محور.",
+  "أهداف قصيرة قابلة للقياس: مهارة واحدة/أسبوع + تغذية راجعة فردية + رصد تقدم حتى الوصول للمستوى المطلوب."
 ];
-
-function pickPlan(rec, fullScore){
-  // تنويع ذكي حسب نسبة الطالب
-  const pct = (rec.grade/fullScore)*100;
-  if(pct < 10) return planBank[0].text;
-  if(pct < 15) return planBank[1].text;
-  if(pct < 20) return planBank[2].text;
-  if(pct < 25) return planBank[3].text;
-  return planBank[4].text;
+function pickPlanByGap(gap, full){
+  const p = pct(full-gap, full);
+  if(p < 20) return planBank[0];
+  if(p < 35) return planBank[1];
+  if(p < 50) return planBank[2];
+  if(p < 65) return planBank[3];
+  return planBank[4];
 }
 
-/* =========================
-   Chart plugins
-   ========================= */
-const centerLabelPlugin = {
-  id:"centerLabel",
+/* ========= Charts ========= */
+const centerText = {
+  id:"centerText",
   afterDraw(chart, args, opts){
     const t = opts && opts.text;
     if(!t) return;
     const {ctx, chartArea:{left,right,top,bottom}} = chart;
     const x=(left+right)/2, y=(top+bottom)/2;
     ctx.save();
-    ctx.font = "900 14px Tajawal, system-ui";
+    ctx.font="900 16px Tajawal, system-ui";
     ctx.fillStyle="#111827";
     ctx.textAlign="center";
     ctx.textBaseline="middle";
@@ -1295,318 +855,282 @@ const centerLabelPlugin = {
     ctx.restore();
   }
 };
-const barValuePlugin = {
-  id:"barValue",
-  afterDatasetsDraw(chart){
-    if(chart.config.type!=="bar") return;
-    const {ctx} = chart;
-    const ds = chart.data.datasets[0];
-    const meta = chart.getDatasetMeta(0);
-    ctx.save();
-    ctx.font="900 12px Tajawal, system-ui";
-    ctx.fillStyle="#111827";
-    ctx.textAlign="center";
-    ds.data.forEach((v,i)=>{
-      const el = meta.data[i];
-      if(!el) return;
-      const p = el.getProps(["x","y"], true);
-      ctx.fillText(v, p.x, p.y + 16);
-    });
-    ctx.restore();
-  }
-};
-Chart.register(centerLabelPlugin, barValuePlugin);
+Chart.register(centerText);
 
-/* =========================
-   الرسوم
-   ========================= */
-function setupCharts(){
-  const donutCfg = [
-    {id:"dWeak",  col:"#ef4444"},
-    {id:"dAcc",   col:"#f59e0b"},
-    {id:"dGood",  col:"#3b82f6"},
-    {id:"dVGood", col:"#10b981"},
-    {id:"dEx",    col:"#22c55e"}
-  ];
-
-  donutCfg.forEach(c=>{
-    const ctx = document.getElementById(c.id).getContext("2d");
-    donuts[c.id]=new Chart(ctx,{
-      type:"doughnut",
-      data:{
-        labels:["النسبة","الباقي"],
-        datasets:[{data:[0,100],backgroundColor:[c.col,"#e5e7eb"],borderWidth:0}]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:true,
-        aspectRatio:1,
-        animation:false,
-        plugins:{
-          legend:{display:false},
-          tooltip:{enabled:false},
-          centerLabel:{text:"0%"}
-        },
-        cutout:"78%"
-      }
-    });
-  });
-
-  const bctx = document.getElementById("barLevels").getContext("2d");
-  bar = new Chart(bctx,{
-    type:"bar",
-    data:{
-      labels:["ضعيف","مقبول","جيد","جيد جدًا","ممتاز"],
-      datasets:[{
-        data:[0,0,0,0,0],
-        backgroundColor:["#ef4444","#f59e0b","#3b82f6","#10b981","#22c55e"],
-        borderRadius:14,
-        maxBarThickness:72,
-        categoryPercentage:0.68,
-        barPercentage:0.88
-      }]
-    },
+function donut(el, color){
+  const ctx=$(el).getContext("2d");
+  return new Chart(ctx,{
+    type:"doughnut",
+    data:{datasets:[{data:[0,100],backgroundColor:[color,"#e5e7eb"],borderWidth:0}]},
     options:{
-      responsive:true,
-      maintainAspectRatio:false,
+      responsive:true, maintainAspectRatio:true, aspectRatio:1,
       animation:false,
-      plugins:{legend:{display:false},barValue:{}},
-      scales:{
-        x:{ticks:{font:{family:"Tajawal",size:12,weight:"800"}}},
-        y:{
-          beginAtZero:true,
-          ticks:{stepSize:1,font:{family:"Tajawal",size:11,weight:"800"}}
-        }
-      }
+      plugins:{legend:{display:false},tooltip:{enabled:false},centerText:{text:"0%"}},
+      cutout:"80%"
     }
   });
 }
-function updateDonut(id, pct){
-  const ch = donuts[id]; if(!ch) return;
-  const p = clamp(pct,0,100);
+function setDonut(ch, percent){
+  const p=Math.max(0,Math.min(100,percent));
   ch.data.datasets[0].data=[p,100-p];
-  ch.options.plugins.centerLabel.text = `${Math.round(p)}%`;
+  ch.options.plugins.centerText.text = `${Math.round(p)}%`;
   ch.update();
 }
+const css = getComputedStyle(document.documentElement);
+const chWk = donut("dWk", css.getPropertyValue("--wk").trim());
+const chAc = donut("dAc", css.getPropertyValue("--ac").trim());
+const chGd = donut("dGd", css.getPropertyValue("--gd").trim());
+const chVg = donut("dVg", css.getPropertyValue("--vg").trim());
+const chEx = donut("dEx", css.getPropertyValue("--ex").trim());
 
-/* =========================
-   تحديث الواجهة
-   ========================= */
-function fillHeader(fullScore){
-  const stage = clean(stageInput.value) || "—";
-  const subj  = clean(subjectInput.value) || "—";
-  const term  = clean(termInput.value) || clean(periodInput.value) || "—";
-  const teacher = clean(teacherInput.value) || "—";
-
-  titleSubject.textContent = subj !== "—" ? subj : (stage !== "—" ? stage : "—");
-
-  stageField.textContent = stage;
-  subjectField.textContent = subj;
-  termField.textContent = term;
-  teacherField.textContent = teacher;
-  maxScoreField.textContent = fullScore;
-
-  ftTeacher.textContent = teacher;
-
-  stageField2.textContent = stage;
-  subjectField2.textContent = subj;
-  termField2.textContent = term;
-  teacherField2.textContent = teacher;
-  maxScoreField2.textContent = fullScore;
-
-  weakTitleSubject.textContent = subj !== "—" ? subj : "—";
-  weakTitleStage.textContent = stage !== "—" ? stage : "—";
-  ftTeacher2.textContent = teacher;
-
-  syncHeaderFromInputs();
-  syncPrincipalFromInput();
-}
-
-function computeStats(list, fullScore){
-  const n=list.length;
-  const sum = list.reduce((a,r)=>a+r.grade,0);
-  const max = Math.max(...list.map(r=>r.grade));
-  const min = Math.min(...list.map(r=>r.grade));
-  const avg = n ? (sum/n) : 0;
-  const avgPct = fullScore ? (avg/fullScore*100) : 0;
-
-  const c = {ex:0,vg:0,gd:0,ac:0,wk:0};
-  list.forEach(r=>{ c[level(r.grade, fullScore)]++; });
-
-  return {n,sum,max,min,avg,avgPct,c};
-}
-
-function setCounts(stats){
-  countExcellent.textContent = stats.c.ex;
-  countVGood.textContent = stats.c.vg;
-  countGood.textContent = stats.c.gd;
-  countAcceptable.textContent = stats.c.ac;
-  countWeak.textContent = stats.c.wk;
-
-  statN.textContent = stats.n;
-  statSum.textContent = stats.sum.toFixed(0);
-  statMax.textContent = stats.max.toFixed(0);
-  statMin.textContent = stats.min.toFixed(0);
-  statAvg.textContent = stats.avg.toFixed(1);
-  statPct.textContent = `${stats.avgPct.toFixed(1)}%`;
-}
-
-function setCharts(stats){
-  const n = stats.n || 1;
-  const pct = (x)=> (x/n)*100;
-
-  updateDonut("dWeak",  pct(stats.c.wk));
-  updateDonut("dAcc",   pct(stats.c.ac));
-  updateDonut("dGood",  pct(stats.c.gd));
-  updateDonut("dVGood", pct(stats.c.vg));
-  updateDonut("dEx",    pct(stats.c.ex));
-
-  pWeak.textContent  = `${pct(stats.c.wk).toFixed(1)}% (${stats.c.wk})`;
-  pAcc.textContent   = `${pct(stats.c.ac).toFixed(1)}% (${stats.c.ac})`;
-  pGood.textContent  = `${pct(stats.c.gd).toFixed(1)}% (${stats.c.gd})`;
-  pVGood.textContent = `${pct(stats.c.vg).toFixed(1)}% (${stats.c.vg})`;
-  pEx.textContent    = `${pct(stats.c.ex).toFixed(1)}% (${stats.c.ex})`;
-
-  if(bar){
-    bar.data.datasets[0].data=[stats.c.wk, stats.c.ac, stats.c.gd, stats.c.vg, stats.c.ex];
-    bar.update();
+const barChart = new Chart($("bar").getContext("2d"),{
+  type:"bar",
+  data:{
+    labels:["ضعيف","مقبول","جيد","جيد جداً","ممتاز"],
+    datasets:[{
+      data:[0,0,0,0,0],
+      backgroundColor:["#ff5a5f","#f08b2f","#3f94e6","#2fb1ab","#35b46f"],
+      borderRadius:14,
+      maxBarThickness:80
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    animation:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{beginAtZero:true, ticks:{font:{family:"Tajawal",weight:"900"}}},
+      x:{ticks:{font:{family:"Tajawal",weight:"900"}}}
+    }
   }
+});
+
+/* ========= Fit printing ========= */
+const fitRoot = $("fitRoot");
+const fitRoot2 = $("fitRoot2");
+const page2 = $("page2");
+
+function computeFitScale(rootEl, pageEl){
+  const pageRect = pageEl.getBoundingClientRect();
+  const rootRect = rootEl.getBoundingClientRect();
+  const availH = pageRect.height;
+  const usedH  = rootRect.height;
+  if(usedH <= availH) return 1;
+  const safe = 0.985;
+  return Math.max(0.84, (availH / usedH) * safe);
+}
+function applyFit(rootEl, pageEl){
+  rootEl.style.setProperty("--fitScale", 1);
+  requestAnimationFrame(()=> requestAnimationFrame(()=>{
+    const s = computeFitScale(rootEl, pageEl);
+    rootEl.style.setProperty("--fitScale", s.toFixed(4));
+  }));
+}
+function fitAllPages(){
+  applyFit(fitRoot, $("page1"));
+  if(!page2.classList.contains("hidden")) applyFit(fitRoot2, $("page2"));
 }
 
-/* ✅ قاعدة الضعفاء (رياضياً) + توليد صفحة الضعفاء تلقائيًا */
-function renderWeakPage(list, fullScore){
-  const thr = weakThreshold(fullScore);                 // 25%
-  const thrLabel = `${(thr).toFixed(2)}`.replace(/\.00$/,"");
-  const note = `قاعدة الضعفاء: أقل من 25% من الدرجة الكلية (أقل من ${thrLabel} من ${fullScore}).`;
+/* ========= Read files ========= */
+function readWorkbook(file){
+  return new Promise((resolve,reject)=>{
+    const fr=new FileReader();
+    fr.onload=(e)=>{
+      try{
+        const data=new Uint8Array(e.target.result);
+        const wb=XLSX.read(data,{type:"array"});
+        const sheets = wb.SheetNames.map(name=>{
+          const ws=wb.Sheets[name];
+          const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+          return {name, rows};
+        });
+        resolve({sheets});
+      }catch(err){reject(err);}
+    };
+    fr.onerror=reject;
+    fr.readAsArrayBuffer(file);
+  });
+}
+function readCSV(file){
+  return new Promise((resolve,reject)=>{
+    const fr=new FileReader();
+    fr.onload=()=>{
+      const text = String(fr.result||"");
+      const rows = text.split(/\r?\n/).filter(Boolean).map(line=> line.split(/[,;\t]/).map(x=>x.trim()));
+      resolve({sheets:[{name:"CSV", rows}]});
+    };
+    fr.onerror=reject;
+    fr.readAsText(file,"utf-8");
+  });
+}
 
-  // ضعفاء = أقل من 25% (strict)
-  const weakList = list
-    .filter(r=> r.grade < thr)
-    .sort((a,b)=> (a.grade-b.grade) || String(a.section).localeCompare(String(b.section)));
+/* ========= Outputs ========= */
+const rEx = $("rEx"), rVg = $("rVg"), rGd = $("rGd"), rAc = $("rAc"), rWk = $("rWk");
+const cEx = $("cEx"), cVg = $("cVg"), cGd = $("cGd"), cAc = $("cAc"), cWk = $("cWk");
+const kN = $("kN"), kMax = $("kMax"), kMin = $("kMin"), kAvg = $("kAvg"), kRate = $("kRate"), kSum = $("kSum");
+const pEx = $("pEx"), pVg = $("pVg"), pGd = $("pGd"), pAc = $("pAc"), pWk = $("pWk");
+const weakRuleEl = $("weakRule"), weakCountEl = $("weakCount"), weakBody = $("weakBody");
 
-  weakRulePill.textContent = note;
-  weakCountPill.textContent = `عدد الضعفاء: ${weakList.length}`;
+let __fullScore = 0;
 
-  if(!weakList.length){
-    weakBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">لا يوجد طلاب ضمن فئة الضعفاء وفق قاعدة 25%.</td></tr>`;
-    sheet2.classList.add("hidden");
-    return {weakCount:0, note};
+function renderWeak(list, full){
+  const cutoff = weakCutoff(full);
+  const weak = list.filter(r=> r.grade <= cutoff).sort((a,b)=> a.grade-b.grade);
+
+  if(!weak.length){
+    page2.classList.add("hidden");
+    weakBody.innerHTML = `<tr><td colspan="6" style="text-align:center;font-weight:900;color:#6b7280;">لا يوجد طلاب ضمن فئة الضعفاء.</td></tr>`;
+    return;
   }
 
-  sheet2.classList.remove("hidden");
+  page2.classList.remove("hidden");
+  weakRuleEl.textContent = `قاعدة الضعفاء: من 0 إلى ${cutoff} (من أصل ${full})`;
+  weakCountEl.textContent = `عدد الضعفاء: ${weak.length}`;
 
-  const rows = weakList.map((r)=>{
-    const gap = Math.max(0, fullScore - r.grade);
-    const pct = (r.grade/fullScore)*100;
-    const plan = pickPlan(r, fullScore);
-    const sec = clean(r.section) || inferSectionFromSheetName(r.sheet) || "—";
-
+  weakBody.innerHTML = weak.map(r=>{
+    const p = pct(r.grade,full);
+    const gap = Math.max(0, full - r.grade);
+    const plan = pickPlanByGap(gap, full);
     return `
       <tr>
-        <td class="name">${r.student}</td>
-        <td class="id">${r.id || "—"}</td>
-        <td style="text-align:center;font-weight:900;">${sec}</td>
-        <td style="text-align:center;font-weight:900;">${r.grade.toFixed(0)}</td>
-        <td style="text-align:center;font-weight:900;color:#0f172a;">${pct.toFixed(1)}%</td>
-        <td style="text-align:center;font-weight:900;color:#991b1b;">${gap.toFixed(0)}</td>
-        <td>${plan}</td>
-        <td class="follow">
-          <label><input type="checkbox" />1</label>
-          <label><input type="checkbox" />2</label>
-          <label><input type="checkbox" />3</label>
-        </td>
+        <td class="nameCell">${clean(r.student)||"—"}</td>
+        <td class="center">${clean(r.section)||"—"}</td>
+        <td class="center">${Number(r.grade).toFixed(0)}</td>
+        <td class="center">${p.toFixed(1)}%</td>
+        <td class="center" style="color:#991b1b;">${gap.toFixed(0)}</td>
+        <td class="plan">${plan}</td>
       </tr>
     `;
   }).join("");
-
-  weakBody.innerHTML = rows;
-  return {weakCount:weakList.length, note};
 }
 
-/* =========================
-   التحليل: قراءة جميع الشيتات + كل شيت شعبة
-   ========================= */
-async function analyze(){
-  if(!selectedFile){
-    setStatus("فضلاً اختر ملف Excel أولاً.");
-    excelFile.classList.add("missing");
-    return;
-  }
-  excelFile.classList.remove("missing");
+/* ========= Download template (Excel) ========= */
+$("dlTemplate").addEventListener("click", ()=>{
+  // قالب بسيط للتعبئة ثم الاستيراد مرة أخرى
+  const edu = clean(inEdu.value) || "الإدارة العامة للتعليم بالمنطقة الشرقية";
+  const school = clean(inSchool.value) || "ثانوية اليعقوبي بالخبر";
+  const subject = clean(inSubject.value) || "المادة";
+  const stage = clean(inStage.value) || "الصف";
+  const fullMode = clean(inFullMode.value || "auto");
 
+  const rows = [
+    ["معلومات (لا تعدل إلا عند الحاجة)"],
+    ["إدارة التعليم", edu],
+    ["اسم المدرسة", school],
+    ["المادة", subject],
+    ["المرحلة/الصف", stage],
+    ["درجة الاختبار (auto/40/60/100)", fullMode],
+    [],
+    ["بيانات الطلاب"],
+    ["اسم الطالب","الشعبة","الدرجة"]
+  ];
+  // صفوف فارغة لتعبئة المستخدم
+  for(let i=0;i<20;i++) rows.push(["","",""]);
+
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  ws["!cols"] = [{wch:28},{wch:10},{wch:10}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Template");
+  const filename = `قالب-درجات-${subject}-${stage}.xlsx`.replace(/\s+/g,"-");
+  XLSX.writeFile(wb, filename);
+});
+
+/* ========= Analyze ========= */
+$("doAnalyze").addEventListener("click", async ()=>{
   try{
-    setStatus("جاري قراءة الملف وتحليل جميع الشيتات (كل شيت = شعبة) ...");
-    const {sheets} = await readWorkbookAllSheets(selectedFile);
+    if(!validateInputs()){
+      alert("فضلاً أكمل الحقول الإلزامية (بالأحمر) ثم ارفع ملف الدرجات.");
+      return;
+    }
 
-    // اجمع السجلات من كل الشيتات (كل شيت يمثل شعبة)
-    let all = [];
-    sheets.forEach(sh=>{
-      const recs = buildRecordsFromRows(sh.rows, sh.name);
-      all = all.concat(recs);
-    });
+    setStatus("جارٍ التحليل...", true);
+    syncHeader();
+    fitAllHeaderText();
 
-    // إزالة تكرارات (هوية + درجة + شعبة) لضمان الدقة
-    const seen = new Set();
-    all = all.filter(r=>{
-      const k = `${clean(r.id)}|${r.grade}|${clean(r.section)}|${clean(r.sheet)}|${clean(r.student)}`;
+    const f = selectedFile;
+    const name = (f?.name||"").toLowerCase();
+    const result = name.endsWith(".csv") ? await readCSV(f) : await readWorkbook(f);
+
+    let list=[];
+    (result.sheets||[]).forEach(sh=>{ list = list.concat(buildRecordsFromSheet(sh.rows, sh.name)); });
+
+    const want = parseSections(inSections.value);
+    if(want.length){
+      const set = new Set(want.map(String));
+      list = list.filter(r=> set.has(String(clean(r.section))) );
+    }
+
+    const seen=new Set();
+    list = list.filter(r=>{
+      const k = `${clean(r.id)}|${clean(r.section)}|${r.grade}|${clean(r.student)}`;
       if(seen.has(k)) return false;
       seen.add(k);
       return true;
     });
 
-    // فلترة الشُعب المطلوبة إن تم إدخالها
-    all = filterByWantedSections(all);
-
-    if(!all.length){
-      setStatus("لم يتم العثور على بيانات قابلة للتحليل. تحقق من الملف أو من إدخال الشُعب.");
+    if(!list.length){
+      setStatus("لم تُكتشف بيانات", false);
+      alert("لم يتم العثور على بيانات صالحة داخل الملف. الأفضل تصدير Excel مباشرة من نور أو استخدام قالب التعبئة.");
       return;
     }
 
-    records = all;
+    const full = inferFullScoreSmart(list, inFullMode.value);
+    __fullScore = full;
+    tFull.textContent = String(full);
+    tFull2.textContent = String(full);
 
-    // الدرجة الكلية من الملف/الوضع
-    const fullScore = inferFullScoreSmart(records);
+    const rr = ranges(full);
+    rEx.textContent = rr.ex; rVg.textContent = rr.vg; rGd.textContent = rr.gd; rAc.textContent = rr.ac; rWk.textContent = rr.wk;
 
-    fillHeader(fullScore);
-    setRanges(fullScore);
+    const st = stats(list, full);
+    cEx.textContent = st.c.ex; cVg.textContent = st.c.vg; cGd.textContent = st.c.gd; cAc.textContent = st.c.ac; cWk.textContent = st.c.wk;
 
-    const stats = computeStats(records, fullScore);
-    setCounts(stats);
-    setCharts(stats);
+    kN.textContent = st.n;
+    kMax.textContent = st.mx.toFixed(0);
+    kMin.textContent = st.mn.toFixed(0);
+    kAvg.textContent = st.avg.toFixed(1);
+    kRate.textContent = `${st.rate.toFixed(2)}%`;
+    kSum.textContent = st.sum.toFixed(0);
 
-    // صفحة الضعفاء (25% رياضياً)
-    const weakInfo = renderWeakPage(records, fullScore);
+    const n = st.n || 1;
+    const pc = (x)=> pct(x,n);
+    setDonut(chWk, pc(st.c.wk));
+    setDonut(chAc, pc(st.c.ac));
+    setDonut(chGd, pc(st.c.gd));
+    setDonut(chVg, pc(st.c.vg));
+    setDonut(chEx, pc(st.c.ex));
 
-    // رسالة توضيحية تشمل حقيقة أن كل شيت = شعبة
-    const sheetsInfo = sheets.map(s=>inferSectionFromSheetName(s.name)).filter(Boolean);
-    const uniqueSecs = Array.from(new Set(records.map(r=>clean(r.section)).filter(Boolean))).slice(0,12);
-    const secText = uniqueSecs.length ? `الشُعب المقروءة: ${uniqueSecs.join("، ")}.` : `تمت قراءة ${sheets.length} شيت.`;
+    pWk.textContent = `${pc(st.c.wk).toFixed(0)}%`;
+    pAc.textContent = `${pc(st.c.ac).toFixed(0)}%`;
+    pGd.textContent = `${pc(st.c.gd).toFixed(0)}%`;
+    pVg.textContent = `${pc(st.c.vg).toFixed(0)}%`;
+    pEx.textContent = `${pc(st.c.ex).toFixed(0)}%`;
 
-    setStatus(`تم التحليل بنجاح: ${stats.n} طالب/حالة. الدرجة الكلية: ${fullScore}. ${weakInfo.note} ${secText}`);
-    overlay.classList.remove("open");
+    barChart.data.datasets[0].data = [st.c.wk, st.c.ac, st.c.gd, st.c.vg, st.c.ex];
+    barChart.update();
 
-    // تحسين إظهار الرسوم بعد التحليل (خصوصًا للطباعة)
-    setTimeout(()=>{
-      Object.values(donuts).forEach(ch=>ch && ch.resize());
-      bar && bar.resize();
-    }, 80);
+    renderWeak(list, full);
 
+    ov.classList.remove("open");
+
+    setTimeout(()=>{ fitAllPages(); setTimeout(fitAllPages,120); }, 180);
+    setStatus("تم التحليل بنجاح", true);
   }catch(err){
     console.error(err);
-    setStatus("حدث خطأ أثناء القراءة/التحليل. تأكد أن ملف الإكسل صحيح ومن نور ثم أعد المحاولة.");
+    setStatus("حدث خطأ", false);
+    alert("حدث خطأ أثناء التحليل. تأكد من الملف ثم أعد المحاولة.");
   }
-}
+});
 
-/* =========================
-   أحداث
-   ========================= */
-analyzeBtn.addEventListener("click", analyze);
+/* ========= Print/save ========= */
+$("printSave").addEventListener("click", ()=>{
+  fitAllPages();
+  fitAllHeaderText();
+  setTimeout(()=> window.print(), 150);
+});
 
-/* تهيئة الرسوم مرة واحدة */
-setupCharts();
-
-/* بداية */
-setStatus("جاهز للتحليل. افتح العدسة لاختيار الملف ثم «بدء التحليل».");
+window.addEventListener("beforeprint", ()=>{ fitAllPages(); fitAllHeaderText(); });
+window.addEventListener("afterprint", ()=>{ fitAllPages(); fitAllHeaderText(); });
 </script>
 
 </body>
