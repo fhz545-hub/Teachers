@@ -26,22 +26,32 @@
 
   --pageW:210mm;
   --pageH:297mm;
-  --pageMargin:6mm;
-  --padX:7.5mm;
-  --padY:6.5mm;
+
+  /* هوامش الطباعة (متناسقة وتقلل الصفحات الفاضية) */
+  --pageMargin:7mm;
+
+  /* مساحة داخلية للصفحة */
+  --padX:7mm;
+  --padY:6mm;
 
   --r:16px;
   --shadow:0 10px 22px rgba(15,23,42,.14);
 
   --fs-kpi:12px;
-  --fs-val:12.6px;
-  --fs-table:11.4px;
-  --fs-foot:12.4px;
+  --fs-val:12.8px;
+  --fs-table:11.6px;
+  --fs-foot:12.6px;
 
   --donutSize:74px;
-  --barH:132px;
+
+  /* تكبير مخطط الأعمدة ليصل قرب نهاية الصفحة */
+  --barH:210px;
 
   --overlay:rgba(15,23,42,.35);
+
+  --danger:#ef4444;
+  --dangerBg:#fff1f2;
+  --dangerSoft:#fecaca;
 }
 
 *{box-sizing:border-box}
@@ -52,17 +62,13 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .page{min-height:var(--pageH); padding:var(--padY) var(--padX); position:relative;}
 .fitRoot{transform-origin:top center; transform:scale(var(--fitScale,1));}
 
-/* ===== Header banner (no background, no distortion, no cropping) =====
-   - الصورة بعرض 100% وارتفاع تلقائي => لا تشوه ولا اجتزاء
-   - النص داخل الهيدر لا يُقص (يتقلص تلقائياً إذا طال)
-*/
+/* ===== Header banner ===== */
 .headerWrap{
   margin:0;
   padding:0;
   width:100%;
   border-radius:18px;
   overflow:hidden;
-  /* لا خلفية إطلاقاً */
   background:transparent;
   box-shadow:none;
   position:relative;
@@ -70,8 +76,8 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .headerWrap img{
   display:block;
   width:100%;
-  height:auto;          /* مهم: لا تشوه */
-  object-fit:fill;      /* غير مؤثر مع height:auto */
+  height:auto;
+  object-fit:fill;
 }
 .headerOverlay{
   position:absolute;
@@ -83,27 +89,20 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
   padding:10px 14px;
   pointer-events:none;
 }
+
+/* نص الهيدر (مضبوط للطباعة + الجوال) */
 .headerText{
-  width:min(92%, 920px);
+  width:min(92%, 980px);
   color:#fff;
-  text-shadow:0 2px 10px rgba(0,0,0,.35);
+  text-shadow:0 2px 12px rgba(0,0,0,.38);
   font-weight:900;
-  line-height:1.18;
-  /* بدون ellipsis/قص */
+  line-height:1.2;
   white-space:normal;
   overflow:visible;
-  word-break:break-word;
 }
-.headerText .edu,
-.headerText .school,
-.headerText .title{
-  white-space:normal;   /* يسمح بالالتفاف عند الحاجة بدل الاجتزاء */
-  overflow:visible;
-  text-overflow:clip;
-}
-.headerText .edu{font-size:16px;}
-.headerText .school{font-size:15px;}
-.headerText .title{font-size:14.5px;}
+.headerText .edu{font-size:18px; letter-spacing:.2px;}
+.headerText .school{font-size:17px; letter-spacing:.15px;}
+.headerText .title{font-size:16px; margin-top:2px;}
 
 .afterHeaderTight{margin-top:8px;}
 
@@ -191,12 +190,19 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 
 .chartCard{margin-top:8px;border:2px solid #0aa38b55;border-radius:18px;padding:8px 8px 9px;}
 .chartTitle{text-align:center;color:var(--moe);font-weight:900;font-size:12.8px;margin:2px 0 8px;white-space:nowrap;}
-.donutsRow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:start;}
+
+/* donuts row */
+.donutsRow{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  align-items:start;
+}
 .donutItem{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;}
 .donutCanvas{width:var(--donutSize) !important;height:var(--donutSize) !important;}
 .donutLabel,.donutPct{font-weight:900;font-size:12.2px;white-space:nowrap;}
 
-.barCard{margin-top:8px;border:2px solid #0aa38b55;border-radius:18px;padding:8px 8px 9px;}
+.barCard{margin-top:8px;border:2px solid #0aa38b55;border-radius:18px;padding:8px 8px 10px;}
 .barCanvas{width:100% !important;height:var(--barH) !important;}
 
 .footer{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-weight:900;font-size:var(--fs-foot);color:#111827;}
@@ -218,11 +224,19 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .tbl th,.tbl td{border:1px solid #d1d5db;padding:7px 6px;vertical-align:top;}
 .tbl th{background:#f3f4f6;font-weight:900;white-space:nowrap;}
 .tbl td.center{text-align:center;font-weight:900;white-space:nowrap;}
-.tbl td.nameCell{white-space:nowrap;overflow:visible;} /* اسم بدون اجتزاء */
+.tbl td.nameCell{white-space:nowrap;overflow:visible;}
 .plan{line-height:1.6;}
 
 /* buttons */
-.fab{position:fixed;left:14px;bottom:14px;z-index:50;display:flex;gap:8px;flex-wrap:wrap;}
+.fab{
+  position:fixed;
+  left:14px;
+  bottom:14px;
+  z-index:50;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
 .btn{
   border:none;border-radius:14px;background:linear-gradient(135deg,var(--moe2),var(--moe));
   color:#fff;font-weight:900;font-family:inherit;padding:10px 14px;cursor:pointer;
@@ -248,44 +262,95 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .modalHead .t{font-weight:900;color:var(--moe);font-size:14px;white-space:nowrap;}
 .modalHead .x{border:none;background:transparent;font-size:18px;cursor:pointer;width:34px;height:34px;border-radius:10px;}
 .modalHead .x:hover{background:#f3f4f6;}
-.modalBody{padding:10px 12px 12px;}
+.modalBody{padding:10px 12px 10px;}
 .formGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 10px;}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0;}
 .field label{font-weight:900;color:#334155;font-size:11.8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .field input,.field select{
-  border:2px solid #cfd8dc;border-radius:12px;padding:9px 9px;font-family:inherit;
-  font-weight:900;background:#fff;font-size:12px;outline:none;
+  border:2px solid var(--dangerSoft);
+  background:var(--dangerBg);
+  border-radius:12px;
+  padding:9px 9px;
+  font-family:inherit;
+  font-weight:900;
+  font-size:12px;
+  outline:none;
 }
+.field input::placeholder{color:#991b1b; opacity:.9; font-weight:900;}
+.field select{color:#111827; background:#fff;}
+.field select{border-color:#cfd8dc;}
 .req{color:#b91c1c;font-weight:900;}
-.invalid{border-color:#ef4444 !important;background:#fff1f2 !important;}
+.invalid{border-color:var(--danger) !important;background:var(--dangerBg) !important;}
+.valid{border-color:#22c55e55 !important; background:#f0fdf4 !important;}
+
 .actions{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center;}
-.badge{margin-right:auto;border:2px solid #0aa38b55;color:var(--moe);background:#fff;font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px;white-space:nowrap;}
+.badge{
+  margin-right:auto;border:2px solid #0aa38b55;color:var(--moe);background:#fff;
+  font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px;white-space:nowrap;
+}
 .badge.bad{border-color:#fecaca;background:#fff1f2;color:#991b1b;}
 .note{
   margin-top:10px;border-radius:14px;border:1px solid #fed7aa;background:#fff7ed;
   padding:9px 10px;font-weight:800;color:#7c2d12;line-height:1.7;font-size:12px;
 }
 .note strong{font-weight:900;}
-
-/* print: منع صفحات فارغة */
-@media print{
-  @page{ size:A4 portrait; margin:var(--pageMargin); }
-  html,body{background:#fff;}
-  body{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
-  .fab,.overlay{display:none !important;}
-  .paper{width:var(--pageW) !important;}
-  .page{min-height:auto !important; height:auto !important; padding:var(--padY) var(--padX) !important;}
-  .pageBreak{break-before:page;}
-  .headerWrap,.metaBox,.card,.chartCard,.barCard,.footer,.weakCard{break-inside:avoid; page-break-inside:avoid;}
+.modalFooterTiny{
+  margin-top:10px;
+  text-align:center;
+  color:#94a3b8;
+  font-weight:800;
+  font-size:11px;
 }
 
+/* ====== PRINT OVERRIDES (هوامش + إزالة الصفحات الفاضية) ====== */
+@media print{
+  @page{ size:A4 portrait; margin:var(--pageMargin); }
+
+  html,body{background:#fff;}
+  body{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+
+  .fab,.overlay{display:none !important;}
+
+  .paper{width:var(--pageW) !important;}
+  .page{
+    min-height:auto !important;
+    height:auto !important;
+    padding:var(--padY) var(--padX) !important;
+  }
+
+  /* يمنع إنشاء صفحة إضافية بسبب حد أدنى للارتفاع */
+  .fitRoot{break-inside:avoid;}
+
+  /* لا تكسر داخل الكروت */
+  .headerWrap,.metaBox,.card,.chartCard,.barCard,.footer,.weakCard{break-inside:avoid; page-break-inside:avoid;}
+
+  /* دونات صف واحد ثابت */
+  .donutsRow{grid-template-columns:repeat(5,1fr) !important; gap:6px !important;}
+  .donutCanvas{width:72px !important;height:72px !important;}
+  .donutLabel,.donutPct{font-size:12px !important;}
+
+  /* الأعمدة أطول في الطباعة */
+  .barCanvas{height:225px !important;}
+}
+
+/* ===== Responsive ===== */
 @media (max-width:1100px){
   .formGrid{grid-template-columns:repeat(2,1fr);}
   .donutsRow{grid-template-columns:repeat(3,1fr);}
 }
 @media (max-width:700px){
-  .formGrid{grid-template-columns:1fr;}
+  .paper{width:100%;}
+  .page{padding:12px 12px;}
+  .gridMain{grid-template-columns:1fr;gap:8px;}
+  .metaRow{grid-template-columns:1fr;gap:8px;}
   .donutsRow{grid-template-columns:repeat(2,1fr);}
+  .headerText .edu{font-size:16px;}
+  .headerText .school{font-size:15px;}
+  .headerText .title{font-size:14px;}
+}
+@media (max-width:420px){
+  .donutCanvas{width:66px !important;height:66px !important;}
+  .headerText{width:94%;}
 }
 </style>
 </head>
@@ -298,7 +363,6 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
     <div class="fitRoot" id="fitRoot">
 
       <div class="headerWrap">
-        <!-- ضع الصورة في نفس المجلد بنفس الاسم تمامًا -->
         <img src="هيدر التحليل .png" alt="هيدر التحليل" id="headerImg1" />
         <div class="headerOverlay">
           <div class="headerText" id="headerTextFit">
@@ -443,32 +507,32 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
       <div class="formGrid">
         <div class="field">
           <label>إدارة التعليم <span class="req">*</span></label>
-          <input id="inEdu" placeholder="مثال: الإدارة العامة للتعليم بالمنطقة الشرقية" value="الإدارة العامة للتعليم بالمنطقة الشرقية" />
+          <input id="inEdu" class="invalid" placeholder="اكتب هنا إدارة التعليم" value="" />
         </div>
         <div class="field">
           <label>اسم المدرسة <span class="req">*</span></label>
-          <input id="inSchool" placeholder="مثال: ثانوية اليعقوبي بالخبر" value="ثانوية اليعقوبي بالخبر" />
+          <input id="inSchool" class="invalid" placeholder="اكتب هنا اسم المدرسة" value="" />
         </div>
         <div class="field">
           <label>اسم مدير المدرسة <span class="req">*</span></label>
-          <input id="inPrincipal" placeholder="مثال: فهد حامد الزهراني" value="فهد حامد الزهراني" />
+          <input id="inPrincipal" class="invalid" placeholder="اكتب هنا اسم مدير المدرسة" value="" />
         </div>
         <div class="field">
           <label>معلم المادة <span class="req">*</span></label>
-          <input id="inTeacher" placeholder="مثال: أحمد محمد ..." />
+          <input id="inTeacher" class="invalid" placeholder="اكتب هنا اسم معلم المادة" value="" />
         </div>
 
         <div class="field">
           <label>المادة <span class="req">*</span></label>
-          <input id="inSubject" placeholder="مثال: الرياضيات" />
+          <input id="inSubject" class="invalid" placeholder="اكتب هنا اسم المادة" value="" />
         </div>
         <div class="field">
           <label>المرحلة / الصف <span class="req">*</span></label>
-          <input id="inStage" placeholder="مثال: سادس ابتدائي" />
+          <input id="inStage" class="invalid" placeholder="اكتب هنا المرحلة/الصف" value="" />
         </div>
         <div class="field">
           <label>السنة / الفصل الدراسي (اختياري)</label>
-          <input id="inTerm" placeholder="مثال: الفصل الأول / 1447هـ" />
+          <input id="inTerm" placeholder="اكتب هنا السنة/الفصل (اختياري)" value="" style="border-color:#cfd8dc;background:#fff;" />
         </div>
         <div class="field">
           <label>درجة الاختبار (اختياري)</label>
@@ -482,18 +546,19 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
 
         <div class="field">
           <label>رفع ملف الدرجات (Excel/CSV) <span class="req">*</span></label>
-          <input type="file" id="file" accept=".xlsx,.xls,.csv" />
+          <input type="file" id="file" class="invalid" accept=".xlsx,.xls,.csv"
+                 style="border-color:var(--dangerSoft);background:var(--dangerBg);" />
         </div>
         <div class="field">
-          <label>تصفية الشُعب (اختياري: 1 أو 1,2,3)</label>
-          <input id="inSections" placeholder="مثال: 1,2,3" />
+          <label>تصفية الشُعب (اختياري)</label>
+          <input id="inSections" placeholder="اكتب الشُعب إن رغبت (مثال: 1,2,3)" value="" style="border-color:#cfd8dc;background:#fff;" />
         </div>
       </div>
 
       <div class="actions">
-        <div class="badge" id="statusPill">جاهز</div>
-        <button class="btn secondary" id="dlTemplate">تنزيل قالب تعبئة (Excel)</button>
-        <button class="btn" id="doAnalyze">بدء التحليل</button>
+        <div class="badge bad" id="statusPill">أكمل الحقول الإلزامية</div>
+        <button class="btn secondary" id="dlTemplate" type="button">تنزيل قالب تعبئة (Excel)</button>
+        <button class="btn" id="doAnalyze" type="button" disabled style="opacity:.55; cursor:not-allowed;">بدء التحليل</button>
       </div>
 
       <div class="note">
@@ -502,6 +567,8 @@ body{font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI"
         <strong>للثانوي (إن وُجد نظام المسارات):</strong> نور → التقارير → <b>تقارير نظام المسارات</b> → كشف رصد درجات مادة → تصدير إلى Excel.
       </div>
 
+      <!-- حفظ الحقوق -->
+      <div class="modalFooterTiny">تصميم وبرمجة هذه الصفحة: فهد حامد الزهراني</div>
     </div>
   </div>
 </div>
@@ -547,6 +614,7 @@ const inFullMode = $("inFullMode");
 const inSections = $("inSections");
 const fileEl = $("file");
 const statusPill = $("statusPill");
+const analyzeBtn = $("doAnalyze");
 
 let selectedFile = null;
 fileEl.addEventListener("change",(e)=>{ selectedFile = e.target.files?.[0] || null; validateInputs(); });
@@ -560,15 +628,29 @@ function setStatus(text, ok=true){
   statusPill.style.background = ok ? "#fff" : "#fff1f2";
   statusPill.style.color = ok ? "var(--moe)" : "#991b1b";
 }
+function markField(el, ok){
+  if(ok){ el.classList.remove("invalid"); el.classList.add("valid"); }
+  else{ el.classList.add("invalid"); el.classList.remove("valid"); }
+}
 function validateInputs(){
   let ok = true;
   required.forEach(el=>{
-    if(!clean(el.value)){ el.classList.add("invalid"); ok=false; }
-    else el.classList.remove("invalid");
+    const good = !!clean(el.value);
+    markField(el, good);
+    if(!good) ok=false;
   });
-  if(!selectedFile){ fileEl.classList.add("invalid"); ok=false; }
-  else fileEl.classList.remove("invalid");
+
+  const fileOk = !!selectedFile;
+  markField(fileEl, fileOk);
+  if(!fileOk) ok=false;
+
   setStatus(ok ? "جاهز للتحليل" : "أكمل الحقول الإلزامية", ok);
+  analyzeBtn.disabled = !ok;
+  analyzeBtn.style.opacity = ok ? "1" : ".55";
+  analyzeBtn.style.cursor = ok ? "pointer" : "not-allowed";
+
+  syncHeader();
+  fitAllHeaderText();
   return ok;
 }
 
@@ -599,60 +681,46 @@ function syncHeader(){
   fTeacher2.textContent = teacher; fPrincipal2.textContent = principal;
 }
 
-/* ========= Fit header text (NO truncation) =========
-   يقلص الخط تدريجياً إذا زاد النص عن مساحة الهيدر (عرض/ارتفاع)
-*/
-function fitHeaderText(boxId, overlaySelector){
+/* ========= Fit header text ========= */
+function fitHeaderText(boxId){
   const box = $(boxId);
   if(!box) return;
   const overlay = box.closest(".headerOverlay");
   if(!overlay) return;
 
-  // إعادة أحجام افتراضية
   const edu = box.querySelector(".edu");
   const school = box.querySelector(".school");
   const title = box.querySelector(".title");
-  const base = {edu:16, school:15, title:14.5};
 
-  edu.style.fontSize = base.edu + "px";
-  school.style.fontSize = base.school + "px";
-  title.style.fontSize = base.title + "px";
-  box.style.transform = "none";
+  edu.style.fontSize = "18px";
+  school.style.fontSize = "17px";
+  title.style.fontSize = "16px";
 
-  // قلّص حتى لا يتجاوز المساحة
   const maxW = overlay.clientWidth - 24;
   const maxH = overlay.clientHeight - 18;
 
   let guard = 0;
-  while(guard < 30 && (box.scrollWidth > maxW || box.scrollHeight > maxH)){
+  while(guard < 34 && (box.scrollWidth > maxW || box.scrollHeight > maxH)){
     guard++;
-    edu.style.fontSize = (parseFloat(getComputedStyle(edu).fontSize) - 0.6) + "px";
-    school.style.fontSize = (parseFloat(getComputedStyle(school).fontSize) - 0.6) + "px";
-    title.style.fontSize = (parseFloat(getComputedStyle(title).fontSize) - 0.6) + "px";
+    edu.style.fontSize = (parseFloat(getComputedStyle(edu).fontSize) - 0.7) + "px";
+    school.style.fontSize = (parseFloat(getComputedStyle(school).fontSize) - 0.7) + "px";
+    title.style.fontSize = (parseFloat(getComputedStyle(title).fontSize) - 0.7) + "px";
   }
 }
-
-function fitAllHeaderText(){
-  fitHeaderText("headerTextFit");
-  fitHeaderText("headerTextFit2");
-}
+function fitAllHeaderText(){ fitHeaderText("headerTextFit"); fitHeaderText("headerTextFit2"); }
 
 ["input","change"].forEach(evt=>{
   [inEdu,inSchool,inPrincipal,inTeacher,inSubject,inStage,inTerm,inFullMode,inSections].forEach(el=>{
-    el.addEventListener(evt, ()=>{ validateInputs(); syncHeader(); fitAllHeaderText(); });
+    el.addEventListener(evt, validateInputs);
   });
 });
 window.addEventListener("resize", ()=> fitAllHeaderText());
-
-/* عند تحميل صورة الهيدر (لتصبح أبعاد overlay صحيحة) */
 [$("headerImg1"), $("headerImg2")].forEach(img=>{
   if(!img) return;
   img.addEventListener("load", ()=> setTimeout(fitAllHeaderText, 50));
 });
-
 syncHeader();
-setTimeout(fitAllHeaderText, 120);
-validateInputs();
+setTimeout(()=>{fitAllHeaderText(); validateInputs();}, 120);
 
 /* ========= Sections ========= */
 function parseSections(v){
@@ -855,7 +923,31 @@ const centerText = {
     ctx.restore();
   }
 };
-Chart.register(centerText);
+
+/* إظهار الأعداد فوق الأعمدة بوضوح */
+const barValueLabels = {
+  id:"barValueLabels",
+  afterDatasetsDraw(chart){
+    const {ctx} = chart;
+    const meta = chart.getDatasetMeta(0);
+    if(!meta || !meta.data) return;
+
+    ctx.save();
+    ctx.font = "900 14px Tajawal, system-ui";
+    ctx.fillStyle = "#0f172a";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "bottom";
+
+    meta.data.forEach((bar, i)=>{
+      const v = chart.data.datasets[0].data[i];
+      const p = bar.tooltipPosition();
+      ctx.fillText(String(v ?? 0), p.x, p.y - 6);
+    });
+    ctx.restore();
+  }
+};
+
+Chart.register(centerText, barValueLabels);
 
 function donut(el, color){
   const ctx=$(el).getContext("2d");
@@ -890,17 +982,29 @@ const barChart = new Chart($("bar").getContext("2d"),{
     datasets:[{
       data:[0,0,0,0,0],
       backgroundColor:["#ff5a5f","#f08b2f","#3f94e6","#2fb1ab","#35b46f"],
-      borderRadius:14,
-      maxBarThickness:80
+      borderRadius:16,
+      maxBarThickness:90
     }]
   },
   options:{
-    responsive:true, maintainAspectRatio:false,
+    responsive:true,
+    maintainAspectRatio:false,
     animation:false,
-    plugins:{legend:{display:false}},
+    plugins:{
+      legend:{display:false},
+      tooltip:{enabled:true}
+    },
+    layout:{padding:{top:18}}, /* مساحة للأرقام فوق الأعمدة */
     scales:{
-      y:{beginAtZero:true, ticks:{font:{family:"Tajawal",weight:"900"}}},
-      x:{ticks:{font:{family:"Tajawal",weight:"900"}}}
+      y:{
+        beginAtZero:true,
+        ticks:{font:{family:"Tajawal",weight:"900",size:13}},
+        grid:{color:"#e5e7eb"}
+      },
+      x:{
+        ticks:{font:{family:"Tajawal",weight:"900",size:13}},
+        grid:{display:false}
+      }
     }
   }
 });
@@ -971,8 +1075,6 @@ const kN = $("kN"), kMax = $("kMax"), kMin = $("kMin"), kAvg = $("kAvg"), kRate 
 const pEx = $("pEx"), pVg = $("pVg"), pGd = $("pGd"), pAc = $("pAc"), pWk = $("pWk");
 const weakRuleEl = $("weakRule"), weakCountEl = $("weakCount"), weakBody = $("weakBody");
 
-let __fullScore = 0;
-
 function renderWeak(list, full){
   const cutoff = weakCutoff(full);
   const weak = list.filter(r=> r.grade <= cutoff).sort((a,b)=> a.grade-b.grade);
@@ -1004,35 +1106,15 @@ function renderWeak(list, full){
   }).join("");
 }
 
-/* ========= Download template (Excel) ========= */
+/* ========= Download template ========= */
 $("dlTemplate").addEventListener("click", ()=>{
-  // قالب بسيط للتعبئة ثم الاستيراد مرة أخرى
-  const edu = clean(inEdu.value) || "الإدارة العامة للتعليم بالمنطقة الشرقية";
-  const school = clean(inSchool.value) || "ثانوية اليعقوبي بالخبر";
-  const subject = clean(inSubject.value) || "المادة";
-  const stage = clean(inStage.value) || "الصف";
-  const fullMode = clean(inFullMode.value || "auto");
-
-  const rows = [
-    ["معلومات (لا تعدل إلا عند الحاجة)"],
-    ["إدارة التعليم", edu],
-    ["اسم المدرسة", school],
-    ["المادة", subject],
-    ["المرحلة/الصف", stage],
-    ["درجة الاختبار (auto/40/60/100)", fullMode],
-    [],
-    ["بيانات الطلاب"],
-    ["اسم الطالب","الشعبة","الدرجة"]
-  ];
-  // صفوف فارغة لتعبئة المستخدم
-  for(let i=0;i<20;i++) rows.push(["","",""]);
-
+  const rows = [["بيانات الطلاب"],["اسم الطالب","الشعبة","الدرجة"]];
+  for(let i=0;i<25;i++) rows.push(["","",""]);
   const ws = XLSX.utils.aoa_to_sheet(rows);
   ws["!cols"] = [{wch:28},{wch:10},{wch:10}];
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Template");
-  const filename = `قالب-درجات-${subject}-${stage}.xlsx`.replace(/\s+/g,"-");
-  XLSX.writeFile(wb, filename);
+  XLSX.utils.book_append_sheet(wb, ws, "درجات");
+  XLSX.writeFile(wb, "قالب-تعبئة-الدرجات.xlsx");
 });
 
 /* ========= Analyze ========= */
@@ -1044,8 +1126,6 @@ $("doAnalyze").addEventListener("click", async ()=>{
     }
 
     setStatus("جارٍ التحليل...", true);
-    syncHeader();
-    fitAllHeaderText();
 
     const f = selectedFile;
     const name = (f?.name||"").toLowerCase();
@@ -1075,7 +1155,6 @@ $("doAnalyze").addEventListener("click", async ()=>{
     }
 
     const full = inferFullScoreSmart(list, inFullMode.value);
-    __fullScore = full;
     tFull.textContent = String(full);
     tFull2.textContent = String(full);
 
@@ -1111,9 +1190,12 @@ $("doAnalyze").addEventListener("click", async ()=>{
 
     renderWeak(list, full);
 
+    syncHeader();
+    fitAllHeaderText();
+
     ov.classList.remove("open");
 
-    setTimeout(()=>{ fitAllPages(); setTimeout(fitAllPages,120); }, 180);
+    setTimeout(()=>{ fitAllPages(); setTimeout(fitAllPages,140); }, 200);
     setStatus("تم التحليل بنجاح", true);
   }catch(err){
     console.error(err);
@@ -1126,11 +1208,22 @@ $("doAnalyze").addEventListener("click", async ()=>{
 $("printSave").addEventListener("click", ()=>{
   fitAllPages();
   fitAllHeaderText();
-  setTimeout(()=> window.print(), 150);
+  setTimeout(()=>{
+    chWk.resize(); chAc.resize(); chGd.resize(); chVg.resize(); chEx.resize();
+    barChart.resize();
+    setTimeout(()=> window.print(), 140);
+  }, 140);
 });
-
-window.addEventListener("beforeprint", ()=>{ fitAllPages(); fitAllHeaderText(); });
-window.addEventListener("afterprint", ()=>{ fitAllPages(); fitAllHeaderText(); });
+window.addEventListener("beforeprint", ()=>{
+  fitAllPages();
+  fitAllHeaderText();
+  chWk.resize(); chAc.resize(); chGd.resize(); chVg.resize(); chEx.resize();
+  barChart.resize();
+});
+window.addEventListener("afterprint", ()=>{
+  fitAllPages();
+  fitAllHeaderText();
+});
 </script>
 
 </body>
