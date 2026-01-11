@@ -49,6 +49,41 @@
   --dangerBg:#fff1f2;
   --dangerSoft:#fecaca;
 }
+/* ====== توسيط عناوين وقيم مربعات المرحلة/السنة/الدرجة ====== */
+.metaBox{
+  border:2px solid #2f80ed33;
+  border-radius:14px;
+  background:#fff;
+  padding:10px 12px;
+  min-height:64px;
+  box-shadow:var(--shadow);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;   /* توسيط عمودي */
+  align-items:center;       /* توسيط أفقي */
+  text-align:center;
+}
+
+.metaBox.green{
+  border-color:#0aa38b55;
+}
+
+.metaLabel{
+  color:var(--moe);
+  font-weight:900;
+  font-size:13px;
+  margin-bottom:6px;
+  white-space:normal;
+}
+
+.metaVal{
+  font-weight:900;
+  font-size:14px;
+  color:#111827;
+  white-space:normal;
+}
+/* ====== نهاية التعديل ====== */
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#fff;}
