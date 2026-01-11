@@ -540,15 +540,17 @@ body{
 (function hardDisableDataLabels(){
   try{
     if (Chart?.defaults?.plugins){
-      // منع أي بلجن datalabels من الرسم لو كان محمّل سابقاً
       Chart.defaults.plugins.datalabels = Chart.defaults.plugins.datalabels || {};
       Chart.defaults.plugins.datalabels.display = false;
 
-      // تعطيل tooltip افتراضياً (وسنفعّله للبار فقط)
       Chart.defaults.plugins.tooltip = Chart.defaults.plugins.tooltip || {};
     }
   }catch(e){}
 })();
+
+// ✅ هنا بالضبط
+try{ Chart.defaults.locale = 'ar-SA'; }catch(e){}
+
 
 /* Helpers */
 const $ = (id)=>document.getElementById(id);
