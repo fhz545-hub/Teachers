@@ -26,10 +26,9 @@
   --pageW:210mm;
   --pageH:297mm;
 
-  /* هوامش A4 */
-  --pageMargin:6mm;
+  /* ✅ هوامش A4 (اضبطها كما تريد) */
+  --pageMargin:8mm;
 
-  /* مساحة داخلية */
   --padX:7mm;
   --padY:6mm;
 
@@ -49,57 +48,16 @@
   --dangerBg:#fff1f2;
   --dangerSoft:#fecaca;
 }
-/* ====== توسيط عناوين وقيم مربعات المرحلة/السنة/الدرجة ====== */
-.metaBox{
-  border:2px solid #2f80ed33;
-  border-radius:14px;
-  background:#fff;
-  padding:10px 12px;
-  min-height:64px;
-  box-shadow:var(--shadow);
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;   /* توسيط عمودي */
-  align-items:center;       /* توسيط أفقي */
-  text-align:center;
-}
-
-.metaBox.green{
-  border-color:#0aa38b55;
-}
-
-.metaLabel{
-  color:var(--moe);
-  font-weight:900;
-  font-size:13px;
-  margin-bottom:6px;
-  white-space:normal;
-}
-
-.metaVal{
-  font-weight:900;
-  font-size:14px;
-  color:#111827;
-  white-space:normal;
-}
-/* ====== نهاية التعديل ====== */
 
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#fff;}
-/* ✅ تمكين التمرير (حل الجمود) */
-html,body{overflow:auto;}
-
+html,body{margin:0;padding:0;background:#fff; overflow:auto;}
 body{
   font-family:"Tajawal",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--ink);
 }
 
 .paper{width:var(--pageW); margin:0 auto; background:#fff;}
-.page{
-  padding:var(--padY) var(--padX);
-  position:relative;
-}
+.page{ padding:var(--padY) var(--padX); position:relative; }
 .fitRoot{transform-origin:top center; transform:scale(var(--fitScale,1));}
 
 /* ===== Header banner ===== */
@@ -149,18 +107,27 @@ body{
   border-radius:14px;
   background:#fff;
   padding:8px 10px;
-  min-height:48px;
+  min-height:52px;
   box-shadow:var(--shadow);
+
+  /* ✅ توسيط العناوين والقيم داخل المربع */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:6px;
 }
 .metaBox.green{border-color:#0aa38b55;}
 .metaLabel{
   color:var(--moe);
   font-weight:900;
   font-size:var(--fs-kpi);
-  margin-bottom:6px;
+  margin:0;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+  text-align:center; /* ✅ */
 }
 .metaVal{
   font-weight:900;
@@ -170,6 +137,7 @@ body{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+  width:100%;
 }
 
 .card{
@@ -211,57 +179,31 @@ body{
 .pEx{background:var(--ex);} .pVg{background:var(--vg);} .pGd{background:var(--gd);} .pAc{background:var(--ac);} .pWk{background:var(--wk);}
 .boxVal{border:2px solid #cfd8dc;border-radius:12px;padding:7px 8px;font-weight:900;text-align:center;background:#fff;font-size:12.5px;white-space:nowrap;}
 
-.sideKPIs{
-  display:grid;
-  gap:8px;
-}
-
-/* عكس الأعمدة + توسيط كامل */
+/* ✅ KPI (اعكسها + توسيط النص داخل المربعات) */
+.sideKPIs{display:grid;gap:8px;}
 .sideRow{
   display:grid;
-  grid-template-columns:1.02fr 1fr; /* القيمة يسار – العنوان يمين */
+  grid-template-columns:1fr 1fr; /* ✅ */
   gap:8px;
   align-items:stretch;
 }
-
 .sideLabel{
-  border:2px solid #0aa38b55;
-  border-radius:12px;
-  padding:7px 8px;
-  color:var(--moe);
-  font-weight:900;
-  font-size:12.2px;
-
+  border:2px solid #0aa38b55;border-radius:12px;
+  padding:7px 8px;color:var(--moe);font-weight:900;font-size:12.2px;
   display:flex;
-  align-items:center;      /* توسيط عمودي */
-  justify-content:center;  /* توسيط أفقي */
-  text-align:center;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  align-items:center;
+  justify-content:center; /* ✅ */
+  text-align:center;      /* ✅ */
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-
-.sideValue{
-  border:2px solid #cfd8dc;
-  border-radius:12px;
-  padding:7px 8px;
-  font-weight:900;
-  font-size:12.5px;
-  background:#fff;
-
-  display:flex;
-  align-items:center;      /* توسيط عمودي */
-  justify-content:center;  /* توسيط أفقي */
-  text-align:center;
-
-  white-space:nowrap;
-}
-
 .sideValue{
   border:2px solid #cfd8dc;border-radius:12px;
   padding:7px 8px;font-weight:900;font-size:12.5px;
-  display:flex;align-items:center;justify-content:center;background:#fff;white-space:nowrap;
+  display:flex;
+  align-items:center;
+  justify-content:center; /* ✅ */
+  text-align:center;      /* ✅ */
+  background:#fff;white-space:nowrap;
 }
 
 .chartCard{margin-top:8px;border:2px solid #0aa38b55;border-radius:18px;padding:8px 8px 9px;}
@@ -287,7 +229,6 @@ body{
 
 /* weak */
 .hidden{display:none !important;}
-.pageBreak{page-break-before:always;}
 .weakCard{margin-top:10px;border:2px solid #0aa38b55;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);}
 .weakHead{
   padding:9px 10px;background:#f4fffb;border-bottom:1px solid #d7efe7;
@@ -357,20 +298,37 @@ body{
 .note{margin-top:10px;border-radius:14px;border:1px solid #fed7aa;background:#fff7ed;padding:9px 10px;font-weight:800;color:#7c2d12;line-height:1.7;font-size:12px;}
 .modalFooterTiny{margin-top:10px;text-align:center;color:#94a3b8;font-weight:800;font-size:11px;}
 
-/* ===== Print ===== */
+/* ===== Print (✅ إصلاح الصفحة الفارغة + الهوامش) ===== */
 @media print{
   @page{ size:A4 portrait; margin:var(--pageMargin); }
-  html,body{overflow:visible !important;}
+  html,body{overflow:visible !important; height:auto !important;}
   body{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
   .fab,.overlay{display:none !important;}
-  .paper{width:100% !important;}
-  .page{margin:0 !important;}
-  .headerWrap,.metaBox,.card,.chartCard,.barCard,.footer,.weakCard{break-inside:avoid; page-break-inside:avoid;}
-  /* تثبيت الدونات صف واحد */
+  .paper{width:100% !important; margin:0 !important;}
+  .page{margin:0 !important; break-after:auto !important; page-break-after:auto !important;}
+
+  /* ✅ لا تطبع صفحة الضعفاء إذا كانت مخفية */
+  #page2.hidden{ display:none !important; }
+
+  /* ✅ اكسر الصفحة فقط إذا كانت صفحة الضعفاء ظاهرة */
+  #page2:not(.hidden){ break-before:page !important; page-break-before:always !important; }
+
+  /* ✅ الدونات صف واحد */
   .donutsRow{grid-template-columns:repeat(5,1fr) !important; gap:6px !important;}
   .donutCanvas{width:72px !important;height:72px !important;}
   .donutLabel,.donutPct{font-size:12px !important;}
+
+  /* ✅ أهم إصلاح للصفحة الفارغة (الهيدر وحده):
+        لا تمنع كسر صفحة الضعفاء بالكامل — اسمح للجدول يمتد على صفحات */
+  .weakCard{ break-inside:auto !important; page-break-inside:auto !important; }
+  .tbl, .tblWrap{ break-inside:auto !important; page-break-inside:auto !important; }
+  .tbl tr{ break-inside:avoid !important; page-break-inside:avoid !important; } /* يحافظ على الصف */
+  .headerWrap, .metaBox, .card, .chartCard, .barCard, .footer{ break-inside:avoid !important; page-break-inside:avoid !important; }
+
+  /* ✅ منع تمدد البار بشكل يضيف صفحة إضافية */
+  .barCanvas{height:210px !important; max-height:210px !important;}
 }
+
 @media (max-width:1100px){
   .formGrid{grid-template-columns:repeat(2,1fr);}
   .donutsRow{grid-template-columns:repeat(3,1fr);}
@@ -409,9 +367,18 @@ body{
 
       <div class="afterHeaderTight">
         <div class="metaRow">
-          <div class="metaBox green"><div class="metaLabel">المرحلة الدراسية / الصف</div><div class="metaVal" id="tStage">—</div></div>
-          <div class="metaBox"><div class="metaLabel">السنة / الفصل الدراسي</div><div class="metaVal" id="tTerm">—</div></div>
-          <div class="metaBox green"><div class="metaLabel">درجة القياس (الاختبار)</div><div class="metaVal" id="tFull">—</div></div>
+          <div class="metaBox green">
+            <div class="metaLabel">المرحلة الدراسية / الصف</div>
+            <div class="metaVal" id="tStage">—</div>
+          </div>
+          <div class="metaBox">
+            <div class="metaLabel">السنة / الفصل الدراسي</div>
+            <div class="metaVal" id="tTerm">—</div>
+          </div>
+          <div class="metaBox green">
+            <div class="metaLabel">درجة القياس (الاختبار)</div>
+            <div class="metaVal" id="tFull">—</div>
+          </div>
         </div>
       </div>
 
@@ -429,13 +396,14 @@ body{
               <div class="dtRow"><div class="boxVal" id="cWk">0</div><div class="boxVal" id="rWk">—</div><div class="pillLvl" style="background:var(--wk)">ضعيف</div></div>
             </div>
 
+            <!-- ✅ KPI: (العنوان يسار/القيمة يمين) لكن كلاهما وسط داخل مربعه -->
             <div class="sideKPIs">
-              <div class="sideRow"><div class="sideValue" id="kN">0</div><div class="sideLabel">عدد الطلاب</div></div>
-              <div class="sideRow"><div class="sideValue" id="kMax">0</div><div class="sideLabel">أعلى درجة</div></div>
-              <div class="sideRow"><div class="sideValue" id="kMin">0</div><div class="sideLabel">أقل درجة</div></div>
-              <div class="sideRow"><div class="sideValue" id="kAvg">0</div><div class="sideLabel">متوسط الدرجات</div></div>
-              <div class="sideRow"><div class="sideValue" id="kRate">0%</div><div class="sideLabel">نسبة التحصيل</div></div>
-              <div class="sideRow"><div class="sideValue" id="kSum">0</div><div class="sideLabel">مجموع الدرجات</div></div>
+              <div class="sideRow"><div class="sideLabel">عدد الطلاب</div><div class="sideValue" id="kN">0</div></div>
+              <div class="sideRow"><div class="sideLabel">أعلى درجة</div><div class="sideValue" id="kMax">0</div></div>
+              <div class="sideRow"><div class="sideLabel">أقل درجة</div><div class="sideValue" id="kMin">0</div></div>
+              <div class="sideRow"><div class="sideLabel">متوسط الدرجات</div><div class="sideValue" id="kAvg">0</div></div>
+              <div class="sideRow"><div class="sideLabel">نسبة التحصيل</div><div class="sideValue" id="kRate">0%</div></div>
+              <div class="sideRow"><div class="sideLabel">مجموع الدرجات</div><div class="sideValue" id="kSum">0</div></div>
             </div>
           </div>
 
@@ -467,7 +435,7 @@ body{
   </div>
 
   <!-- PAGE 2 -->
-  <div class="page hidden pageBreak" id="page2">
+  <div class="page hidden" id="page2">
     <div class="fitRoot" id="fitRoot2">
 
       <div class="headerWrap">
@@ -596,11 +564,10 @@ body{
       </div>
 
       <div class="note">
-  <strong>طريقة استخراج ملف الدرجات (تخدم جميع المراحل):</strong><br>
-  نظام نور → التقارير → تقارير الدرجات/رصد الدرجات → كشف رصد درجات مادة → «تصدير إلى Excel».<br>
-  <strong>ملاحظة:</strong> إذا لم يتوفر ملف جاهز، نزّل القالب ثم عبّئ أسماء الطلاب والدرجات وأعد استيراده.
-</div>
-
+        <strong>طريقة استخراج ملف الدرجات (تخدم جميع المراحل):</strong><br>
+        نظام نور → التقارير → تقارير الدرجات/رصد الدرجات → كشف رصد درجات مادة → «تصدير إلى Excel».<br>
+        <strong>ملاحظة:</strong> إذا لم يتوفر ملف جاهز، نزّل القالب ثم عبّئ أسماء الطلاب والدرجات وأعد استيراده.
+      </div>
 
       <div class="modalFooterTiny">تصميم وبرمجة هذه الصفحة: فهد حامد الزهراني</div>
     </div>
@@ -608,6 +575,9 @@ body{
 </div>
 
 <script>
+/* ✅ مكان مناسب لوضع locale: بعد تحميل Chart.js مباشرة وقبل إنشاء أي رسم */
+Chart.defaults.locale = 'ar-SA';
+
 /* =========================
    🔒 تعطيل أي Datalabels نهائياً (لو كان موجوداً من بيئة أخرى)
 ========================= */
@@ -616,15 +586,10 @@ body{
     if (Chart?.defaults?.plugins){
       Chart.defaults.plugins.datalabels = Chart.defaults.plugins.datalabels || {};
       Chart.defaults.plugins.datalabels.display = false;
-
       Chart.defaults.plugins.tooltip = Chart.defaults.plugins.tooltip || {};
     }
   }catch(e){}
 })();
-
-// ✅ هنا بالضبط
-try{ Chart.defaults.locale = 'ar-SA'; }catch(e){}
-
 
 /* Helpers */
 const $ = (id)=>document.getElementById(id);
@@ -952,10 +917,7 @@ function pickPlanByGap(gap, full){
   return planBank[4];
 }
 
-/* =========================
-   ✅ الدونات: لا tooltips ولا events ولا datalabels
-   ✅ مركز الدونات فقط نسبة صحيحة (بدون أرقام طويلة)
-========================= */
+/* ✅ الدونات: لا tooltips ولا events ولا datalabels + مركزها نسبة صحيحة */
 const centerText = {
   id:"centerText",
   afterDraw(chart, args, opts){
@@ -984,11 +946,11 @@ function donut(el, color){
       maintainAspectRatio:true,
       aspectRatio:1,
       animation:false,
-      events: [],                 // ✅ يمنع hover
+      events: [],
       plugins:{
         legend:{display:false},
-        tooltip:{enabled:false},  // ✅ لا تلميحات
-        datalabels:{display:false},// ✅ حتى لو كان موجود
+        tooltip:{enabled:false},
+        datalabels:{display:false},
         centerText:{text:"0%"}
       },
       cutout:"80%"
@@ -996,7 +958,7 @@ function donut(el, color){
   });
 }
 function setDonut(ch, percent){
-  const p=Math.max(0,Math.min(100, Math.round(percent))); // ✅ منع كسور طويلة
+  const p=Math.max(0,Math.min(100, Math.round(percent)));
   ch.data.datasets[0].data=[p,100-p];
   ch.options.plugins.centerText.text = `${p}%`;
   ch.update();
@@ -1187,14 +1149,12 @@ $("doAnalyze").addEventListener("click", async ()=>{
     const n = st.n || 1;
     const pc = (x)=> pct(x,n);
 
-    // ✅ الآن الدونات تعتمد فقط على رقم صحيح (بدون كسور طويلة)
     setDonut(chWk, pc(st.c.wk));
     setDonut(chAc, pc(st.c.ac));
     setDonut(chGd, pc(st.c.gd));
     setDonut(chVg, pc(st.c.vg));
     setDonut(chEx, pc(st.c.ex));
 
-    // ✅ النص أسفل الدونات كذلك أرقام قصيرة
     pWk.textContent = `${Math.round(pc(st.c.wk))}%`;
     pAc.textContent = `${Math.round(pc(st.c.ac))}%`;
     pGd.textContent = `${Math.round(pc(st.c.gd))}%`;
@@ -1225,11 +1185,6 @@ $("printSave").addEventListener("click", ()=>{
 });
 window.addEventListener("beforeprint", ()=>{ fitAllHeaderText(); });
 
-/* Fit header on image load */
-[$("headerImg1"), $("headerImg2")].forEach(img=>{
-  if(!img) return;
-  img.addEventListener("load", ()=> setTimeout(fitAllHeaderText, 60));
-});
 </script>
 
 </body>
