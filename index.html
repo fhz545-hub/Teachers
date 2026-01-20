@@ -594,7 +594,9 @@ function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?
 
 /* "جديد" الآن مرتبط فقط بالتاريخ الحديث (آخر يومين) */
 function isLatest(item){
-  if(item && item.addedAt) return خلالأيام(item.addedAt,2);
+  if(!item) return false;
+  if(item.isNew === true) return true;      // ✅ يدوي
+  if(item.addedAt) return خلالأيام(item.addedAt,2); // ✅ تلقائي (آخر يومين)
   return false;
 }
 
