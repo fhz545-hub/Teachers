@@ -588,15 +588,15 @@ function خلالأيام(dateStr, days=2){
 
 /* أدوات مساعدة */
 function esc(s){return String(s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] || c));}
-function isValidUrl(u){return /^https:\/\/.+/i.test(u||"")}
+function isValidUrl(u){return /^https?:\/\/.+/i.test(u||"")}
 function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m?m[1]:""}
 function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?export=download&id=${id}`:u}
 
 /* "جديد" الآن مرتبط فقط بالتاريخ الحديث (آخر يومين) */
 function isLatest(item){
   if(!item) return false;
-  if(item.isNew === true) return true;      // ✅ يدوي
-  if(item.addedAt) return خلالأيام(item.addedAt,2); // ✅ تلقائي (آخر يومين)
+  if(item.isNew === true) return true;          // ✅ جديد يدوي
+  if(item.addedAt) return خلالأيام(item.addedAt,2); // ✅ جديد تلقائي آخر يومين
   return false;
 }
 
@@ -664,7 +664,7 @@ const CATALOG = {
     {title:"المركز الوطني للمناهج — دليل الوثيقة التعريفية لمرحلة الثانوية العامة",desc:"تعريف بوثيقة المرحلة الثانوية ومساراتها.",kind:"دليل",url:"https://drive.google.com/file/d/1eX_OGdyNl7fMb_xapBDSzdvrBeZBr5BT/view?usp=sharing",src:"المركز الوطني للمناهج"},
     {title:"دليل التحول إلى نموذج الخدمات المركزي",desc:"مرجع لتحول إدارات التعليم إلى نموذج الخدمات المركزي.",kind:"دليل",url:"https://drive.google.com/file/d/1vYJlzeQXbxQI5Au-Q8wiNruc9XCxSzoS/view?usp=sharing",src:"وزارة التعليم"},
     {title:"منح مديري ومديرات المدارس الصلاحيات",desc:"ضوابط تنظيم ومنح الصلاحيات لقادة المدارس.",kind:"تعميم",url:"https://drive.google.com/file/d/166h6cj6lRPBMSro_HRNoltRQPj8LLxPq/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"},
-{title:"الدليل التنظيمي لوزارة التعليم - (اصدار ثاني محدث) - للعام (1447 هـ - 2025 م)",desc:"دليل الاهداف والمهام محدث اصدار ثاني.",kind:"دليل",url:"https://drive.google.com/file/d/1Jv5CHtfmXV3UDERZdjTXr7Q6msWQiL1c/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"}
+{title:"الدليل التنظيمي لوزارة التعليم - (اصدار ثاني محدث) - للعام (1447 هـ - 2025 م)",desc:"دليل الاهداف والمهام محدث اصدار ثاني.",kind:"دليل",url:"https://drive.google.com/file/d/1Jv5CHtfmXV3UDERZdjTXr7Q6msWQiL1c/view?usp=sharing",src:"وزارة التعليم",addedAt:"2026-1-20"}
   ],
   staff: [
     {title:"وثيقة التشكيلات الإشرافية والمدرسية لشاغلي الوظائف التعليمية (وكالة الموارد البشرية) 1445هـ–2024م",desc:"تنظيم الهياكل والتشكيلات الإشرافية والمدرسية.",kind:"وثيقة",url:"https://drive.google.com/file/d/1aXEQ1jJRA_Sa-w-Cv436B2DTY1PNpnn/view?usp=sharing",src:"وكالة الموارد البشرية — وزارة التعليم"},
@@ -782,7 +782,7 @@ function renderDocs(){
       return a.title.localeCompare(b.title,'ar',{numeric:true});
     });
 
-    items.forEach(d=>{ if(خلالأيام(d.addedAt,2)) newCount++; });
+    items.forEach(d=>{ if(isLatest(d)) newCount++; });
 
     const det=document.createElement('details');det.className='group';det.setAttribute('data-i',String(i+1));
     det.innerHTML=`<summary><span>📁</span><span class="gtitle">${esc(GROUP_TITLES[key]||'قسم')}</span><span class="gcount">${items.length}</span></summary><div class="wrap"></div>`;
