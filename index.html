@@ -194,7 +194,7 @@ button{font-family:inherit;cursor:pointer}
   background-size:contain; /* ✅ بدون قص/اجتزاء */
   transform:scale(1.0);
 filter:none;
-  transition:transform .55s ease, filter .25s ease;
+  transition:transform .35s ease; /* أسرع وأخف */
   z-index:0;
 }
 /* طبقة تظليل خفيفة لتحسين قراءة النص بدون وضع خلفية للنص نفسه */
@@ -260,10 +260,10 @@ filter:none;
 
 /* إبراز البنر عند المرور */
 .bannerCard:hover .banner{
-  transform:scale(1.06);
+  transform:scale(1.04); /* أخف */
   filter:brightness(1.15) contrast(1.10) saturate(1.10);
 }
-.bannerCard:hover .veil{opacity:.46}
+.bannerCard:hover .veil{opacity:.52}
 .bannerCard:hover .hoverLabel{
   opacity:1;
   transform:translateY(0);
@@ -276,7 +276,7 @@ filter:none;
 /* للأجهزة اللمسية: إظهار العنوان دائمًا بشكل لطيف */
 @media (hover:none){
   .bannerCard .hoverLabel{opacity:1;transform:none}
-  .bannerCard .veil{opacity:.30}
+  .bannerCard .veil{opacity:.58}
   .bannerCard .banner{background-size:contain}
 }
 /* ✅ تسريع النقر وتقليل الحمل على بنرات المنصات */
@@ -879,19 +879,29 @@ function renderPlatformNewBadge(){
   if(!cont) return;
   const cards = cont.querySelectorAll('a.card[data-added-at]');
   let anyNew = false;
-  cards.forEach(card=>{
-    const addedAt = card.getAttribute('data-added-at');
-    if(خلالأيام(addedAt,2)){
-      anyNew = true;
-      const badge = document.createElement('div');
-      badge.className = 'badge new';
-      badge.textContent = 'جديد';
-      badge.style.position = 'absolute';
-      badge.style.top = '10px';
-      badge.style.insetInlineEnd = '10px';
-      card.appendChild(badge);
-    }
-  });
+ tiltCards.forEach(card=>{
+  let rafId=0;
+  function onMove(ev){
+    const r = card.getBoundingClientRect();
+    const x = (ev.clientX - r.left) / r.width - .5;
+    const y = (ev.clientY - r.top) / r.height - .5;
+    const rotX = (+y)*6;
+    const rotY = (-x)*6;
+
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(()=>{
+      card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
+    });
+  }
+  function reset(){
+    cancelAnimationFrame(rafId);
+    card.style.transform='';
+  }
+  card.addEventListener('mousemove', onMove);
+  card.addEventListener('mouseleave', reset);
+  card.addEventListener('blur', reset);
+});
+
   const announce=document.getElementById('announce');
   if(anyNew && announce && announce.style.display!=='flex'){
     announce.style.display='flex';
