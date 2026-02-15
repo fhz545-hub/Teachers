@@ -877,34 +877,38 @@ function renderDocs(){
 function renderPlatformNewBadge(){
   const cont = document.getElementById('platformCards');
   if(!cont) return;
+
   const cards = cont.querySelectorAll('a.card[data-added-at]');
   let anyNew = false;
- tiltCards.forEach(card=>{
-  let rafId=0;
-  function onMove(ev){
-    const r = card.getBoundingClientRect();
-    const x = (ev.clientX - r.left) / r.width - .5;
-    const y = (ev.clientY - r.top) / r.height - .5;
-    const rotX = (+y)*6;
-    const rotY = (-x)*6;
 
-    cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(()=>{
-      card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
-    });
-  }
-  function reset(){
-    cancelAnimationFrame(rafId);
-    card.style.transform='';
-  }
-  card.addEventListener('mousemove', onMove);
-  card.addEventListener('mouseleave', reset);
-  card.addEventListener('blur', reset);
-});
+  cards.forEach(card=>{
+    const dt = card.getAttribute('data-added-at');
+    const isNewNow = خلالأيام(dt, 2);
 
-  const announce=document.getElementById('announce');
-  if(anyNew && announce && announce.style.display!=='flex'){
-    announce.style.display='flex';
+    // شارة جديدة تلقائية
+    let badge = card.querySelector('.badge.new[data-auto="1"]');
+
+    if(isNewNow){
+      anyNew = true;
+      if(!badge){
+        badge = document.createElement('span');
+        badge.className = 'badge new';
+        badge.textContent = 'جديد';
+        badge.setAttribute('data-auto','1');
+        badge.style.position = 'absolute';
+        badge.style.top = '10px';
+        badge.style.insetInlineEnd = '10px';
+        card.appendChild(badge);
+      }
+    }else{
+      badge?.remove();
+    }
+  });
+
+  // (اختياري) إذا عندك منصات جديدة ولا يوجد شريط إعلان ظاهر
+  const announce = document.getElementById('announce');
+  if(anyNew && announce && announce.style.display !== 'flex'){
+    announce.style.display = 'flex';
     announce.querySelector('.txt').textContent = 'تمت إضافة عناصر جديدة خلال اليومين الماضيين.';
   }
 }
@@ -1041,33 +1045,45 @@ function setupSearchUI(){
 
 /* تأثير المنصات */
 function setupPlatformFX(){
-const cards = document.querySelectorAll('#platformCards .card');                 // للـ reveal فقط
-const tiltCards = document.querySelectorAll('#platformCards .card:not(.bannerCard)'); // للحركة فقط
+  const cards = document.querySelectorAll('#platformCards .card'); // للـ reveal فقط
+  const tiltCards = document.querySelectorAll('#platformCards .card:not(.bannerCard)'); // حركة فقط بدون البنرات
+
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
-      if(e.isIntersecting){ e.target.classList.add('reveal'); io.unobserve(e.target); }
-    })
+      if(e.isIntersecting){
+        e.target.classList.add('reveal');
+        io.unobserve(e.target);
+      }
+    });
   },{threshold:.15});
+
   cards.forEach(c=>io.observe(c));
 
-  cards.forEach(card=>{
+  if(reduceMotion) return;
+
+  tiltCards.forEach(card=>{
     let rafId=0;
+
     function onMove(ev){
       const r = card.getBoundingClientRect();
       const x = (ev.clientX - r.left) / r.width - .5;
       const y = (ev.clientY - r.top) / r.height - .5;
       const rotX = (+y)*6;
       const rotY = (-x)*6;
+
       cancelAnimationFrame(rafId);
-      rafId=requestAnimationFrame(()=>{
+      rafId = requestAnimationFrame(()=>{
         card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
       });
     }
+
     function reset(){
       cancelAnimationFrame(rafId);
-      card.style.transform='';
+      card.style.transform = '';
     }
+
     card.addEventListener('mousemove', onMove);
     card.addEventListener('mouseleave', reset);
     card.addEventListener('blur', reset);
@@ -1082,7 +1098,6 @@ setupSearchUI();
 setupPlatformFX();
 
 /* زر إخفاء شريط الإشعار */
-document.getElementById('announce').querySelector('.close').addEventListener('click',()=>{document.getElementById('announce').style.display='none'});
 </script>
 
 <script type="module">
