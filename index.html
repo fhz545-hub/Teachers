@@ -68,7 +68,8 @@ button{font-family:inherit;cursor:pointer}
   width:min(320px,72vw);
   border:1px solid var(--line);
   background:#fff;
-  padding:8px 12px 8px 36px;
+  padding:8px 12px;
+  padding-inline-start:36px;
   border-radius:12px;
   font-size:13px;
   color:var(--ink);
@@ -613,15 +614,33 @@ const ORDER=[
   "platformsOps","uniform","forms","inclusive","safety","elearn","counseling","kg",
   "interactive","guides"
 ];
-
-/* حساب "جديد" للإشعار خلال يومين — (ديناميكي حسب تاريخ جهاز المستخدم) */
-const TODAY = new Date();
+// ✅ محلّل تاريخ آمن يقبل: YYYY-M-D أو YYYY-MM-DD (بدون تأثير الوقت)
+function parseYMD(dateStr){
+  if(!dateStr) return null;
+  const m = String(dateStr).trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(!m) return null;
+  const y  = Number(m[1]);
+  const mo = Number(m[2]);
+  const d  = Number(m[3]);
+  return new Date(y, mo - 1, d); // تاريخ محلي بدون وقت
+}
+/* حساب "جديد" لآخر N أيام (تقويميًا بدون تأثير الساعات) */
 function خلالأيام(dateStr, days=2){
   if(!dateStr) return false;
-  const d = new Date(dateStr);
-  const diff = (TODAY - d) / (1000*60*60*24);
-  return diff >= 0 && diff <= days;
+
+  // تثبيت اليوم عند منتصف الليل
+  const now = new Date();
+  const todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // تثبيت تاريخ العنصر عند منتصف الليل
+  const d0 = parseYMD(dateStr);
+if(!d0) return false;
+  const dateMid = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate());
+
+  const diffDays = Math.floor((todayMid - dateMid) / (1000*60*60*24));
+  return diffDays >= 0 && diffDays <= days;
 }
+
 
 /* أدوات مساعدة */
 function esc(s){return String(s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] || c));}
@@ -813,8 +832,11 @@ function renderDocs(){
     const items=(CATALOG[key]||[]).slice().sort((a,b)=>{
       const aL=isLatest(a), bL=isLatest(b);
       if(aL!==bL) return bL - aL;
-      const aD=a.addedAt?new Date(a.addedAt).getTime():0;
-      const bD=b.addedAt?new Date(b.addedAt).getTime():0;
+      const aObj = a.addedAt ? parseYMD(a.addedAt) : null;
+const bObj = b.addedAt ? parseYMD(b.addedAt) : null;
+const aD = aObj ? aObj.getTime() : 0;
+const bD = bObj ? bObj.getTime() : 0;
+
       if(aD!==bD) return bD - aD;
       return a.title.localeCompare(b.title,'ar',{numeric:true});
     });
@@ -829,8 +851,11 @@ function renderDocs(){
       wrap.innerHTML=`<div style="padding:10px;color:#6b7;font-size:12.5px">لا توجد روابط مضافة هنا بعد.</div>`;
     }else{
       items.forEach(d=>{
-        const ok=isValidUrl(d.url);
-        const dl=toDirect(d.url);
+        const ok = isValidUrl(d.url);
+const id = driveId(d.url);
+const canDl = ok && !!id;      // تحميل فقط لروابط Drive
+const dl = canDl ? toDirect(d.url) : "";
+
         const latest=isLatest(d);
 
         wrap.insertAdjacentHTML('beforeend',
@@ -847,7 +872,7 @@ function renderDocs(){
             </div>
             <div class="actions">
               <a class="btn open" ${ok?'target="_blank" rel="noopener" href="'+esc(d.url)+'"':'aria-disabled="true"'}>فتح</a>
-              <a class="btn download" ${ok?'href="'+esc(dl)+'"':'aria-disabled="true"'}>تحميل</a>
+<a class="btn download" ${canDl ? 'href="'+esc(dl)+'"' : 'aria-disabled="true"'}>تحميل</a>
             </div>
           </div>`);
       });
@@ -862,7 +887,8 @@ function renderDocs(){
     if(newCount>0){
       announce.style.display='flex';
       announce.querySelector('.txt').textContent = `تمت إضافة ${newCount} عنصر جديد خلال اليومين الماضيين.`;
-      announce.querySelector('.close')?.addEventListener('click',()=>{announce.style.display='none'});
+      const closeBtn = announce.querySelector('.close');
+if(closeBtn) closeBtn.onclick = ()=>{ announce.style.display='none'; };
     }else{
       announce.style.display='none';
     }
@@ -1132,26 +1158,21 @@ const counterEl = document.getElementById("visitorCount");
 
 /* Prevent double counting on refresh */
 const SESSION_KEY = "FH_VISITOR_COUNTED";
-
-/* Live update for all visitors */
+/* Live update for all visitors (display) */
 onSnapshot(counterRef, (snap) => {
-  if (!snap.exists()) return;
-  const visits = snap.data().visits ?? 783;
-  if (counterEl) {
-    counterEl.textContent = Number(visits).toLocaleString("ar-SA");
-  }
+  const visits = snap.exists() ? (snap.data().visits ?? 783) : 783;
+  if (counterEl) counterEl.textContent = Number(visits).toLocaleString("ar-SA");
 });
 
-/* Increment counter once per visitor session */
+/* Increment counter once per visitor session (tab session) */
 async function incrementVisitor() {
   if (sessionStorage.getItem(SESSION_KEY)) return;
 
   try {
     await runTransaction(db, async (tx) => {
       const snap = await tx.get(counterRef);
-      if (!snap.exists()) return;
-      const current = snap.data().visits ?? 783;
-      tx.update(counterRef, { visits: current + 1 });
+      const current = snap.exists() ? (snap.data().visits ?? 783) : 783;
+      tx.set(counterRef, { visits: current + 1 }, { merge: true }); // ينشئ الوثيقة إن لم تكن موجودة
     });
 
     sessionStorage.setItem(SESSION_KEY, "1");
@@ -1161,6 +1182,10 @@ async function incrementVisitor() {
 }
 
 incrementVisitor();
+
+
+
+
 </script>
 
 </body>
