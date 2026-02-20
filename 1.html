@@ -157,11 +157,40 @@ html,body{
   box-shadow:0 8px 18px rgba(0,0,0,.06);
 }
 .photo input{position:absolute; inset:0; opacity:0; cursor:pointer; z-index:3}
+/* تنبيه مربعات الصور — أوضح وأكبر */
 .photo .hint{
-  position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  color:#b91c1c; font-size:11px; z-index:2;
-  text-align:center; padding:4px 8px;
+  position:absolute; inset:10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+
+  text-align:center;
+  padding:14px 14px;
+  z-index:2;
+
+  font-size:14.5px;
+  font-weight:900;
+  line-height:1.75;
+  color:#0e3b46;
+
+  background:rgba(255,255,255,.94);
+  border:2px dashed rgba(47,127,121,.70);
+  border-radius:14px;
+  box-shadow:0 10px 24px rgba(0,0,0,.10);
+}
+
+/* شارة نوع الملف */
+.photo .hint .type{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-weight:1000;
+  letter-spacing:.6px;
+  color:#0e3b46;
+  border:1px solid rgba(14,59,70,.28);
+  background:linear-gradient(180deg, rgba(47,127,121,.18), rgba(14,59,70,.10));
 }
 .photo::before{content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg,transparent,rgba(47,127,121,.05)); z-index:1;}
 .photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; z-index:2; display:block}
@@ -286,25 +315,45 @@ html,body{
     </div>
 
     <!-- الشواهد (4 صور) -->
-    <div class="gallery" id="gallery">
-      <div class="photo">
-        <input type="file" accept="image/*">
-        <div class="hint" data-nopdf="true">تنبيه: يُفضّل استخدام صور بصيغة JPG للحصول على أفضل جودة في التقرير</div>
-      </div>
-      <div class="photo">
-        <input type="file" accept="image/*">
-        <div class="hint" data-nopdf="true">تنبيه: يُفضّل استخدام صور بصيغة JPG للحصول على أفضل جودة في التقرير</div>
-      </div>
-      <div class="photo">
-        <input type="file" accept="image/*">
-        <div class="hint" data-nopdf="true">تنبيه: يُفضّل استخدام صور بصيغة JPG للحصول على أفضل جودة في التقرير</div>
-      </div>
-      <div class="photo">
-        <input type="file" accept="image/*">
-        <div class="hint" data-nopdf="true">تنبيه: يُفضّل استخدام صور بصيغة JPG للحصول على أفضل جودة في التقرير</div>
-      </div>
-    </div>
+<div class="gallery" id="gallery">
 
+  <div class="photo">
+    <input type="file" accept="image/*">
+    <div class="hint" data-nopdf="true">
+      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
+      <div class="type">JPG / JPEG</div>
+      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
+    </div>
+  </div>
+
+  <div class="photo">
+    <input type="file" accept="image/*">
+    <div class="hint" data-nopdf="true">
+      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
+      <div class="type">JPG / JPEG</div>
+      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
+    </div>
+  </div>
+
+  <div class="photo">
+    <input type="file" accept="image/*">
+    <div class="hint" data-nopdf="true">
+      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
+      <div class="type">JPG / JPEG</div>
+      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
+    </div>
+  </div>
+
+  <div class="photo">
+    <input type="file" accept="image/*">
+    <div class="hint" data-nopdf="true">
+      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
+      <div class="type">JPG / JPEG</div>
+      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
+    </div>
+  </div>
+
+</div>
     <!-- التواقيع -->
     <div class="signatures">
       <div class="sig">
