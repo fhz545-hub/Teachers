@@ -156,7 +156,14 @@ html,body{
   display:flex; align-items:center; justify-content:center; overflow:hidden;
   box-shadow:0 8px 18px rgba(0,0,0,.06);
 }
-.photo input{position:absolute; inset:0; opacity:0; cursor:pointer; z-index:3}
+.photo input{
+  position:absolute; inset:0;
+  opacity:0.001;          /* خليها 0.001 عادي */
+  cursor:pointer;
+  pointer-events:auto;    /* ✅ مهم جداً */
+  z-index:5;              /* فوق كل شيء */
+}
+.photo .hint, .photo img{ pointer-events:none; }
 /* تنبيه مربعات الصور — أوضح وأكبر */
 .photo .hint{
   position:absolute; inset:10px;
@@ -391,62 +398,121 @@ async function toDataURL(img,{maxSide=2400,q=0.95}={}){
   c.getContext('2d',{alpha:false}).drawImage(img,0,0,cw,ch);
   return c.toDataURL('image/jpeg',q);
 }
-async function renderFillNoDistortion(file,box){
-  return new Promise((resolve,reject)=>{
-    const url=URL.createObjectURL(file);
-    const img=new Image();
-    img.onload=async()=>{
+async function renderFillNoDistortion(file, box){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+
+    img.onload = () => {
       try{
-        const dpr=Math.min(window.devicePixelRatio||1,2.5);
-        const W=Math.max(1,Math.floor(box.clientWidth*dpr));
-        const H=Math.max(1,Math.floor(box.clientHeight*dpr));
-        const c=document.createElement('canvas'); c.width=W; c.height=H;
-        const ctx=c.getContext('2d',{alpha:false});
-        ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H);
-        const ratioContain=Math.min(W/img.naturalWidth,H/img.naturalHeight);
-        const newW=Math.floor(img.naturalWidth*ratioContain);
-        const newH=Math.floor(img.naturalHeight*ratioContain);
-        const x=Math.floor((W-newW)/2), y=Math.floor((H-newH)/2);
-        const cover=Math.max(W/img.naturalWidth,H/img.naturalHeight);
-        const bgW=Math.floor(img.naturalWidth*cover), bgH=Math.floor(img.naturalHeight*cover);
-        const bgX=Math.floor((W-bgW)/2), bgY=Math.floor((H-bgH)/2);
-        ctx.filter='blur(16px) brightness(1.02)'; ctx.drawImage(img,bgX,bgY,bgW,bgH);
-        ctx.filter='none'; ctx.globalAlpha=0.12; ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1;
-        ctx.drawImage(img,x,y,newW,newH);
-        const data=c.toDataURL('image/jpeg',0.92);
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.2);
+
+        // مهم جداً: يعتمد على الحجم الحقيقي حتى لو فيه transform:scale
+        const rect = box.getBoundingClientRect();
+        const W = Math.max(1, Math.round(rect.width  * dpr));
+        const H = Math.max(1, Math.round(rect.height * dpr));
+
+        const c = document.createElement('canvas');
+        c.width = W; c.height = H;
+        const ctx = c.getContext('2d', { alpha:false });
+
+        // جودة الرسم
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        // 1) خلفية ذكية: نفس الصورة "Cover" + Blur لملء الفراغات
+        const coverR = Math.max(W / img.naturalWidth, H / img.naturalHeight) * 1.08; // 1.08 لمنع أي حواف
+        const bgW = Math.round(img.naturalWidth  * coverR);
+        const bgH = Math.round(img.naturalHeight * coverR);
+        const bgX = Math.round((W - bgW) / 2);
+        const bgY = Math.round((H - bgH) / 2);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0,0,W,H);
+
+        ctx.filter = 'blur(22px) saturate(1.05) brightness(1.02)';
+        ctx.drawImage(img, bgX, bgY, bgW, bgH);
+        ctx.filter = 'none';
+
+        // غشاء خفيف لتوحيد الخلفية (اختياري لكنه يطلع أنظف)
+        ctx.globalAlpha = 0.10;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0,0,W,H);
+        ctx.globalAlpha = 1;
+
+        // 2) الصورة الأصلية بدون قص (Contain) فوق الخلفية
+        const containR = Math.min(W / img.naturalWidth, H / img.naturalHeight);
+        const newW = Math.round(img.naturalWidth  * containR);
+        const newH = Math.round(img.naturalHeight * containR);
+        const x = Math.round((W - newW) / 2);
+        const y = Math.round((H - newH) / 2);
+
+        ctx.drawImage(img, x, y, newW, newH);
+
+        const data = c.toDataURL('image/jpeg', 0.94);
         URL.revokeObjectURL(url);
         resolve(data);
-      }catch(e){URL.revokeObjectURL(url); reject(e);}
+
+      }catch(e){
+        URL.revokeObjectURL(url);
+        reject(e);
+      }
     };
-    img.onerror=()=>{URL.revokeObjectURL(url); reject(new Error('تعذّر قراءة الصورة'));};
-    img.src=url;
+
+    img.onerror = () => {
+      try{ URL.revokeObjectURL(url); }catch{}
+      reject(new Error('تعذّر قراءة الصورة'));
+    };
+
+    img.src = url;
   });
 }
 /* ===================== دعم HEIC/HEIF (الجوال) ===================== */
 function getExt(name=""){
-  const i=name.lastIndexOf('.');
-  return i>=0 ? name.slice(i+1).toLowerCase() : "";
+  const i = name.lastIndexOf('.');
+  return i >= 0 ? name.slice(i+1).toLowerCase() : "";
 }
+
+function isLikelyImage(file){
+  // بعض الأجهزة ترجع type فاضي، لذلك نعتمد على الامتداد أيضاً
+  const t = (file?.type || "").toLowerCase();
+  if (t.startsWith("image/")) return true;
+
+  const e = getExt(file?.name || "");
+  return ["jpg","jpeg","png","webp","gif","bmp","tif","tiff","heic","heif","hif","heifs"].includes(e);
+}
+
 function isHeicLike(file){
-  const t=(file?.type||"").toLowerCase();
-  const e=getExt(file?.name||"");
+  const t = (file?.type || "").toLowerCase();
+  const e = getExt(file?.name || "");
   return t.includes("heic") || t.includes("heif") || ["heic","heif","hif","heifs"].includes(e);
 }
-async function canBrowserDecode(file){
-  // اختبار سريع: إذا المتصفح قادر يقرأ الملف مباشرة (مثل Safari iOS) ما نحتاج تحويل
-  return new Promise(resolve=>{
+
+async function canBrowserDecode(file, timeoutMs=3500){
+  return new Promise((resolve)=>{
+    let settled=false, url=null, timer=null;
+
+    const finish=(ok)=>{
+      if(settled) return;
+      settled=true;
+      if(timer) clearTimeout(timer);
+      if(url) { try{ URL.revokeObjectURL(url);}catch{} }
+      resolve(!!ok);
+    };
+
     try{
-      const url=URL.createObjectURL(file);
-      const img=new Image();
-      const done=(ok)=>{ try{URL.revokeObjectURL(url);}catch{} resolve(!!ok); };
-      img.onload=()=>done(true);
-      img.onerror=()=>done(false);
-      img.src=url;
-      // مهلة أمان
-      setTimeout(()=>done(false), 2500);
-    }catch{ resolve(false); }
+      url = URL.createObjectURL(file);
+      const img = new Image();
+      timer = setTimeout(()=>finish(false), timeoutMs);
+      img.onload = ()=>finish(true);
+      img.onerror = ()=>finish(false);
+      img.src = url;
+    }catch{
+      finish(false);
+    }
   });
 }
+
 async function convertHeicToJpeg(file){
   if(typeof window.heic2any !== "function"){
     throw new Error("HEIC converter not loaded");
@@ -456,19 +522,28 @@ async function convertHeicToJpeg(file){
     toType: "image/jpeg",
     quality: 0.95
   });
+
   const blob = Array.isArray(out) ? out[0] : out;
   const base = (file.name || "photo").replace(/\.(heic|heif|hif|heifs)$/i, "");
   const jpgName = base + ".jpg";
-  return new File([blob], jpgName, { type:"image/jpeg", lastModified: Date.now() });
+
+  const f = (typeof File === "function")
+    ? new File([blob], jpgName, { type:"image/jpeg", lastModified: Date.now() })
+    : blob;
+
+  if(typeof File !== "function"){
+    try{ f.name = jpgName; }catch{}
+  }
+  return f;
 }
+
 async function normalizeImageFile(file){
   if(!file) return null;
 
-  // لو ليست صورة (أحيانًا type يكون فاضي) نتحقق بالامتداد
-  const looksImage = (file.type||"").startsWith("image/") || isHeicLike(file);
-  if(!looksImage) return null;
+  // ✅ لو type فاضي نعتمد على الامتداد
+  if(!isLikelyImage(file)) return null;
 
-  // HEIC/HEIF: إذا المتصفح يقرأها مباشرة نستخدمها، وإلا نحولها
+  // HEIC/HEIF: Safari قد يقرأها مباشرة، غيره يحولها
   if(isHeicLike(file)){
     const ok = await canBrowserDecode(file);
     if(ok) return file;
@@ -477,17 +552,18 @@ async function normalizeImageFile(file){
 
   return file;
 }
+
 function bindPhotoBox(box){
   const input = box.querySelector('input[type=file]');
   const hint  = box.querySelector('.hint');
-
-  if(!input) return; // حماية
-  input.addEventListener('click', e=>e.stopPropagation()); // يمنع تكرار النقر
-  box.tabIndex = 0; // لتفعيل paste بعد التركيز
+  if(!input) return;
 
   const setImage = (src)=>{
     let img = box.querySelector('img');
-    if(!img){ img=document.createElement('img'); box.appendChild(img); }
+    if(!img){
+      img = document.createElement('img');
+      box.appendChild(img);
+    }
     img.src = src;
     hint?.remove();
     save();
@@ -504,40 +580,39 @@ function bindPhotoBox(box){
       setImage(dataUrl);
     }catch(err){
       console.error(err);
-      // رسالة واضحة عند فشل HEIC النادر
-      alert('تعذّر معالجة الصورة. إذا كانت HEIC/HEIF جرّب إعادة اختيارها أو تحويلها إلى JPG.');
+      alert('تعذّر معالجة الصورة. إذا كانت HEIC/HEIF جرّب تحويلها إلى JPG.');
+    }finally{
+      input.value = ""; // يسمح بإعادة اختيار نفس الصورة
     }
   };
 
-  input.addEventListener('change', e=>{
+  input.addEventListener('change', (e)=>{
     const f = e.target.files?.[0];
     if(f) handleFile(f);
   });
 
-  box.addEventListener('click', ()=> input.click());
+  // سحب وإفلات (لأن input يغطي المربع نربط على الاثنين)
+  const onDragOver = (e)=>{ e.preventDefault(); box.style.outline='2px dashed #2f7f79'; };
+  const onDragLeave= (e)=>{ e.preventDefault(); box.style.outline='none'; };
 
-  ['dragover','dragenter'].forEach(ev=> box.addEventListener(ev, e=>{
-    e.preventDefault();
-    box.style.outline='2px dashed #2f7f79';
-  }));
-
-  ['dragleave','drop'].forEach(ev=> box.addEventListener(ev, e=>{
-    e.preventDefault();
-    box.style.outline='none';
-  }));
-
-  box.addEventListener('drop', e=>{
-    const f = e.dataTransfer?.files?.[0];
-    if(f) handleFile(f);
+  [box, input].forEach(el=>{
+    el.addEventListener('dragover', onDragOver);
+    el.addEventListener('dragenter', onDragOver);
+    el.addEventListener('dragleave', onDragLeave);
+    el.addEventListener('drop', onDragLeave);
+    el.addEventListener('drop', (e)=>{
+      const f = e.dataTransfer?.files?.[0];
+      if(f) handleFile(f);
+    });
   });
 
-  box.addEventListener('paste', e=>{
+  // لصق صورة
+  box.addEventListener('paste', (e)=>{
     const item=[...(e.clipboardData?.items||[])].find(it=>it.type?.startsWith('image/'));
     const f=item?.getAsFile?.();
     if(f) handleFile(f);
   });
 }
-
 /* التاريخ الهجري الافتراضي */
 (function(){try{const h=document.getElementById('hijriDate'); if(h && !h.textContent.trim()){ h.textContent=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',{day:'2-digit',month:'long',year:'numeric'}).format(new Date()); }}catch{}})();
 
