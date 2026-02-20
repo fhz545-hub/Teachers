@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-
+<script defer src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <style>
 :root{
   --ink:#0f172a; --muted:#64748b; --line:#e6eef2;
@@ -318,7 +318,15 @@ html,body{
 <div class="gallery" id="gallery">
 
   <div class="photo">
-    <input type="file" accept="image/*">
+<input type="file" accept="image/*,.heic,.heif">    <div class="hint" data-nopdf="true">
+      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
+      <div class="type">JPG / JPEG</div>
+      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
+    </div>
+  </div>
+
+  <div class="photo">
+<input type="file" accept="image/*,.heic,.heif">
     <div class="hint" data-nopdf="true">
       <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
       <div class="type">JPG / JPEG</div>
@@ -327,8 +335,8 @@ html,body{
   </div>
 
   <div class="photo">
-    <input type="file" accept="image/*">
-    <div class="hint" data-nopdf="true">
+<input type="file" accept="image/*,.heic,.heif"> 
+   <div class="hint" data-nopdf="true">
       <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
       <div class="type">JPG / JPEG</div>
       <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
@@ -336,17 +344,8 @@ html,body{
   </div>
 
   <div class="photo">
-    <input type="file" accept="image/*">
-    <div class="hint" data-nopdf="true">
-      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
-      <div class="type">JPG / JPEG</div>
-      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
-    </div>
-  </div>
-
-  <div class="photo">
-    <input type="file" accept="image/*">
-    <div class="hint" data-nopdf="true">
+<input type="file" accept="image/*,.heic,.heif"> 
+   <div class="hint" data-nopdf="true">
       <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
       <div class="type">JPG / JPEG</div>
       <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
@@ -423,24 +422,119 @@ async function renderFillNoDistortion(file,box){
     img.src=url;
   });
 }
+/* ===================== دعم HEIC/HEIF (الجوال) ===================== */
+function getExt(name=""){
+  const i=name.lastIndexOf('.');
+  return i>=0 ? name.slice(i+1).toLowerCase() : "";
+}
+function isHeicLike(file){
+  const t=(file?.type||"").toLowerCase();
+  const e=getExt(file?.name||"");
+  return t.includes("heic") || t.includes("heif") || ["heic","heif","hif","heifs"].includes(e);
+}
+async function canBrowserDecode(file){
+  // اختبار سريع: إذا المتصفح قادر يقرأ الملف مباشرة (مثل Safari iOS) ما نحتاج تحويل
+  return new Promise(resolve=>{
+    try{
+      const url=URL.createObjectURL(file);
+      const img=new Image();
+      const done=(ok)=>{ try{URL.revokeObjectURL(url);}catch{} resolve(!!ok); };
+      img.onload=()=>done(true);
+      img.onerror=()=>done(false);
+      img.src=url;
+      // مهلة أمان
+      setTimeout(()=>done(false), 2500);
+    }catch{ resolve(false); }
+  });
+}
+async function convertHeicToJpeg(file){
+  if(typeof window.heic2any !== "function"){
+    throw new Error("HEIC converter not loaded");
+  }
+  const out = await window.heic2any({
+    blob: file,
+    toType: "image/jpeg",
+    quality: 0.95
+  });
+  const blob = Array.isArray(out) ? out[0] : out;
+  const base = (file.name || "photo").replace(/\.(heic|heif|hif|heifs)$/i, "");
+  const jpgName = base + ".jpg";
+  return new File([blob], jpgName, { type:"image/jpeg", lastModified: Date.now() });
+}
+async function normalizeImageFile(file){
+  if(!file) return null;
+
+  // لو ليست صورة (أحيانًا type يكون فاضي) نتحقق بالامتداد
+  const looksImage = (file.type||"").startsWith("image/") || isHeicLike(file);
+  if(!looksImage) return null;
+
+  // HEIC/HEIF: إذا المتصفح يقرأها مباشرة نستخدمها، وإلا نحولها
+  if(isHeicLike(file)){
+    const ok = await canBrowserDecode(file);
+    if(ok) return file;
+    return await convertHeicToJpeg(file);
+  }
+
+  return file;
+}
 function bindPhotoBox(box){
-  const input=box.querySelector('input[type=file]'); const hint=box.querySelector('.hint');
-  const setImage=(src)=>{ let img=box.querySelector('img'); if(!img){img=document.createElement('img'); box.appendChild(img);} img.src=src; hint?.remove(); save(); };
-  input.addEventListener('change', async e=>{
-    const f=e.target.files?.[0]; if(!f) return;
-    try{ setImage(await renderFillNoDistortion(f, box)); }catch{ alert('تعذّر معالجة الصورة'); }
+  const input = box.querySelector('input[type=file]');
+  const hint  = box.querySelector('.hint');
+
+  if(!input) return; // حماية
+  input.addEventListener('click', e=>e.stopPropagation()); // يمنع تكرار النقر
+  box.tabIndex = 0; // لتفعيل paste بعد التركيز
+
+  const setImage = (src)=>{
+    let img = box.querySelector('img');
+    if(!img){ img=document.createElement('img'); box.appendChild(img); }
+    img.src = src;
+    hint?.remove();
+    save();
+  };
+
+  const handleFile = async (rawFile)=>{
+    try{
+      const file = await normalizeImageFile(rawFile);
+      if(!file){
+        alert('الملف ليس صورة صالحة.');
+        return;
+      }
+      const dataUrl = await renderFillNoDistortion(file, box);
+      setImage(dataUrl);
+    }catch(err){
+      console.error(err);
+      // رسالة واضحة عند فشل HEIC النادر
+      alert('تعذّر معالجة الصورة. إذا كانت HEIC/HEIF جرّب إعادة اختيارها أو تحويلها إلى JPG.');
+    }
+  };
+
+  input.addEventListener('change', e=>{
+    const f = e.target.files?.[0];
+    if(f) handleFile(f);
   });
+
   box.addEventListener('click', ()=> input.click());
-  ['dragover','dragenter'].forEach(ev=> box.addEventListener(ev, e=>{e.preventDefault(); box.style.outline='2px dashed #2f7f79';}));
-  ['dragleave','drop'].forEach(ev=> box.addEventListener(ev, e=>{e.preventDefault(); box.style.outline='none';}));
-  box.addEventListener('drop', async e=>{
-    const f=e.dataTransfer?.files?.[0]; if(!f) return;
-    try{ setImage(await renderFillNoDistortion(f, box)); }catch{ alert('تعذّر معالجة الصورة'); }
+
+  ['dragover','dragenter'].forEach(ev=> box.addEventListener(ev, e=>{
+    e.preventDefault();
+    box.style.outline='2px dashed #2f7f79';
+  }));
+
+  ['dragleave','drop'].forEach(ev=> box.addEventListener(ev, e=>{
+    e.preventDefault();
+    box.style.outline='none';
+  }));
+
+  box.addEventListener('drop', e=>{
+    const f = e.dataTransfer?.files?.[0];
+    if(f) handleFile(f);
   });
-  box.addEventListener('paste', async e=>{
-    const item=[...(e.clipboardData?.items||[])].find(it=>it.type.startsWith('image/'));
-    if(!item) return;
-    try{ setImage(await renderFillNoDistortion(item.getAsFile(), box)); }catch{ alert('تعذّر معالجة الصورة'); }
+
+  box.addEventListener('paste', e=>{
+    const item=[...(e.clipboardData?.items||[])].find(it=>it.type?.startsWith('image/'));
+    const f=item?.getAsFile?.();
+    if(f) handleFile(f);
   });
 }
 
