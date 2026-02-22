@@ -615,8 +615,54 @@ async function normalizeImageFile(file){
 
   return file;
 }
+/* ===================== تنبيه إذا كانت الصورة عمودية (تنبيه فقط) ===================== */
+const ORIENTATION_WARN_RATIO = 1.03; 
+// هامش بسيط لتجنب تنبيه الصور شبه المربعة (3%)
 
-function bindPhotoBox(box){
+function getImageDimensionsFromFile(file){
+  return new Promise((resolve, reject) => {
+    let url = null;
+    try{
+      url = URL.createObjectURL(file);
+      const img = new Image();
+
+      img.onload = () => {
+        const width  = img.naturalWidth  || img.width  || 0;
+        const height = img.naturalHeight || img.height || 0;
+        try{ URL.revokeObjectURL(url); }catch{}
+        resolve({ width, height });
+      };
+
+      img.onerror = () => {
+        try{ URL.revokeObjectURL(url); }catch{}
+        reject(new Error('تعذّر قراءة أبعاد الصورة'));
+      };
+
+      img.src = url;
+    }catch(err){
+      if(url){ try{ URL.revokeObjectURL(url); }catch{} }
+      reject(err);
+    }
+  });
+}
+
+async function warnIfPortraitImage(file){
+  try{
+    const { width, height } = await getImageDimensionsFromFile(file);
+    if(!width || !height) return;
+
+    // تنبيه فقط إذا كانت الصورة طولية بشكل واضح
+    if(height > width * ORIENTATION_WARN_RATIO){
+      alert(
+        'تنبيه: الصورة المختارة تبدو طولية (عمودية).\\n\\n' +
+        'لأفضل ظهور داخل مساحة الشاهد في التقرير، يُفضّل استخدام صورة بالعرض (أفقية).\\n' +
+        'سيتم قبول الصورة الحالية ومعالجتها بشكل طبيعي.'
+      );
+    }
+  }catch{
+    // لا نوقف الرفع إذا تعذر قراءة الأبعاد
+  }
+}function bindPhotoBox(box){
   const input = box.querySelector('input[type=file]');
   const hint  = box.querySelector('.hint');
   if(!input) return;
@@ -637,12 +683,15 @@ function bindPhotoBox(box){
     if(!rawFile) return;
     if(!checkImageSizeLimit(rawFile)) return;
 
-    const file = await normalizeImageFile(rawFile);
-      if(!file){
-        alert('الملف ليس صورة صالحة.');
-        return;
-      }
-      const dataUrl = await renderFillNoDistortion(file, box);
+   const file = await normalizeImageFile(rawFile);
+if(!file){
+  alert('الملف ليس صورة صالحة.');
+  return;
+}
+
+await warnIfPortraitImage(file); // ✅ تنبيه فقط ولا يمنع الرفع
+
+const dataUrl = await renderFillNoDistortion(file, box);
       setImage(dataUrl);
     }catch(err){
       console.error(err);
