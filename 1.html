@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>تقرير تنفيذ برنامج — وزارة التعليم</title>
+<title> تقرير تنفيذ برنامج </title>
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -225,6 +225,20 @@ html,body{
     transform:scale(.7);
     transform-origin:top center;
   }
+
+  .photo .hint{
+    inset:6px;
+    padding:10px 10px;
+    gap:6px;
+    font-size:12px;
+    line-height:1.55;
+    border-radius:12px;
+  }
+  .photo .hint .type{
+    padding:4px 10px;
+    font-size:11px;
+    letter-spacing:.3px;
+  }
 }
 @media print{
   .sheet{
@@ -321,41 +335,46 @@ html,body{
       </div>
     </div>
 
-    <!-- الشواهد (4 صور) -->
+  <!-- الشواهد (4 صور) -->
 <div class="gallery" id="gallery">
 
   <div class="photo">
-<input type="file" accept="image/*,.heic,.heif">    <div class="hint" data-nopdf="true">
-      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
-      <div class="type">JPG / JPEG</div>
-      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
-    </div>
-  </div>
-
-  <div class="photo">
-<input type="file" accept="image/*,.heic,.heif">
+    <input type="file" accept="image/*,.heic,.heif">
     <div class="hint" data-nopdf="true">
-      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
+      <div>تنبيه مهم: لظهور الشاهد بصورة أجمل داخل التقرير يُفضّل استخدام صيغة</div>
       <div class="type">JPG / JPEG</div>
-      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
+      <div>ويُفضّل أن تكون الصورة <strong>بالعرض (أفقية)</strong> لتناسب مساحة الشاهد بشكل أفضل.</div>
+      <div>كما يُفضّل ألا يتجاوز حجم الصورة <strong>500MB</strong> لتسريع المعالجة والتصدير إلى PDF.</div>
     </div>
   </div>
 
   <div class="photo">
-<input type="file" accept="image/*,.heic,.heif"> 
-   <div class="hint" data-nopdf="true">
-      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
+    <input type="file" accept="image/*,.heic,.heif">
+    <div class="hint" data-nopdf="true">
+      <div>تنبيه مهم: لظهور الشاهد بصورة أجمل داخل التقرير يُفضّل استخدام صيغة</div>
       <div class="type">JPG / JPEG</div>
-      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
+      <div>ويُفضّل أن تكون الصورة <strong>بالعرض (أفقية)</strong> لتناسب مساحة الشاهد بشكل أفضل.</div>
+      <div>كما يُفضّل ألا يتجاوز حجم الصورة <strong>500MB</strong> لتسريع المعالجة والتصدير إلى PDF.</div>
     </div>
   </div>
 
   <div class="photo">
-<input type="file" accept="image/*,.heic,.heif"> 
-   <div class="hint" data-nopdf="true">
-      <div>تنبيه مهم: صانع التقارير يعتمد معالجة الصور وتصديرها بصيغة</div>
+    <input type="file" accept="image/*,.heic,.heif">
+    <div class="hint" data-nopdf="true">
+      <div>تنبيه مهم: لظهور الشاهد بصورة أجمل داخل التقرير يُفضّل استخدام صيغة</div>
       <div class="type">JPG / JPEG</div>
-      <div>لأفضل وضوح داخل ملف PDF (حتى لو رفعت PNG سيتم تحويلها تلقائيًا).</div>
+      <div>ويُفضّل أن تكون الصورة <strong>بالعرض (أفقية)</strong> لتناسب مساحة الشاهد بشكل أفضل.</div>
+      <div>كما يُفضّل ألا يتجاوز حجم الصورة <strong>500MB</strong> لتسريع المعالجة والتصدير إلى PDF.</div>
+    </div>
+  </div>
+
+  <div class="photo">
+    <input type="file" accept="image/*,.heic,.heif">
+    <div class="hint" data-nopdf="true">
+      <div>تنبيه مهم: لظهور الشاهد بصورة أجمل داخل التقرير يُفضّل استخدام صيغة</div>
+      <div class="type">JPG / JPEG</div>
+      <div>ويُفضّل أن تكون الصورة <strong>بالعرض (أفقية)</strong> لتناسب مساحة الشاهد بشكل أفضل.</div>
+      <div>كما يُفضّل ألا يتجاوز حجم الصورة <strong>500MB</strong> لتسريع المعالجة والتصدير إلى PDF.</div>
     </div>
   </div>
 
@@ -378,6 +397,21 @@ html,body{
 
 <script>
 const STORAGE_KEY='report_v15_headerPDF_chip';
+const MAX_IMAGE_SIZE_MB = 500;
+const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
+
+function checkImageSizeLimit(file){
+  if(!file) return false;
+  if(file.size <= MAX_IMAGE_SIZE_BYTES) return true;
+
+  const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+  alert(
+    `حجم الصورة (${sizeMB} MB) أكبر من الحد المحدد.\n\n` +
+    `الحد الأعلى المسموح: ${MAX_IMAGE_SIZE_MB}MB\n` +
+    `يُرجى ضغط الصورة أو تصغيرها ثم إعادة المحاولة لضمان سرعة المعالجة وجودة التصدير.`
+  );
+  return false;
+}
 function setBusy(b){const el=document.getElementById('btnPdf'); if(el) el.disabled=!!b;}
 function fitBox(id){
   const el=document.getElementById(id); if(!el) return;
@@ -599,8 +633,11 @@ function bindPhotoBox(box){
   };
 
   const handleFile = async (rawFile)=>{
-    try{
-      const file = await normalizeImageFile(rawFile);
+  try{
+    if(!rawFile) return;
+    if(!checkImageSizeLimit(rawFile)) return;
+
+    const file = await normalizeImageFile(rawFile);
       if(!file){
         alert('الملف ليس صورة صالحة.');
         return;
