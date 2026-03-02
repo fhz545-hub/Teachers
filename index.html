@@ -136,7 +136,12 @@ button{font-family:inherit;cursor:pointer}
 .btn{border:1px solid var(--line);background:#fff;padding:7px 10px;border-radius:10px;font-weight:700;font-size:12.5px}
 .btn.open{color:#0a4a46}
 .btn.download{color:#0a6e5f;border-color:#cfeadf}
-.btn:disabled,[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
+.btn[aria-disabled="true"],
+.search-results a[aria-disabled="true"]{
+  opacity:.55;
+  cursor:not-allowed;
+}
+.btn[aria-disabled="true"]{ pointer-events:none; }
 
 /* بطاقات المنصات التعليمية */
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
@@ -644,10 +649,30 @@ if(!d0) return false;
 
 
 /* أدوات مساعدة */
-function esc(s){return String(s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] || c));}
-function isValidUrl(u){return /^https?:\/\/.+/i.test(u||"")}
-function driveId(u){const m=String(u||"").match(/\/file\/d\/([^/]+)\//);return m?m[1]:""}
-function toDirect(u){const id=driveId(u);return id?`https://drive.google.com/uc?export=download&id=${id}`:u}
+function esc(s){
+  return String(s ?? "").replace(/[&<>"'`]/g, (c) => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","`":"&#96;"
+  }[c]));
+}
+function isValidUrl(u){
+  try{
+    const url = new URL(String(u||"").trim());
+    return url.protocol === "https:";
+  }catch(_){
+    return false;
+  }
+}
+function driveId(u){
+  const s = String(u||"");
+  let m = s.match(/\/file\/d\/([^/]+)\//);
+  if(m) return m[1];
+  m = s.match(/[?&]id=([^&]+)/);
+  return m ? m[1] : "";
+}
+function toDirect(u){
+  const id = driveId(u);
+  return id ? `https://drive.google.com/uc?export=download&id=${encodeURIComponent(id)}` : u;
+}
 
 /* "جديد" الآن مرتبط فقط بالتاريخ الحديث (آخر يومين) */
 function isLatest(item){
@@ -659,14 +684,15 @@ function isLatest(item){
 
 /* الكتالوج المصنّف */
 const CATALOG = {
-  grading: [
-    {title:"توزيع درجات المواد الدراسية_2025_للائحة_المحدثة",desc:"إدارة تقويم الأداء المعرفي والمهاري نجران.",kind:"لائحة",url:"https://drive.google.com/file/d/1FB7bDXAWutT_FH1fvK1T53P0o0ZEFd29/view?usp=sharing",src:"تعليم نجران  "},
-    {title:"أهم مستجدات لائحة تقويم الطالب في المرحلة الابتدائية 2025م",desc:"مستجدات وتحديثات مرتبطة بتطبيق لائحة تقويم الطالب للمرحلة الابتدائية.",kind:"مستجدات",url:"https://drive.google.com/file/d/1HCgjtGboL6stBjtbpzcs6-A4SkWsQpEv/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-17"},
-    {title:"لائحة تقويم الطالب 2025م",desc:"سياسة التقييم وأدوات القياس.",kind:"لائحة",url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view",src:"وزارة التعليم"},
-    {title:"دليل توزيع الدرجات لجميع المراحل الدراسية ٢٠٢٥",desc:" نِسَب عناصر التقويم.",kind:"دليل",url:"https://drive.google.com/file/d/1WE62DFBgeCrHf1noqxvechwULBDYi58Y/view?usp=sharing",src:" تعليم المدينه"},
-    {title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م",desc:"آليات تطبيق اللائحة داخل المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view",src:"وزارة التعليم"},
-    {title:"توزيع درجات الطلاب 2025م",desc:"نِسَب عناصر التقويم.",kind:"دليل",url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view",src:"وزارة التعليم"}
-  ],
+ grading: [
+  {title:"خطة التقويم الفصلي والجاهزية للتقويم الخارجي – ف2 1447هـ",desc:"تعليم القصيم.",kind:"خطة",url:"https://drive.google.com/file/d/1A3wVyGjk9c1-ZdB3X5lKjJzftIbP5pYM/view?usp=sharing",src:"تعليم القصيم",addedAt:"2026-03-02"},
+ {title:"توزيع درجات المواد الدراسية_2025_للائحة_المحدثة",desc:"إدارة تقويم الأداء المعرفي والمهاري نجران.",kind:"لائحة",url:"https://drive.google.com/file/d/1FB7bDXAWutT_FH1fvK1T53P0o0ZEFd29/view?usp=sharing",src:"تعليم نجران  "},
+  {title:"أهم مستجدات لائحة تقويم الطالب في المرحلة الابتدائية 2025م",desc:"مستجدات وتحديثات مرتبطة بتطبيق لائحة تقويم الطالب للمرحلة الابتدائية.",kind:"مستجدات",url:"https://drive.google.com/file/d/1HCgjtGboL6stBjtbpzcs6-A4SkWsQpEv/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-12-17"},
+  {title:"لائحة تقويم الطالب 2025م",desc:"سياسة التقييم وأدوات القياس.",kind:"لائحة",url:"https://drive.google.com/file/d/1jMcFdltw6SomgRAGyFQFOecvJOqF4m8-/view",src:"وزارة التعليم"},
+  {title:"دليل توزيع الدرجات لجميع المراحل الدراسية ٢٠٢٥",desc:" نِسَب عناصر التقويم.",kind:"دليل",url:"https://drive.google.com/file/d/1WE62DFBgeCrHf1noqxvechwULBDYi58Y/view?usp=sharing",src:" تعليم المدينه"},
+  {title:"الإجراءات التنفيذية للائحة تقويم الطالب 2025م",desc:"آليات تطبيق اللائحة داخل المدرسة.",kind:"دليل",url:"https://drive.google.com/file/d/1L5GiafAgPY0vBSQdea_obk9vKcE-t7JR/view",src:"وزارة التعليم"},
+  {title:"توزيع درجات الطلاب 2025م",desc:"نِسَب عناصر التقويم.",kind:"دليل",url:"https://drive.google.com/file/d/1aJfnmDnFuvE5STTsZ6PIGeMJLfYG0Xcl/view",src:"وزارة التعليم"}
+],
   exams: [
     {title:"دليل الاختبارات 2025م",desc:"أسس تنفيذ الاختبارات وتنظيمها.",kind:"دليل",url:"https://drive.google.com/file/d/1igqY7tNeqoEPX7YV6VqTw0GnGUWDzBNf/view",src:"وزارة التعليم"},
     {title:"إطار الاختبارات المركزية في إدارات التعليم العامة 1446",desc:"تنظيم وآليات الاختبارات المركزية.",kind:"إطار",url:"https://drive.google.com/file/d/1tHeew76-antAa3jRdJx2gjKE9OSbSyER/view?usp=sharing",src:"وزارة التعليم"},
@@ -811,7 +837,7 @@ interactive: [
   {title:"قائمة الملفات والسجلات الأساسية",desc:"حصر السجلات والملفات الأساسية لعمل التقويم المدرسي.",kind:"قائمة",url:"https://drive.google.com/file/d/1dUGen3NJDbIfcCMwyFO9uvBEIkyifdH4/view?usp=sharing",src:"وزارة التعليم"},
   {title:"الدليل الإجرائي للتقويم الذاتي لمدارس الطفولة المبكرة ورياض الأطفال",desc:"آليات التقويم الذاتي لمدارس الطفولة المبكرة ورياض الأطفال.",kind:"دليل",url:"https://drive.google.com/file/d/1jKCt3ho7k47TTaVk0HPRhrZVbibPj_9s/view?usp=sharing",src:"وزارة التعليم"},
   {title:"خريطة نواتج التعلم",desc:"خريطة مرجعية لنواتج التعلم لتحسين التقويم والمتابعة.",kind:"خريطة",url:"https://drive.google.com/file/d/1Ht6HA3YXRkoKVM36w8fbIdXDsoHzR0dR/view?usp=sharing",src:"وزارة التعليم",addedAt:"2025-11-19"},
-  {title:"معايير التقويم والاعتماد المدرسي لمدارس التعليم العام 2026م",desc:"مرجع معايير التقويم والاعتماد المدرسي (إدارة تعليم حائل).",kind:"معايير",url:"https://drive.google.com/file/d/1JRJaWiUaHIt8CGKXQ5Zz4D3B7fQj1S2c/view?usp=sharing",src:"إدارة تعليم حائل",addedAt:"2026-02-22"}
+  {title:"معايير التقويم والاعتماد المدرسي لمدارس التعليم العام 2026م",desc:"مرجع معايير التقويم والاعتماد المدرسي (إدارة تعليم حائل).",kind:"معايير",url:"https://drive.google.com/file/d/1JRJaWiUaHIt8CGKXQ5Zz4D3B7fQj1S2c/view?usp=sharing",src:"إدارة تعليم حائل",addedAt:"2026-02-22"},
 ],
  guides: [
   {title:"الدليل العام لمنصة العمل التطوعي",desc:"مرجع استخدام المنصة الوطنية للعمل التطوعي.",kind:"دليل",url:"https://drive.google.com/file/d/1K8YJKNgVFSsQXOMisTTHiUydE6qQOGF8/view?usp=sharing",src:"وزارة الموارد البشرية والتنمية الاجتماعية"},
@@ -874,7 +900,11 @@ const dl = canDl ? toDirect(d.url) : "";
               </div>
             </div>
             <div class="actions">
-              <a class="btn open" ${ok?'target="_blank" rel="noopener" href="'+esc(d.url)+'"':'aria-disabled="true"'}>فتح</a>
+              <a class="btn open" ${
+  ok
+    ? 'target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" href="'+esc(d.url)+'"'
+    : 'aria-disabled="true" tabindex="-1"'
+}>فتح</a>
 <a class="btn download" ${canDl ? 'href="'+esc(dl)+'"' : 'aria-disabled="true"'}>تحميل</a>
             </div>
           </div>`);
@@ -1027,7 +1057,9 @@ function setupSearchUI(){
       return;
     }
     list.forEach(it=>{
-      const openBtn = isValidUrl(it.url) ? `<a href="${esc(it.url)}" target="_blank" rel="noopener">فتح</a>` : `<a aria-disabled="true">فتح</a>`;
+      const openBtn = isValidUrl(it.url)
+  ? `<a href="${esc(it.url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">فتح</a>`
+  : `<a aria-disabled="true" tabindex="-1">فتح</a>`;
       box.insertAdjacentHTML('beforeend',`
         <div class="itm" role="option">
           <div>
@@ -1185,10 +1217,6 @@ async function incrementVisitor() {
 }
 
 incrementVisitor();
-
-
-
-
 </script>
 
 </body>
