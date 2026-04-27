@@ -1344,17 +1344,29 @@ incrementVisitor();
   if(!popup || !closeBtn) return;
 
   const storageKey = 'hr_shrm_banner_closed_session';
+  let fadeTimer = null;
 
   function openPopup(){
     if(sessionStorage.getItem(storageKey) === '1') return;
+
     popup.classList.add('show');
     document.body.style.overflow = 'hidden';
+
+    // إخفاء البنر تلقائيًا بعد 20 ثانية
+    fadeTimer = setTimeout(function(){
+      closePopup();
+    }, 20000);
   }
 
   function closePopup(){
     popup.classList.remove('show');
     document.body.style.overflow = '';
     sessionStorage.setItem(storageKey, '1');
+
+    if(fadeTimer){
+      clearTimeout(fadeTimer);
+      fadeTimer = null;
+    }
   }
 
   closeBtn.addEventListener('click', function(e){
