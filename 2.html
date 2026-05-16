@@ -752,7 +752,159 @@ footer{
     display:none;
   }
 }
-</style>
+/* =========================================================
+   تنسيق موحد للهيدر والصفحة
+   ========================================================= */
+:root{
+  --ink:#0b3f43;
+  --muted:#5f747a;
+  --accent:#0b7e88;
+  --accent2:#0c594e;
+  --bg:#f7fbfc;
+  --card:#ffffff;
+  --line:#d8e9ed;
+  --soft:#eef8f9;
+  --shadow:0 10px 24px rgba(15,23,42,.075);
+  --maxW:1140px;
+}
+
+body{
+  background:linear-gradient(180deg,#ffffff 0%, var(--bg) 35%, #eef7f9 100%) !important;
+}
+
+.top-bar{
+  background:#ffffff !important;
+  padding:10px 12px 8px !important;
+  border-bottom:1px solid var(--line) !important;
+  box-shadow:0 8px 22px rgba(15,23,42,.055) !important;
+}
+
+.header-banner{
+  display:block !important;
+  width:min(100%, var(--maxW)) !important;
+  max-width:var(--maxW) !important;
+  max-height:156px !important;
+  height:auto !important;
+  margin:0 auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  background:#ffffff !important;
+}
+
+.floating-guides{
+  margin:10px auto 0 !important;
+  background:rgba(255,255,255,.96) !important;
+  border:1px solid var(--line) !important;
+  box-shadow:0 8px 22px rgba(15,23,42,.07) !important;
+}
+
+main{
+  padding:18px 12px 36px !important;
+  background:transparent !important;
+}
+
+.shell{
+  max-width:var(--maxW) !important;
+}
+
+.hero,
+.category-card,
+.search-wrapper,
+.link-row,
+.modal,
+footer{
+  background:#ffffff !important;
+  border-color:var(--line) !important;
+}
+
+.hero{
+  padding:20px 20px 18px !important;
+  box-shadow:0 10px 24px rgba(15,23,42,.075) !important;
+}
+
+.hero::before{
+  height:5px !important;
+  background:linear-gradient(90deg,var(--accent),#15a1aa,var(--accent2)) !important;
+}
+
+.hero-chip,
+.link-chip{
+  background:var(--soft) !important;
+  border-color:rgba(11,126,136,.18) !important;
+  color:var(--accent2) !important;
+}
+
+.category-card{
+  box-shadow:0 8px 18px rgba(15,23,42,.055) !important;
+  transition:transform .22s ease, box-shadow .22s ease;
+}
+
+.category-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 26px rgba(15,23,42,.085) !important;
+}
+
+.link-row{
+  box-shadow:0 5px 14px rgba(15,23,42,.045) !important;
+}
+
+.link-row:hover{
+  background:#f7fcfd !important;
+  border-color:rgba(11,126,136,.28) !important;
+}
+
+footer{
+  background:#ffffff !important;
+}
+
+/* ضبط أحجام الهيدر على الشاشات */
+@media (max-width:900px){
+  .header-banner{
+    max-height:125px !important;
+  }
+
+  .floating-guides{
+    width:min(var(--maxW), calc(100% - 20px)) !important;
+  }
+}
+
+@media (max-width:640px){
+  .top-bar{
+    padding:7px 8px 5px !important;
+  }
+
+  .header-banner{
+    max-height:86px !important;
+  }
+
+  .floating-guides{
+    margin-top:6px !important;
+    width:calc(100% - 16px) !important;
+  }
+
+  main{
+    padding:12px 8px 28px !important;
+  }
+
+  .hero{
+    padding:16px 13px 14px !important;
+  }
+
+  .category-grid{
+    gap:11px !important;
+  }
+.guide-exam,
+.guide-assess,
+.guide-proc,
+.guide-grades,
+.guide-org{
+  background:linear-gradient(135deg,#0b7e88,#0c594e) !important;
+}
+
+.guide-btn:hover{
+  background:linear-gradient(135deg,#0996a2,#0b3f43) !important;
+}
+}</style>
 </head>
 <body>
 
