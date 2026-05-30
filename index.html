@@ -319,12 +319,12 @@ filter:none;
 .muntzm-floating-ad{
   position:fixed;
   top:50%;
-  inset-inline-start:22px;
+  inset-inline-end:24px;
   transform:translateY(-50%);
   z-index:999;
   display:block;
-  width:165px;
-  max-width:20vw;
+  width:230px;
+  max-width:22vw;
   background:transparent;
   border:none;
   box-shadow:none;
@@ -341,22 +341,25 @@ filter:none;
 }
 
 @keyframes muntzmPulse{
-  0%,100%{
-    filter:drop-shadow(0 8px 16px rgba(13,177,170,.18));
-  }
-  50%{
-    filter:drop-shadow(0 0 20px rgba(13,177,170,.45));
-  }
+  0%,100%{filter:drop-shadow(0 8px 16px rgba(13,177,170,.18));}
+  50%{filter:drop-shadow(0 0 20px rgba(13,177,170,.45));}
 }
 
 .muntzm-floating-ad:hover{
-  transform:translateY(-50%) translateX(4px);
+  transform:translateY(-50%) translateX(-4px);
+}
+
+@media(max-width:1200px){
+  .muntzm-floating-ad{
+    width:190px;
+    inset-inline-end:10px;
+  }
 }
 
 @media(max-width:900px){
   .muntzm-floating-ad{
     width:125px;
-    inset-inline-start:10px;
+    inset-inline-end:8px;
   }
 }
 
@@ -365,7 +368,7 @@ filter:none;
     width:90px;
     bottom:12px;
     top:auto;
-    inset-inline-start:12px;
+    inset-inline-end:12px;
     transform:none;
   }
 }
