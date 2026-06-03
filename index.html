@@ -12,6 +12,38 @@
   --card:#ffffff; --accent:#0a7f79; --accent2:#3db2aa;
   --maxW:1200px;
 }
+/* بنر منتظم العرضي داخل الصفحة */
+.muntzm-inline-banner{
+  display:block;
+  width:100%;
+  max-width:var(--maxW);
+  margin:0 auto 14px;
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 10px 24px rgba(0,0,0,.06);
+}
+
+.muntzm-inline-banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+}
+
+.muntzm-inline-banner:hover{
+  transform:translateY(-2px);
+  transition:.2s ease;
+  box-shadow:0 14px 28px rgba(0,0,0,.08);
+}
+
+@media(max-width:768px){
+  .muntzm-inline-banner{
+    border-radius:12px;
+    margin:0 auto 12px;
+  }
+}
 *{box-sizing:border-box}
 html,body{margin:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#0b3f43;font-family:"Tajawal",system-ui,sans-serif}
 a{color:inherit;text-decoration:none}
@@ -384,18 +416,16 @@ filter:none;
   <span class="txt">تمت إضافة 8 عنصر جديد خلال اليومين الماضيين.</span>
   <button class="close" type="button" aria-label="إخفاء">إخفاء</button>
 </div>
-<a class="muntzm-floating-ad"
+
+
+<div class="container">
+<a class="muntzm-inline-banner"
    href="https://muntzm.com/"
    target="_blank"
    rel="noopener"
    aria-label="الدخول إلى منصة منتظم">
-  <img src="muntzm-side-banner.png" alt="منتظم - منصة ذكية لإدارة العمل المدرسي">
+  <img src="muntzm-top-banner.png" alt="منتظم - منصة ذكية لإدارة وتنظيم العمل المدرسي">
 </a>
-
-
-<div class="container">
-  <div class="note">ℹ️ <b>تنويه:</b> هذه المنصة مرجع تنظيمي وتعليمي لتجميع الأدلّة واللوائح والخدمات من مصادرها الرسمية.</div>
-
   <!-- قسم الأدلّة والأنظمة مع العداد والبحث -->
   <section class="section" id="docs">
     <h2>
